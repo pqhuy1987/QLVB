@@ -1,0 +1,41 @@
+﻿@model List<QLVB.Models.PdfPage>
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript">
+        document.oncontextmenu = function () { return false; };
+
+        $(function () {
+            $('#loading_gif').hide();
+        });
+    </script>
+</head>
+<body>
+    @if (Model != null)
+    {
+        <div class="content">
+            <div id="divPages" style="height: 100%; width: 100%;">
+                @foreach (var page in Model)
+                {
+                    <div>
+                        <img src="@page.ImageUrl?v=@DateTime.Now.ToString("yyMMddHHmmss")" alt="" width="100%" />
+                    </div>
+                }
+            </div>
+        </div>
+        <div id="loading_gif" style="position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%; background: black; opacity: 0.5;">
+            <div style="width: 10%; left: 50%; position: absolute; top: 25%; ">
+                <img src="~/Content/loading.gif" width="50">
+            </div>
+        </div>
+    }
+</body>
+</html>
+

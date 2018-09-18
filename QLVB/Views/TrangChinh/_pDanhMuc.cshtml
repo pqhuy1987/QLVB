@@ -1,0 +1,24 @@
+﻿@{
+
+    IEnumerable<QLVB.Models.DanhMuc> lstDanhMuc = ViewBag.DanhMuc;
+}
+
+<style type="text/css">
+    #li-3:after {
+        width: 100%;
+        background: #00ada7;
+        color: orangered;
+    }
+
+    #li-3 a {
+        color: red;
+    }
+</style>
+
+<ul class="nav navbar-nav navbar-2">
+    @foreach (var item in lstDanhMuc)
+    {
+        <li id="li-@item.MaDanhMuc"><a href="@item.Url" target="_blank">@item.IconUrl @item.TenDanhMuc</a></li>
+    }
+  
+</ul>

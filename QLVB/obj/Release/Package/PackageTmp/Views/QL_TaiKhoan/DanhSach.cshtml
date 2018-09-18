@@ -1,0 +1,161 @@
+﻿@model PagedList.IPagedList<QLVB.Models.NhanVien>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách tài khoản";
+
+}
+<script>
+    //key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+
+<h3><i class="fa fa-user"></i> Danh sách tài khoản @Html.ActionLink("Tạo mới", "ThemMoi", "QL_TaiKHoan", null, new { @class = "btn btn-primary" })</h3>
+<hr />
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h2 class="panel-title">Tìm kiếm </h2>
+    </div>
+    <br />
+    @using (Html.BeginForm("DanhSach", "QL_TaiKhoan", FormMethod.Post))
+    {
+        <div class="col-md-12">
+            <div class="input-group">
+                <span class="input-group-addon">
+                   Họ tên 
+                </span>
+                <input name="HoTen" type="text" value="@ViewBag.HoTen" class="form-control" >
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                </span>
+            </div>
+            <div class="panel panel-success">
+                <div class="panel-body ">
+
+                    <div class="row">
+                        <label class="col-md-2 control-label ">
+                            Điện thoại
+                        </label>
+                        <div class="col-md-4">
+                            <input name="DienThoai" class="form-control" value="@ViewBag.DienThoai" onkeypress = "return ValidateKeypress(/[0-9]/,event);" />
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            Email
+                        </label>
+                        <div class="col-md-4">
+                            <input name="Email" class="form-control" value="@ViewBag.Email" />
+                        </div>
+
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+
+    }
+    <br />
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Họ Tên</th>
+                <th>Tên đăng nhập</th>
+                <th>Điện thoại</th>
+                <th>Email</th>
+                <th>Ngày sinh</th>
+                <th>Địa chỉ</th>
+                <th>Tình trạng</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{ int iSTT = 0;}
+        @foreach (var item in Model)
+        {
+            iSTT++;
+            <tr>
+                <td>@iSTT</td>
+                <td>@item.HoTen</td>
+                <td>@item.TenDangNhap</td>
+                <td>@item.DienThoai</td>
+                <td>@item.Email</td>
+                <td> @if (item.NgaySinh != null) { @item.NgaySinh.Value.ToString("dd/MM/yyyy") }</td>
+                <td>@item.DiaChi</td>
+                <td>
+                    @if (item.KichHoat == true)
+                    {
+                        @Html.ActionLink("Đã kích hoạt", "KichHoat", "QL_TaiKHoan", new { @id = item.TenDangNhap, @id2 = false }, new { @class = "btn btn-warning" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Chưa kích hoạt", "KichHoat", "QL_TaiKHoan", new { @id = item.TenDangNhap, @id2 = true }, new { @class = "btn btn-default" })
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink(" ", "ChinhSua", "QL_TaiKHoan", new { @id = item.Id }, new { @class = "btn btn-success fa fa-pencil" })
+                    @Html.ActionLink(" ", "Xoa", "QL_TaiKHoan", new { @id = item.Id, @class = "btnxoa btn btn-danger fa fa-times" })
+
+                </td>
+            </tr>
+        }
+    </table>
+    </div>
+
+    <div class="dlink">
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page, HoTen=ViewBag.HoTen,DienThoai=ViewBag.DienThoai, Email=ViewBag.Email }))
+    </div>
+
+    <!-- Trigger the modal with a button -->
+    <button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <input hidden id="id-xoa" />
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thông báo</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="pthongbao"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+
+        $('#btn-dongy').click(function () {
+            location = "Xoa/" + $('#id-xoa').val();
+        });
+        $('.btnxoa').click(function () {
+            $('#btn-dongy').show();
+            $('#btn-thongbao').trigger("click");
+            $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+            $('#id-xoa').val($(this).attr('id'));
+            return false;
+        });
+
+        $('#menul-qltk').addClass("active");
+    </script>
+    @Html.Raw(TempData["thongbao"])

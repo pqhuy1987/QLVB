@@ -1,0 +1,868 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QLVBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Banner">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TieuDe" Type="nvarchar" MaxLength="256" />
+    <Property Name="Image" Type="nvarchar" MaxLength="256" />
+    <Property Name="Url" Type="nvarchar" MaxLength="256" />
+    <Property Name="Order" Type="int" />
+  </EntityType>
+  <EntityType Name="BinhLuan">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdNhanVien" Type="int" />
+    <Property Name="MaTin" Type="int" />
+    <Property Name="NgayBinhLuan" Type="datetime" />
+    <Property Name="NoiDung" Type="nvarchar(max)" />
+    <Property Name="MaBinhLuanCha" Type="int" />
+  </EntityType>
+  <EntityType Name="CauHinh">
+    <Key>
+      <PropertyRef Name="MaCauHinh" />
+    </Key>
+    <Property Name="MaCauHinh" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="NoiDung" Type="nvarchar" MaxLength="200" />
+    <Property Name="DuLieu" Type="nvarchar" MaxLength="200" />
+    <Property Name="MoTa" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="CT_LuotXemTai">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaLuotXemTai" Type="int" />
+    <Property Name="IDNguoiDung" Type="int" />
+    <Property Name="Xem" Type="int" />
+    <Property Name="Tai" Type="int" />
+  </EntityType>
+  <EntityType Name="DanhGia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdNhanVien" Type="int" />
+    <Property Name="MaTin" Type="int" />
+  </EntityType>
+  <EntityType Name="DanhMuc">
+    <Key>
+      <PropertyRef Name="MaDanhMuc" />
+    </Key>
+    <Property Name="MaDanhMuc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenDanhMuc" Type="nvarchar" MaxLength="250" />
+    <Property Name="DanhMucCha" Type="int" />
+    <Property Name="IconUrl" Type="nvarchar" MaxLength="250" />
+    <Property Name="Url" Type="nvarchar" MaxLength="250" />
+    <Property Name="ThuTu" Type="int" />
+    <Property Name="SuDung" Type="bit" />
+  </EntityType>
+  <EntityType Name="DMBanLanhDao">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="Color" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="DMPhongBan">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenPhong" Type="nvarchar(max)" />
+    <Property Name="ThuTu" Type="int" />
+    <Property Name="KichHoat" Type="bit" />
+  </EntityType>
+  <EntityType Name="FAQ">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CauHoi" Type="nvarchar(max)" />
+    <Property Name="TraLoi" Type="nvarchar(max)" />
+    <Property Name="Parent_Id" Type="int" />
+    <Property Name="STT" Type="int" />
+    <Property Name="HinhAnh" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="FAQ_NoiDung">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CauHoi" Type="nvarchar(max)" />
+    <Property Name="TraLoi" Type="nvarchar(max)" />
+    <Property Name="MaDanhMuc" Type="int" />
+    <Property Name="STT" Type="int" />
+  </EntityType>
+  <EntityType Name="FeedBack">
+    <Key>
+      <PropertyRef Name="MaYKien" />
+    </Key>
+    <Property Name="MaYKien" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HoTenGui" Type="nvarchar(max)" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="DienThoai" Type="nvarchar(max)" />
+    <Property Name="NoiDung" Type="nvarchar(max)" />
+    <Property Name="NgayGui" Type="date" />
+  </EntityType>
+  <EntityType Name="GhiChu">
+    <Key>
+      <PropertyRef Name="MaGhiChu" />
+    </Key>
+    <Property Name="MaGhiChu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdNhanVien" Type="int" />
+    <Property Name="MaVanBan" Type="int" />
+    <Property Name="NoiDung" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="LichHop">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Subject" Type="nvarchar" MaxLength="255" />
+    <Property Name="RoomId" Type="int" />
+    <Property Name="Start" Type="datetime" />
+    <Property Name="End" Type="datetime" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedUserId" Type="int" />
+    <Property Name="UpdatedDate" Type="datetime" />
+    <Property Name="UpdatedUserId" Type="int" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" />
+    <Property Name="RecurrenceRule" Type="nvarchar" MaxLength="1000" />
+    <Property Name="RecurrenceParentId" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="LichHop_BLD">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Subject" Type="nvarchar" MaxLength="255" />
+    <Property Name="OwnerId" Type="int" />
+    <Property Name="Start" Type="datetime" />
+    <Property Name="End" Type="datetime" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedUserId" Type="int" />
+    <Property Name="UpdatedDate" Type="datetime" />
+    <Property Name="UpdatedUserId" Type="int" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" />
+    <Property Name="RecurrenceRule" Type="nvarchar" MaxLength="1000" />
+    <Property Name="RecurrenceParentId" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="LoaiTaiLieu">
+    <Key>
+      <PropertyRef Name="MaLoaiTL" />
+    </Key>
+    <Property Name="MaLoaiTL" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenLoaiTL" Type="nvarchar(max)" />
+    <Property Name="CapTaiLieu" Type="int" />
+    <Property Name="ThuTu" Type="int" />
+  </EntityType>
+  <EntityType Name="LuotXemTai">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaVanBan" Type="int" />
+    <Property Name="NgayXT" Type="date" />
+    <Property Name="LuotXem" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="LuotTai" Type="numeric" Precision="18" Scale="0" />
+  </EntityType>
+  <EntityType Name="NhanVien">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenDangNhap" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MatKhau" Type="nvarchar" MaxLength="50" />
+    <Property Name="DienThoai" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="HoTen" Type="nvarchar" MaxLength="100" />
+    <Property Name="KichHoat" Type="bit" />
+    <Property Name="NgaySinh" Type="date" />
+    <Property Name="DiaChi" Type="nvarchar" MaxLength="200" />
+    <Property Name="Ldap" Type="bit" />
+    <Property Name="HinhDaiDien" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="NhatKy">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DateTime" Type="datetime" Nullable="false" />
+    <Property Name="Module" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Action" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Author" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="IpAddress" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Nhom_FAQ">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaFAQ" Type="int" />
+    <Property Name="MaNhom" Type="int" />
+  </EntityType>
+  <EntityType Name="Nhom_Nhanvien">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaNhom" Type="int" />
+    <Property Name="IdNhanVien" Type="int" />
+  </EntityType>
+  <EntityType Name="Nhom_Quyen">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaNhom" Type="int" />
+    <Property Name="MaQuyen" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="NhomTV">
+    <Key>
+      <PropertyRef Name="MaNhom" />
+    </Key>
+    <Property Name="MaNhom" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenNhom" Type="nvarchar" MaxLength="50" />
+    <Property Name="MacDinh" Type="bit" />
+  </EntityType>
+  <EntityType Name="PdfPage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DocumentId" Type="int" Nullable="false" />
+    <Property Name="Page" Type="int" Nullable="false" />
+    <Property Name="ImageUrl" Type="nvarchar" MaxLength="500" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PhongHop">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Location" Type="nvarchar" MaxLength="255" />
+    <Property Name="Color" Type="nvarchar" MaxLength="10" />
+    <Property Name="Resources" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Seats" Type="int" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Ordering" Type="int" />
+  </EntityType>
+  <EntityType Name="Quyen">
+    <Key>
+      <PropertyRef Name="MaQuyen" />
+    </Key>
+    <Property Name="MaQuyen" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TenQuyen" Type="nvarchar(max)" />
+    <Property Name="MoTa" Type="nvarchar(max)" />
+    <Property Name="ChucNang" Type="int" />
+  </EntityType>
+  <EntityType Name="Revision">
+    <Key>
+      <PropertyRef Name="MaRevision" />
+    </Key>
+    <Property Name="MaRevision" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaVanBan" Type="int" />
+    <Property Name="TenRevision" Type="nvarchar(max)" />
+    <Property Name="fileTV" Type="nvarchar(max)" />
+    <Property Name="fileTA" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="TaiLieu">
+    <Key>
+      <PropertyRef Name="MaTaiLieu" />
+    </Key>
+    <Property Name="MaTaiLieu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenTaiLieu" Type="nvarchar(max)" />
+    <Property Name="NoiDungTV" Type="nvarchar(max)" />
+    <Property Name="NoiDungTA" Type="nvarchar(max)" />
+    <Property Name="NoiDungTomTat" Type="nvarchar(max)" />
+    <Property Name="SoHieu" Type="nvarchar(max)" />
+    <Property Name="LoaiVanBan" Type="int" />
+    <Property Name="NoiBanHanh" Type="int" />
+    <Property Name="NguoiKy" Type="nvarchar" MaxLength="50" />
+    <Property Name="NgayBanHanh" Type="date" />
+    <Property Name="NgayHieuLuc" Type="date" />
+    <Property Name="TinhTrang" Type="nvarchar(max)" />
+    <Property Name="PhongBan" Type="int" />
+    <Property Name="fileGOC" Type="nvarchar" MaxLength="200" />
+    <Property Name="filePDF" Type="nvarchar" MaxLength="200" />
+    <Property Name="fileDOCV" Type="nvarchar" MaxLength="200" />
+    <Property Name="fileDOCA" Type="nvarchar" MaxLength="200" />
+    <Property Name="BaoMat" Type="bit" />
+    <Property Name="LanHieuChinh" Type="int" />
+    <Property Name="NgayTaiLen" Type="date" />
+    <Property Name="MaHieu" Type="nvarchar" MaxLength="128" />
+    <Property Name="LanBanHanh" Type="int" />
+    <Property Name="DonViApDung" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="ThuMuc">
+    <Key>
+      <PropertyRef Name="MaThuMuc" />
+    </Key>
+    <Property Name="MaThuMuc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdNhanVien" Type="int" />
+    <Property Name="TenThuMuc" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="TinTuc">
+    <Key>
+      <PropertyRef Name="MaTinTuc" />
+    </Key>
+    <Property Name="MaTinTuc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LoaiTinTuc" Type="int" />
+    <Property Name="MaDanhMuc" Type="int" />
+    <Property Name="TieuDe" Type="nvarchar" MaxLength="255" />
+    <Property Name="HinhDaiDien" Type="nvarchar" MaxLength="255" />
+    <Property Name="NoiDungThuGon" Type="nvarchar" MaxLength="1000" />
+    <Property Name="NoiDung" Type="nvarchar(max)" />
+    <Property Name="ChoPhepBinhLuan" Type="bit" />
+    <Property Name="LuotXem" Type="int" />
+    <Property Name="LuotThich" Type="int" />
+    <Property Name="LuotBinhLuan" Type="int" />
+    <Property Name="TinHot" Type="bit" />
+    <Property Name="EndHotDate" Type="datetime" />
+    <Property Name="TrangThai" Type="bit" />
+    <Property Name="NgayDang" Type="datetime" />
+    <Property Name="NgayTao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="VB_BMLQ">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaVanBan" Type="int" Nullable="false" />
+    <Property Name="MaBieuMau" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VB_VBCC">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaVanBan" Type="int" Nullable="false" />
+    <Property Name="MaVanBanCC" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VB_VBHD">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaVanBan" Type="int" Nullable="false" />
+    <Property Name="MaVanBanHD" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VB_VBLQ">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaVanBan" Type="int" Nullable="false" />
+    <Property Name="MaVanBanLQ" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VB_VBSD">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaVanBan" Type="int" Nullable="false" />
+    <Property Name="MaVanBanSD" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VBLuuTru">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdNhanVien" Type="int" />
+    <Property Name="MaVanBan" Type="int" />
+    <Property Name="MaThuMuc" Type="int" />
+  </EntityType>
+  <Association Name="FK_BinhLuan_NhanVien">
+    <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="0..1" />
+    <End Role="BinhLuan" Type="Self.BinhLuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhanVien">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BinhLuan">
+        <PropertyRef Name="IdNhanVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BinhLuan_TinTuc">
+    <End Role="TinTuc" Type="Self.TinTuc" Multiplicity="0..1" />
+    <End Role="BinhLuan" Type="Self.BinhLuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TinTuc">
+        <PropertyRef Name="MaTinTuc" />
+      </Principal>
+      <Dependent Role="BinhLuan">
+        <PropertyRef Name="MaTin" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CT_LuotXemTai_LuotXemTai">
+    <End Role="LuotXemTai" Type="Self.LuotXemTai" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CT_LuotXemTai" Type="Self.CT_LuotXemTai" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LuotXemTai">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CT_LuotXemTai">
+        <PropertyRef Name="MaLuotXemTai" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CT_LuotXemTai_NhanVien">
+    <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CT_LuotXemTai" Type="Self.CT_LuotXemTai" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhanVien">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CT_LuotXemTai">
+        <PropertyRef Name="IDNguoiDung" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FAQNoiDung_FAQ">
+    <End Role="FAQ" Type="Self.FAQ" Multiplicity="0..1" />
+    <End Role="FAQ_NoiDung" Type="Self.FAQ_NoiDung" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FAQ">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FAQ_NoiDung">
+        <PropertyRef Name="MaDanhMuc" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GhiChu_NhanVien">
+    <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="GhiChu" Type="Self.GhiChu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhanVien">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GhiChu">
+        <PropertyRef Name="IdNhanVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GhiChu_VanBan">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="GhiChu" Type="Self.GhiChu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="GhiChu">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LuotXemTai_TaiLieu">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LuotXemTai" Type="Self.LuotXemTai" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="LuotXemTai">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Nhom_Nhanvien_NhanVien">
+    <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Nhom_Nhanvien" Type="Self.Nhom_Nhanvien" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhanVien">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Nhom_Nhanvien">
+        <PropertyRef Name="IdNhanVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Nhom_Nhanvien_Nhom">
+    <End Role="NhomTV" Type="Self.NhomTV" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Nhom_Nhanvien" Type="Self.Nhom_Nhanvien" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhomTV">
+        <PropertyRef Name="MaNhom" />
+      </Principal>
+      <Dependent Role="Nhom_Nhanvien">
+        <PropertyRef Name="MaNhom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Nhom_Quyen_Nhom">
+    <End Role="NhomTV" Type="Self.NhomTV" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Nhom_Quyen" Type="Self.Nhom_Quyen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhomTV">
+        <PropertyRef Name="MaNhom" />
+      </Principal>
+      <Dependent Role="Nhom_Quyen">
+        <PropertyRef Name="MaNhom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Nhom_Quyen_Quyen">
+    <End Role="Quyen" Type="Self.Quyen" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Nhom_Quyen" Type="Self.Nhom_Quyen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Quyen">
+        <PropertyRef Name="MaQuyen" />
+      </Principal>
+      <Dependent Role="Nhom_Quyen">
+        <PropertyRef Name="MaQuyen" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Revision_VanBan">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Revision" Type="Self.Revision" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="Revision">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TaiLieu_LoaiTaiLieu">
+    <End Role="LoaiTaiLieu" Type="Self.LoaiTaiLieu" Multiplicity="0..1" />
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoaiTaiLieu">
+        <PropertyRef Name="MaLoaiTL" />
+      </Principal>
+      <Dependent Role="TaiLieu">
+        <PropertyRef Name="LoaiVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TaiLieu_PhongBan">
+    <End Role="DMPhongBan" Type="Self.DMPhongBan" Multiplicity="0..1" />
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DMPhongBan">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TaiLieu">
+        <PropertyRef Name="PhongBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_BMLQ1">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VB_BMLQ" Type="Self.VB_BMLQ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_BMLQ">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_BMLQ2">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1" />
+    <End Role="VB_BMLQ" Type="Self.VB_BMLQ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_BMLQ">
+        <PropertyRef Name="MaBieuMau" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBCC1">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VB_VBCC" Type="Self.VB_VBCC" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBCC">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBCC2">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1" />
+    <End Role="VB_VBCC" Type="Self.VB_VBCC" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBCC">
+        <PropertyRef Name="MaVanBanCC" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBHD1">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VB_VBHD" Type="Self.VB_VBHD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBHD">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBHD2">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1" />
+    <End Role="VB_VBHD" Type="Self.VB_VBHD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBHD">
+        <PropertyRef Name="MaVanBanHD" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBLQ1">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VB_VBLQ" Type="Self.VB_VBLQ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBLQ">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBLQ2">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1" />
+    <End Role="VB_VBLQ" Type="Self.VB_VBLQ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBLQ">
+        <PropertyRef Name="MaVanBanLQ" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBSD1">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VB_VBSD" Type="Self.VB_VBSD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBSD">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VB_VBSD2">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="1" />
+    <End Role="VB_VBSD" Type="Self.VB_VBSD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VB_VBSD">
+        <PropertyRef Name="MaVanBanSD" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VBLuuTru_TaiLieu">
+    <End Role="TaiLieu" Type="Self.TaiLieu" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VBLuuTru" Type="Self.VBLuuTru" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiLieu">
+        <PropertyRef Name="MaTaiLieu" />
+      </Principal>
+      <Dependent Role="VBLuuTru">
+        <PropertyRef Name="MaVanBan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QLVBModelStoreContainer">
+    <EntitySet Name="Banner" EntityType="Self.Banner" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BinhLuan" EntityType="Self.BinhLuan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CauHinh" EntityType="Self.CauHinh" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CT_LuotXemTai" EntityType="Self.CT_LuotXemTai" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DanhGia" EntityType="Self.DanhGia" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DanhMuc" EntityType="Self.DanhMuc" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DMBanLanhDao" EntityType="Self.DMBanLanhDao" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DMPhongBan" EntityType="Self.DMPhongBan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FAQ" EntityType="Self.FAQ" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FAQ_NoiDung" EntityType="Self.FAQ_NoiDung" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FeedBack" EntityType="Self.FeedBack" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GhiChu" EntityType="Self.GhiChu" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LichHop" EntityType="Self.LichHop" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LichHop_BLD" EntityType="Self.LichHop_BLD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoaiTaiLieu" EntityType="Self.LoaiTaiLieu" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LuotXemTai" EntityType="Self.LuotXemTai" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NhanVien" EntityType="Self.NhanVien" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NhatKy" EntityType="Self.NhatKy" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nhom_FAQ" EntityType="Self.Nhom_FAQ" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nhom_Nhanvien" EntityType="Self.Nhom_Nhanvien" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nhom_Quyen" EntityType="Self.Nhom_Quyen" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NhomTV" EntityType="Self.NhomTV" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PdfPage" EntityType="Self.PdfPage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PhongHop" EntityType="Self.PhongHop" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Quyen" EntityType="Self.Quyen" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Revision" EntityType="Self.Revision" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TaiLieu" EntityType="Self.TaiLieu" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ThuMuc" EntityType="Self.ThuMuc" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TinTuc" EntityType="Self.TinTuc" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VB_BMLQ" EntityType="Self.VB_BMLQ" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VB_VBCC" EntityType="Self.VB_VBCC" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VB_VBHD" EntityType="Self.VB_VBHD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VB_VBLQ" EntityType="Self.VB_VBLQ" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VB_VBSD" EntityType="Self.VB_VBSD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VBLuuTru" EntityType="Self.VBLuuTru" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_BinhLuan_NhanVien" Association="Self.FK_BinhLuan_NhanVien">
+      <End Role="NhanVien" EntitySet="NhanVien" />
+      <End Role="BinhLuan" EntitySet="BinhLuan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BinhLuan_TinTuc" Association="Self.FK_BinhLuan_TinTuc">
+      <End Role="TinTuc" EntitySet="TinTuc" />
+      <End Role="BinhLuan" EntitySet="BinhLuan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CT_LuotXemTai_LuotXemTai" Association="Self.FK_CT_LuotXemTai_LuotXemTai">
+      <End Role="LuotXemTai" EntitySet="LuotXemTai" />
+      <End Role="CT_LuotXemTai" EntitySet="CT_LuotXemTai" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CT_LuotXemTai_NhanVien" Association="Self.FK_CT_LuotXemTai_NhanVien">
+      <End Role="NhanVien" EntitySet="NhanVien" />
+      <End Role="CT_LuotXemTai" EntitySet="CT_LuotXemTai" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FAQNoiDung_FAQ" Association="Self.FK_FAQNoiDung_FAQ">
+      <End Role="FAQ" EntitySet="FAQ" />
+      <End Role="FAQ_NoiDung" EntitySet="FAQ_NoiDung" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GhiChu_NhanVien" Association="Self.FK_GhiChu_NhanVien">
+      <End Role="NhanVien" EntitySet="NhanVien" />
+      <End Role="GhiChu" EntitySet="GhiChu" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GhiChu_VanBan" Association="Self.FK_GhiChu_VanBan">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="GhiChu" EntitySet="GhiChu" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LuotXemTai_TaiLieu" Association="Self.FK_LuotXemTai_TaiLieu">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="LuotXemTai" EntitySet="LuotXemTai" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Nhom_Nhanvien_NhanVien" Association="Self.FK_Nhom_Nhanvien_NhanVien">
+      <End Role="NhanVien" EntitySet="NhanVien" />
+      <End Role="Nhom_Nhanvien" EntitySet="Nhom_Nhanvien" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Nhom_Nhanvien_Nhom" Association="Self.FK_Nhom_Nhanvien_Nhom">
+      <End Role="NhomTV" EntitySet="NhomTV" />
+      <End Role="Nhom_Nhanvien" EntitySet="Nhom_Nhanvien" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Nhom_Quyen_Nhom" Association="Self.FK_Nhom_Quyen_Nhom">
+      <End Role="NhomTV" EntitySet="NhomTV" />
+      <End Role="Nhom_Quyen" EntitySet="Nhom_Quyen" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Nhom_Quyen_Quyen" Association="Self.FK_Nhom_Quyen_Quyen">
+      <End Role="Quyen" EntitySet="Quyen" />
+      <End Role="Nhom_Quyen" EntitySet="Nhom_Quyen" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Revision_VanBan" Association="Self.FK_Revision_VanBan">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="Revision" EntitySet="Revision" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TaiLieu_LoaiTaiLieu" Association="Self.FK_TaiLieu_LoaiTaiLieu">
+      <End Role="LoaiTaiLieu" EntitySet="LoaiTaiLieu" />
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TaiLieu_PhongBan" Association="Self.FK_TaiLieu_PhongBan">
+      <End Role="DMPhongBan" EntitySet="DMPhongBan" />
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_BMLQ1" Association="Self.FK_VB_BMLQ1">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_BMLQ" EntitySet="VB_BMLQ" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_BMLQ2" Association="Self.FK_VB_BMLQ2">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_BMLQ" EntitySet="VB_BMLQ" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBCC1" Association="Self.FK_VB_VBCC1">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBCC" EntitySet="VB_VBCC" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBCC2" Association="Self.FK_VB_VBCC2">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBCC" EntitySet="VB_VBCC" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBHD1" Association="Self.FK_VB_VBHD1">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBHD" EntitySet="VB_VBHD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBHD2" Association="Self.FK_VB_VBHD2">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBHD" EntitySet="VB_VBHD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBLQ1" Association="Self.FK_VB_VBLQ1">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBLQ" EntitySet="VB_VBLQ" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBLQ2" Association="Self.FK_VB_VBLQ2">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBLQ" EntitySet="VB_VBLQ" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBSD1" Association="Self.FK_VB_VBSD1">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBSD" EntitySet="VB_VBSD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VB_VBSD2" Association="Self.FK_VB_VBSD2">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VB_VBSD" EntitySet="VB_VBSD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VBLuuTru_TaiLieu" Association="Self.FK_VBLuuTru_TaiLieu">
+      <End Role="TaiLieu" EntitySet="TaiLieu" />
+      <End Role="VBLuuTru" EntitySet="VBLuuTru" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

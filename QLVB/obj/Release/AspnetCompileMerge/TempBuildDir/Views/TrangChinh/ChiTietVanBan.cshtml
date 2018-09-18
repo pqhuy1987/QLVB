@@ -1,0 +1,862 @@
+﻿@model QLVB.Models.TaiLieu
+
+@using QLVB.Models;
+
+@{
+    IEnumerable<QLVB.Models.VB_VBCC> VBCanCu = ViewBag.VBCC;
+    IEnumerable<QLVB.Models.VB_VBSD> VBSuaDoi = ViewBag.VBSD;
+    IEnumerable<QLVB.Models.VB_VBHD> VBHuongDan = ViewBag.VBHD;
+    IEnumerable<QLVB.Models.VB_VBLQ> VBLienQuan = ViewBag.VBLQ;
+    IEnumerable<QLVB.Models.Revision> lstRevision = ViewBag.Revision;
+    IEnumerable<QLVB.Models.CauHinh> lstCauHinh = ViewBag.CauHinh;
+
+    // BEGIN
+    IEnumerable<QLVB.Models.VB_BMLQ> BMLienQuan = ViewBag.BMLQ;
+    List<DMPhongBan> lstPhongBan = new List<DMPhongBan>();
+    using (QuanLyVanBanEntities db = new QuanLyVanBanEntities())
+    {
+        lstPhongBan = db.DMPhongBans.ToList();
+    }
+    // END
+
+    ViewBag.Title = Model.TenTaiLieu;
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+}
+
+<script>
+    // Key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+
+<div class="page-content-inner">
+    <div class="row" style="margin-left:-10px">
+        <div class="col-md-12 ">
+            <div class="index-phai-tren">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><i class="fa fa-search-plus"></i> Tìm kiếm </h2>
+                    </div>
+                    <br />
+                    @using (Html.BeginForm("IndexVanBan", "TrangChinh", FormMethod.Post))
+                    {
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <span class="input-group-addon timkiem-btn">
+                                    <i class="fa fa-search"></i> Nâng cao <i class="fa fa-chevron-down ic-ud"></i> <i class="fa fa-chevron-up ic-ud" style="display:none;"></i>
+                                </span>
+                                <input name="TenVanBan" type="text" value="@ViewBag.TenVanBan" class="form-control" placeholder="Tiêu đề hoặc nội dung ngắn gọn văn bản">
+                                <span class="input-group-btn">
+                                    <button class="btn-timkiem" type="submit">Tìm kiếm</button>
+                                </span>
+                            </div>
+                            <div class="panel panel-success timkiem-load" hidden>
+                                <div class="panel-body ">
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            Số hiệu
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="SoHieu" class="form-control" value="@ViewBag.SoHieu" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            Loại văn bản
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("LoaiVanBan", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            Mã hiệu
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="MaHieu" class="form-control" value="@ViewBag.MaHieu" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            Loại văn bản
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="LanBanHanh" class="form-control" value="@ViewBag.LanBanHanh" onkeypress="return ValidateKeypress(/[0-9]/,event);" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            @*Nơi ban hành*@
+                                            Đơn vị soạn thảo
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("NoiBanHanh", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            Người ký
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NguoiKy" class="form-control" value="@ViewBag.NguoiKy" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label">
+                                            Ngày ban hành
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayBanHanhfrom" class="form-control datepicker" value="@ViewBag.NgayBanHanhfrom" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            đến
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayBanHanhto" class="form-control datepicker" value="@ViewBag.NgayBanHanhto" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            Ngày hiệu lực
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayHieuLucfrom" class="form-control datepicker" value="@ViewBag.NgayHieuLucfrom" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            đến
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayHieuLucto" class="form-control datepicker" value="@ViewBag.NgayHieuLucto" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label">
+                                            Tình trạng
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("TinhTrang", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            @*Phòng ban*@
+                                            Đơn vị áp dụng
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("PhongBan", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                </div>
+            </div>
+            <div class="index-phai-tren">
+                <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+                    <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                <i class="fa fa-bars text-danger"></i> Tóm tắt văn bản
+                            </a>
+                        </li>
+                        @*<li role="presentation" class="">
+                                <a href="#noidungTV" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                    <i class="fa fa-vine text-danger"></i> Nội dung TV
+                                </a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="#noidungTA" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                    <i class="fa fa-font text-danger"></i> Nội dung TA
+                                </a>
+                            </li>*@
+                        <li role="presentation" class="">
+                            <a href="#vanbangoc" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                <i class="fa fa-file-image-o text-danger"></i> Văn bản gốc
+                            </a>
+                        </li>
+                        <li role="presentation" class="">
+                            <a href="#luocdo" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                <i class="fa fa-th text-danger"></i> Lược đồ
+                            </a>
+                        </li>
+                        @if (HttpContext.Current.User.IsInRole("TAI-VB"))
+                        {
+                            <li role="presentation" class="">
+                                <a href="#taive" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                    <i class="fa fa-download text-danger"></i> Tải về
+                                </a>
+                            </li>
+                        }
+                        @if (HttpContext.Current.User.IsInRole("XEM-REVISION"))
+                        {
+                            <li role="presentation" class="">
+                                <a href="#revision" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                    <i class="fa fa-pencil-square text-danger"></i> revision
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active in" role="tabpanel" id="home" aria-labelledby="profile-tab">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Model.TenTaiLieu
+                                </div>
+                            </div>
+                            <div class="container table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <tr>
+                                        <th>Số hiệu</th>
+                                        <td>@Model.SoHieu</td>
+                                        <th>Loại văn bản</th>
+                                        <td>
+                                            @if (Model.LoaiTaiLieu != null)
+                                            {
+                                                @Model.LoaiTaiLieu.TenLoaiTL
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mã hiệu</th>
+                                        <td>@Model.MaHieu</td>
+                                        <th>Lần ban hành</th>
+                                        <td> @Model.LanBanHanh </td>
+                                    </tr>
+                                    <tr>
+                                        @*<th>Nơi ban hành</th>*@
+                                        <th>Đơn vị soạn thảo</th>
+                                        <td>
+                                            @if (Model.DMPhongBan1 != null)
+                                            {
+                                                @Model.DMPhongBan1.TenPhong
+                                            }
+                                        </td>
+                                        <th>Người ký</th>
+                                        <td>@Model.NguoiKy </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ngày ban hành</th>
+                                        <td>
+                                            @if (Model.NgayBanHanh != null)
+                                            {
+                                                @Model.NgayBanHanh.Value.ToString("dd/MM/yyyy");
+                                            }
+                                        </td>
+                                        <th>Ngày hiệu lực</th>
+                                        <td>
+                                            @if (Model.NgayHieuLuc != null)
+                                            {
+                                                @Model.NgayHieuLuc.Value.ToString("dd/MM/yyyy");
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @*<th>Phòng ban</th>*@
+                                        <th>Đơn vị áp dụng</th>
+                                        <td>
+                                            @*@if (Model.DMPhongBan != null)
+                                            {
+                                                @Model.DMPhongBan.TenPhong;
+                                            }*@
+                                            @if (!string.IsNullOrEmpty(Model.DonViApDung))
+                                            {
+                                                string[] arrId = Model.DonViApDung.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                                if (arrId != null && arrId.Length > 0)
+                                                {
+                                                    List<string> lstText = new List<string>();
+                                                    foreach (string id in arrId)
+                                                    {
+                                                        var tmp = lstPhongBan.Where(x => x.Id.ToString() == id).FirstOrDefault();
+                                                        if (tmp != null)
+                                                        {
+                                                            lstText.Add(tmp.TenPhong);
+                                                        }
+                                                    }
+                                                    <text>@string.Join(", ", lstText)</text>
+                                                }
+                                            }
+                                        </td>
+                                        <th>Tình trạng</th>
+                                        <td>
+                                            @if (Model.TinhTrang == "1")
+                                            {
+                                                // BEGIN
+                                                @*<span>Chưa hiệu lực</span>*@
+                                                <span>Dự thảo</span>
+                                                // END
+                                            }
+                                            @if (Model.TinhTrang == "2")
+                                            {
+                                                <span style="color:blue;font-weight:500">Còn hiệu lực</span>
+                                            }
+                                            @if (Model.TinhTrang == "3")
+                                            {
+                                                <span style="color: red; font-weight: 500">Hết hiệu lực</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.Raw(Model.NoiDungTomTat)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="noidungTV" aria-labelledby="profile-tab">
+                            @if (Model.NoiDungTV != null)
+                            {
+                                <div class="img-moc"></div>
+                            }
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                </div>
+                                <div class="col-md-2">
+                                    @if (Session["DangNhap"] != null)
+                                    {
+                                        if (ViewBag.VBLuuTru == 0)
+                                        {
+                                            <a data-toggle="tooltip" title="Thêm vào văn bản của tôi" href="@Url.Action("LuuTruVanBan", "TrangChinh", new {@id=Model.MaTaiLieu })" class="btn btn-default"><i class="fa fa-heart-o"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a data-toggle="tooltip" title="Xóa khỏi văn bản của tôi" href="@Url.Action("XoaLuuTruVanBan", "TrangChinh", new {@id=Model.MaTaiLieu })" class="btn btn-danger"><i class="fa fa-heart"></i></a>
+                                        }
+                                        <a data-togg="tooltip" title="Ghí chú" class="btn btn-primary" data-toggle="modal" data-target="#myGhiChu"><i class="fa fa-pencil-square-o"></i></a>
+                                    }
+                                    <a data-togg="tooltip" title="Góp ý văn bản!" data-toggle="modal" data-target="#myYKien" class="btn btn-success"><i class="fa fa-comment"></i></a>
+                                </div>
+                                <div class="col-md-11">
+                                    @Html.Raw(Model.NoiDungTV)
+                                </div>
+                                <div style="clear:both"></div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="noidungTA" aria-labelledby="profile-tab">
+                            @if (Model.NoiDungTA != null)
+                            {
+                                <div class="img-moc"></div>
+
+                            }
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                </div>
+                                <div class="col-md-2">
+                                    @if (Session["DangNhap"] != null)
+                                    {
+                                        if (ViewBag.VBLuuTru == 0)
+                                        {
+                                            <a data-toggle="tooltip" title="Thêm vào văn bản của tôi" href="@Url.Action("LuuTruVanBan", "TrangChinh", new {@id=Model.MaTaiLieu })" class="btn btn-default"><i class="fa fa-heart-o"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a data-toggle="tooltip" title="Xóa khỏi văn bản của tôi" href="@Url.Action("XoaLuuTruVanBan", "TrangChinh", new {@id=Model.MaTaiLieu })" class="btn btn-danger"><i class="fa fa-heart"></i></a>
+                                        }
+                                        <a data-togg="tooltip" title="Ghí chú" class="btn btn-primary" data-toggle="modal" data-target="#myGhiChu"><i class="fa fa-pencil-square-o"></i></a>
+                                    }
+                                    <a data-togg="tooltip" title="Góp ý văn bản!" data-toggle="modal" data-target="#myYKien" class="btn btn-success"><i class="fa fa-comment"></i></a>
+                                </div>
+                                <div class="col-md-11">
+                                    @Html.Raw(Model.NoiDungTA)
+                                </div>
+                                <div style="clear:both"></div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="vanbangoc" aria-labelledby="profile-tab">
+                            <div class="col-md-12">
+                                @if (Model.fileGOC != null)
+                                {
+                                    @*<iframe src="~/Upload/TaiLieuGoc/@Model.fileGOC#zoom=50&toolbar=0" style="width:100%;" height="500"></iframe>*@
+
+                                    if (Model.fileGOC.ToLower().EndsWith(".pdf"))
+                                        {
+                                            <iframe src="/Pdf/Preview/@Model.MaTaiLieu" style="width:100%;" height="500"><div id="loading_gif" style="position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%; background: black; opacity: 0.5;"></iframe>
+                                        }
+                                        else
+                                        {
+                                            <p>PHẦN MỀM CHỈ HỖ TRỢ XEM ONLINE VĂN BẢN GỐC ĐỊNH DẠNG PDF</p>
+                                            <p><a href="~/Upload/TaiLieuGoc/@Model.fileGOC">Tải về</a></p>
+                                        }
+                                }
+                                else
+                                {
+                                    <p>CHƯA CÓ VĂN BẢN GỐC</p>
+                                }
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="luocdo" aria-labelledby="home-tab">
+                            <div class="col-md-4">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><i class="fa fa-tag"></i> Văn bản được căn cứ <span class="numVBCC" style="color:greenyellow">(@VBCanCu.Count())</span></h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12">
+                                            <div class="loadVBCanCu">
+                                                @foreach (var item in VBCanCu)
+                                                {
+                                                    <a class=" text-success" href="@Url.Action("ChiTietVanBan", "TrangChinh", new { @id = item.MaVanBanCC })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                                    <hr />
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><i class="fa fa-tags"></i> Văn bản được sửa đổi, bổ sung, thay thế <span class="numVBSD" style="color:greenyellow">(@VBSuaDoi.Count())</span></h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12">
+                                            <div class="loadVBSuaDoi">
+                                                @foreach (var item in VBSuaDoi)
+                                                {
+                                                    <a class=" text-success" href="@Url.Action("ChiTietVanBan", "TrangChinh", new {@id=item.MaVanBanSD })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                                    <hr />
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-danger">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><i class="fa fa-eye"></i> Văn bản đang xem</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <label>@Model.TenTaiLieu</label>
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <td>Số hiệu: </td>
+                                                <td> @Model.SoHieu</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mã hiệu: </td>
+                                                <td> @Model.MaHieu</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lần ban hành </td>
+                                                <td> @Model.LanBanHanh</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Loại văn bản: </td>
+                                                <td>
+                                                    @if (Model.LoaiTaiLieu != null)
+                                                    {
+                                                        @Model.LoaiTaiLieu.TenLoaiTL
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                @*<td>Nơi ban hành </td>*@
+                                                <td>Đơn vị soạn thảo </td>
+                                                <td> @Model.DMPhongBan1.TenPhong</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Người ký </td>
+                                                <td>@Model.NguoiKy</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ngày ban hành </td>
+                                                <td>
+                                                    @if (Model.NgayBanHanh != null)
+                                                    {
+                                                        @Model.NgayBanHanh.Value.ToString("dd/MM/yyyy")
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ngày hiệu lực </td>
+                                                <td>
+                                                    @if (Model.NgayHieuLuc != null)
+                                                    {
+                                                        @Model.NgayHieuLuc.Value.ToString("dd/MM/yyyy")
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tình trạng </td>
+                                                <td>
+                                                    @if (Model.TinhTrang == "1")
+                                                    {
+                                                        // BEGIN
+                                                        @*<span>Chưa hiệu lực</span>*@
+                                                        <span>Dự thảo</span>
+                                                        // END
+                                                    }
+                                                    @if (Model.TinhTrang == "2")
+                                                    {
+                                                        <span style="color:blue;font-weight:500">Còn hiệu lực</span>
+                                                    }
+                                                    @if (Model.TinhTrang == "3")
+                                                    {
+                                                        <span style="color: red; font-weight: 500">Hết hiệu lực</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    @if (Model.NoiDungTomTat != null)
+                                                    { // bo het the html
+                                                        string sNoiDung = System.Text.RegularExpressions.Regex.Replace(Model.NoiDungTomTat, @"<[^>]*>", String.Empty);
+                                                        if (sNoiDung.Length < 500)
+                                                        {
+                                                            @Html.Raw(sNoiDung)
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw(sNoiDung.Substring(0, 499))                                                                       <span>...</span>
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                @*
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title"><i class="fa fa-hand-o-right"></i> Văn bản hướng dẫn <span class="numVBHD" style="color:greenyellow">(@VBHuongDan.Count())</span></h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-md-12">
+                                                <div class="loadVBHuongDan">
+                                                    @foreach (var item in VBHuongDan)
+                                                    {
+                                                        <a class=" text-success" href="@Url.Action("ChiTietVanBan", "TrangChinh", new { @id = item.MaVanBanHD })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                                        <hr />
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                *@
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><i class="fa fa-link"></i> Văn bản liên quan <span class="numVBLQ" style="color:greenyellow">(@VBLienQuan.Count())</span></h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12">
+                                            <div class="loadVBLienQuan">
+                                                @foreach (var item in VBLienQuan)
+                                                {
+                                                    <a class="text-success" href="@Url.Action("ChiTietVanBan", "TrangChinh", new { @id = item.MaVanBanLQ })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                                    <hr />
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* BEGIN *@
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><i class="fa fa-link"></i> Biểu mẫu liên quan <span class="numBMLQ" style="color:greenyellow">(@BMLienQuan.Count())</span></h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12">
+                                            <div class="loadBMLienQuan">
+                                                @foreach (var item in BMLienQuan)
+                                                {
+                                                    <a class="text-success" href="@Url.Action("ChiTietVanBan", "TrangChinh", new { @id = item.MaBieuMau })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                                    <hr />
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @* END *@
+
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="taive" aria-labelledby="profile-tab">
+                            <div class="container table-responsive">
+                                <table class="table table-bordered table-striped ">
+                                    <tr>
+                                        <th colspan="3">
+                                            @Model.TenTaiLieu
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">
+                                            @if (Model.filePDF != null)
+                                            {
+                                                <i class="text-danger fa fa-file-pdf-o"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new {@id=Model.MaTaiLieu ,@ng = "/Upload/filePDF/" + Model.filePDF })"> TẢI BẢN PDF</a>
+                                            }
+                                        </th>
+                                        <th class="text-center">
+                                            @if (Model.fileDOCV != null)
+                                            {
+                                                <i class="text-danger fa fa-vine"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id=Model.MaTaiLieu, @ng = "/Upload/fileDOCTV/" + Model.fileDOCV })"> TẢI BẢN TIẾNG VIỆT</a>
+                                            }
+                                        </th>
+                                        <th class="text-center">
+                                            @if (Model.fileDOCA != null)
+                                            {
+                                                <i class="text-danger fa fa-font"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id=Model.MaTaiLieu, @ng = "/Upload/fileDOCTA/" + Model.fileDOCA })">TẢI BẢN TIẾNG ANH</a>
+                                            }
+                                        </th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="revision" aria-labelledby="profile-tab">
+                            <div class="container table-responsive">
+                                <table id="tbRevision" class="table table-bordered table-striped text-center">
+                                    <tr>
+                                        <td><i class="fa fa-list text-danger"></i> Phiên bản </td>
+                                        <td><i class="fa fa-vine text-danger"></i> Tiếng Việt</td>
+                                        <td><i class="fa fa-font text-danger"></i> Tiếng Anh</td>
+                                    </tr>
+                                    @foreach (var item in lstRevision)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <b>@item.TenRevision</b>
+                                            </td>
+                                            <td id="tdReTV">
+                                                @if (!string.IsNullOrEmpty(item.fileTV))
+                                                {
+                                                    <a href="/Upload/revision/@item.fileTV"><i class="fa fa-download"></i> DOWNLOAD  </a>
+                                                }
+                                            </td>
+                                            <td id="tdReTA">
+                                                @if (!string.IsNullOrEmpty(item.fileTA))
+                                                {
+                                                    <a href="/Upload/revision/@item.fileTA"><i class="fa fa-download"></i> DOWNLOAD  </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- popup ghi chu -->
+
+<div id="myGhiChu" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Ghi chú văn bản</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>@Model.TenTaiLieu</b></label>
+                    <div class="col-md-12">
+                        @Html.TextArea("NoiDungGhiChu", (string)ViewBag.NoiDungGhiChu, new { @class = "form-control", @rows = "5" })
+                        @Html.Hidden("MaVanBanGhiChu", Model.MaTaiLieu)
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-LuuGhiChu" type="button" class="btn-success btn">Lưu</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myYKien" class="modal fade" role="dialog">
+    @{
+        string sHoTen = "";
+        string sEmail = "";
+        string sDienThoai = "";
+        if (Session["DangNhap"] != null)
+        {
+            QLVB.Models.NhanVien nv = (QLVB.Models.NhanVien)Session["DangNhap"];
+            sHoTen = nv.HoTen;
+            sEmail = nv.Email;
+            sDienThoai = nv.DienThoai;
+        }
+    }
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Gửi góp ý</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Họ & Tên</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbHoTen", sHoTen, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Email</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbEmail", sEmail, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Điện thoại</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbDienThoai", sDienThoai, new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Nội dung</b></label>
+                    <div class="col-md-12">
+                        @Html.TextArea("fbNoiDung", "", new { @class = "form-control", @rows = "5" })
+                    </div>
+                    <script>
+                        $('#fbNoiDung').val("Văn bản góp ý: " + window.location.href);
+                    </script>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-LuuFB" type="button" class="btn-success btn">Gửi</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao2" data-toggle="modal" data-target="#myThongBao" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myThongBao" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div hidden id="div_shadow" style="position: fixed; top: 0; left: 0; z-index: 9000; width: 100%; height: 100%; background: black; opacity: 0.5;"></div>
+
+<script>
+    $('.sub').each(function () {
+        $(this).find('.subHL').find('#CTNoiDung').html($(this).find('.subHL').find('#CTNoiDung').text());
+        $(this).attr("title", $(this).find('.subHL').find('#CTTieuDe').text());
+        $(this).attr("data-toggle", "tooltip");
+    });
+
+    // xu ly ghi chu highlight
+    $('.sub').click(function () {
+        $('#div_shadow').show();
+        $(this).find('.subHL').show();
+    });
+
+    $('#div_shadow').click(function () {
+        $(this).hide();
+        $('.subHL').hide();
+    });
+
+    $('#btn-div-shadow').click(function () {
+
+    });
+
+    $('body').delegate('.CTclose', 'click', function () {
+        $('#div_shadow').hide();
+        $('.subHL').hide();
+    });
+
+    $('.timkiem-btn').click(function () {
+        $('.timkiem-load').slideToggle();
+        $('.ic-ud').toggle();
+        $('.div-timkiem-input').slideToggle();
+    }
+    );
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-togg="tooltip"]').tooltip()
+    })
+
+    window.onload = function () {
+        var url = document.location.toString();
+        if (url.match('#')) {
+            $('.nav-tabs a[href=\\#' + url.split('#')[1] + ']').tab('show');
+        }
+    }
+
+    $('#btn-LuuGhiChu').click(function () {
+        $("#loading_gif").show();
+        $.ajax({
+            type: 'POST',
+            url: '/TrangChinh/GhiChu',
+            data: { NoiDung: $('#NoiDungGhiChu').val(), MaVanBan: $('#MaVanBanGhiChu').val() },
+
+            success: function (result) {
+                $("#loading_gif").hide();
+                $('#pthongbao').text('Lưu thành công');
+                $('#btn-thongbao2').trigger('click');
+            }
+        });
+    });
+
+    $('#btn-LuuFB').click(function () {
+        $("#loading_gif").show();
+        $.ajax({
+            type: 'POST',
+            url: '/TrangChinh/GuiYKien',
+            data: { HoTen: $('#fbHoTen').val(), Email: $('#fbEmail').val(), DienThoai: $('#fbDienThoai').val(), NoiDung: $('#fbNoiDung').val(), MaVanBan: $('#MaVanBanGhiChu').val() },
+
+            success: function (result) {
+                $("#loading_gif").hide();
+                $('#pthongbao').text('Gửi ý kiến thành công');
+                $('#btn-thongbao2').trigger('click');
+            }
+        });
+    });
+</script>
+
+@Html.Raw(TempData["thongbao"])
+
+@if (Model.TinhTrang == "1") //chua hieu luc
+{
+    <input hidden id="img-CauHinh" value="@lstCauHinh.SingleOrDefault(n => n.MaCauHinh == "IMG-CHL").DuLieu" />
+}
+
+@if (Model.TinhTrang == "2") //chua hieu luc
+{
+    <input hidden id="img-CauHinh" value="@lstCauHinh.SingleOrDefault(n => n.MaCauHinh == "IMG-HL").DuLieu" />
+}
+
+@if (Model.TinhTrang == "3") //het hieu luc
+{
+    <input hidden id="img-CauHinh" value="@lstCauHinh.SingleOrDefault(n => n.MaCauHinh == "IMG-HHL").DuLieu" />
+}
+
+<script>
+    $('.img-moc').css({
+        "background": "url(../../Upload/" + $('#img-CauHinh').val() + ") no-repeat",
+        "background-size": "200px"
+    });
+</script>

@@ -1,0 +1,202 @@
+﻿@model QLVB.Models.NhanVien
+@{
+    ViewBag.Title = "ThongTinTaiKhoan";
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+}
+
+
+<div class="index-phai-tren" style="background-color:#fff">
+    <h3 class="title-link">
+        Thông tin cá nhân
+    </h3>
+    <hr />
+    <div class="col-sm-3">
+        @{ string sImg = "icon-user.png";}
+
+        @if(!string.IsNullOrEmpty(Model.HinhDaiDien))
+        {
+            sImg = Model.HinhDaiDien;
+        }
+
+        <img src="~/Upload/Avatar/@sImg" class="img-responsive fa-border imgDaiDien" />
+        Nhấn để thay đổi hình đại diện của bạn
+        <input type="file" id="imgDaiDien" style="display:none" accept="image/*" />
+
+    </div>
+    <div class="col-sm-9">
+        @using (Html.BeginForm("ThongTinTaiKhoan", "ND_TaiKhoan", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+            <div class="title_">1. Thông tin bản thân</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Họ tên</label>
+                <div class="col-sm-9">
+                    @Html.TextBox("HoTen", Model.HoTen, new { @class = "form-control" })
+
+                </div>
+                <label id="erHoTen" class="col-sm-1 text-danger error">*</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Ngày sinh</label>
+                <div class="col-sm-9">
+                    @Html.TextBox("NgaySinhs", Model.NgaySinh != null ? Model.NgaySinh.Value.ToString("dd/MM/yyyy") : "", new { @class = "form-control datepicker" })
+                </div>
+            </div>
+            <div class="title_">2. Thông tin bảo mật</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Tên đăng nhập</label>
+                <div class="col-sm-9">
+                    @Html.Hidden("TenDangNhap", Model.TenDangNhap)
+                    @Html.TextBox("TenDangNhap", Model.TenDangNhap, new { @disabled = "true", @class = "form-control" })
+                </div>
+                <label id="erTenDangNhap" class="col-sm-1 text-danger error">* @ViewBag.ktTenDangNhap</label>
+            </div>
+
+        if(Model.Ldap.Value==false)
+        {
+                <div class="form-group">
+                    <label for="inputPassword" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="changePassword">Thay đổi mật khẩu</div>
+                    </div>
+
+                </div>
+        }
+
+            <div class="title_">3. Thông tin liên lạc</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Địa chỉ</label>
+                <div class="col-sm-9">
+                    @Html.TextArea("DiaChi", Model.DiaChi, new { @class = "form-control" })
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-9">
+                    @Html.TextBox("Email", Model.Email, new { @class = "form-control" })
+                </div>
+                <label id="erEmail" class="col-sm-1 text-danger error">* @ViewBag.ktEmail</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Điện thoại</label>
+                <div class="col-sm-9">
+                    @Html.TextBox("DienThoai", Model.DienThoai, new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                </div>
+                <label id="erDienThoai" class="col-sm-1 text-danger error">*</label>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <input id="ChinhSua" type="submit" value="Cập nhật" class="btn btn-success" />
+                </div>
+            </div>
+    }
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    $('#ChinhSua').click(function () {
+        $("label.error").text("");
+        var i = 0;
+        if($('#HoTen').val()=="")
+        {
+            i++;
+            $('#erHoTen').text("*Hãy nhập họ tên");
+        }
+        if ($('#TenDangNhap').val() == "") {
+            i++;
+            $('#erTenDangNhap').text("*Hãy nhập tên đăng nhập");
+        }
+        
+        if ($('#DienThoai').val() == "") {
+            i++;
+            $('#erDienThoai').text("*Hãy nhập số điện thoại");
+        }
+
+        
+      
+        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        if (!emailReg.test($('#Email').val()))
+        {
+            i++;
+            $('#erEmail').text("*Email không hợp lệ");
+        }
+   
+        if (i != 0)
+           
+            return false;
+    });
+
+    $('#menul-qltk').addClass("active");
+
+    $('body').delegate('.imgDaiDien', 'click', function () {
+        $('#imgDaiDien').trigger('click');
+    });
+    $('#imgDaiDien').change(function () {
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+
+            $.ajax({
+                url: '@Url.Action("saveimgDaiDien_ajax", "ND_TaiKhoan")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result == "-1") {
+                        window.location = "/QuanTri/DangXuat";
+                    }
+                    else {
+                        window.location.reload();
+                    }
+
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+</script>
+<button id="btn-thongbao1" data-toggle="modal" data-target="#myModal1" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal1" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao1"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Raw(TempData["thongbao1"])
+
+<!-- Trigger the modal with a button -->

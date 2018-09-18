@@ -1,0 +1,188 @@
+﻿@model QLVB.Models.NhanVien
+
+@{
+    IEnumerable<QLVB.Models.NhomTV> lstNhom = ViewBag.NhomTV;
+    
+    ViewBag.Title = "Tạo tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+}
+<script>
+    //key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+
+<h3 class="title-link">
+    <i class="fa fa-user"></i> @Html.ActionLink("Danh sách", "DanhSach") <i class="fa fa-angle-right"></i>
+    Tạo tài khoản mới
+</h3>
+<hr />
+
+@using (Html.BeginForm("ThemMoi", "QL_TaiKhoan", FormMethod.Post, new {@class="form-horizontal" }))
+{
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Họ tên</label>
+        <div class="col-sm-5">
+            @Html.TextBox("HoTen", "", new { @class = "form-control" })
+            
+        </div>
+        <label id="erHoTen" class="col-sm-5 text-danger error">*</label>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Tên đăng nhập</label>
+        <div class="col-sm-5">
+            @Html.TextBox("TenDangNhap", "", new { @class = "form-control" })
+        </div>
+        <label id="erTenDangNhap" class="col-sm-5 text-danger error">* @ViewBag.ktTenDangNhap</label>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword" class="col-sm-2 control-label">Mật khẩu</label>
+        <div class="col-sm-5">
+           @Html.Password("MatKhau", "", new { @class = "form-control" })
+        </div>
+        <label id="erMatKhau" class="col-sm-5 text-danger error">*Mật khẩu có độ dài 6-30 ký tự</label>
+    </div>
+      <div class="form-group">
+        <label for="inputPassword" class="col-sm-2 control-label">Nhập lại mật khẩu</label>
+        <div class="col-sm-5">
+           @Html.Password("MatKhauAG", "", new { @class = "form-control" })
+        </div>
+          <label id="erMatKhauAG" class="col-sm-5 text-danger error"></label>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Điện thoại</label>
+        <div class="col-sm-5">
+            @Html.TextBox("DienThoai", "", new { @class = "form-control",@onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+        </div>
+        <label id="erDienThoai" class="col-sm-5 text-danger error"></label>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-5">
+            @Html.TextBox("Email", "", new { @class = "form-control" })
+        </div>
+        <label id="erEmail" class="col-sm-5 text-danger error"> @ViewBag.ktEmail</label>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Địa chỉ</label>
+        <div class="col-sm-5">
+            @Html.TextArea("DiaChi", "", new { @class = "form-control" })
+        </div>
+
+    </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Ngày sinh</label>
+        <div class="col-sm-5">
+            @Html.TextBox("NgaySinhs", null, new { @class = "form-control datepicker" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Trình trạng</label>
+        <div class="col-sm-5">
+                @Html.RadioButton("KichHoat", "True", new { @checked = "checked" }) Kích hoạt
+                @Html.RadioButton("KichHoat", "False") Không kích hoạt
+        </div>
+    </div>
+     <div class="form-group">
+        <label class="col-sm-2 control-label">Tài khoản LDAP</label>
+            <div class="col-sm-5">
+                <input name="Ldap" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Nhóm</label>
+
+        @foreach (var item in lstNhom)
+        {
+            <div class="col-sm-3">
+               <input name="Nhom" type="checkbox" value="@item.MaNhom" /> @item.TenNhom
+            </div>
+        }
+
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <input id="TaoMoi" type="submit" value="Tạo mới" class="btn btn-success" /> 
+        </div>
+    </div>
+}
+
+<script>
+    $('#TaoMoi').click(function () {
+        $("label.error").text("");
+        var i = 0;
+        if($('#HoTen').val()=="")
+        {
+            i++;
+            $('#erHoTen').text("*Hãy nhập họ tên");
+        }
+        if ($('#TenDangNhap').val() == "") {
+            i++;
+            $('#erTenDangNhap').text("*Hãy nhập tên đăng nhập");
+        }
+        if ($('#MatKhau').val() == "") {
+            i++;
+            $('#erMatKhau').text("*Hãy nhập mật khẩu");
+        }
+        //if ($('#DienThoai').val() == "") {
+        //    i++;
+        //    $('#erDienThoai').text("*Hãy nhập số điện thoại");
+        //}
+       
+        if ($('#MatKhau').val() != $('#MatKhauAG').val()) {
+            i++;
+            $('#erMatKhauAG').text("*Mật khẩu không trùng với nhau");
+        }
+        if ($('#MatKhau').val().length < 6 || $('#MatKhau').val().length > 30) {
+            i++;
+            $('#erMatKhau').text("*Mật khẩu có độ dài 6-30 ký tự");
+        }
+        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        if (!emailReg.test($('#Email').val()))
+        {
+            i++;
+            $('#erEmail').text("*Email không hợp lệ");
+        }
+        if (i != 0)
+            return false;
+    });
+   
+    $('#menul-qltk').addClass("active");
+</script>
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao"  data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Raw(TempData["thongbao"])

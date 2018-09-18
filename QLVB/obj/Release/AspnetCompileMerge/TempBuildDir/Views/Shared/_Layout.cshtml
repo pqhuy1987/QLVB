@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="~/favicon.png" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <!-- Bootstrap Core CSS -->
+    <!-- Custom CSS -->
+    <link href="../../Content/ThemeAdmin/css/sb-admin.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../../Content/ThemeAdmin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,‌​100italic,300,300ita‌​lic,400italic,500,50‌​0italic,700,700itali‌​c,900italic,900' rel='stylesheet' type='text/css'>
+
+    <link href="~/Content/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Content/ckeditor/ckeditor.js"></script>
+
+    @*<link href="~/Content/DateTimePicker/jquery-ui.css" rel="stylesheet" />
+       <script src="~/Content/DateTimePicker/jquery-ui.js"></script>*@
+
+
+    @*<link rel="stylesheet" href="~/Content/alilas/bower_components/kendo-ui/styles/kendo.common-material.min.css" />
+      <link rel="stylesheet" href="~/Content/alilas/bower_components/kendo-ui/styles/kendo.material.min.css" />
+      <script src="~/Content/alilas/assets/js/common.min.js"></script>
+      <script src="~/Content/alilas/assets/js/kendoui_custom.min.js"></script>*@
+    <link href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.common-material.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.dataviz.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.material.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.dataviz.material.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://kendo.cdn.telerik.com/2017.2.504/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.2.504/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.2.504/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.2.504/js/kendo.aspnetmvc.min.js"></script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+    <div id="div-thongbao" style="display:none">
+        <p id="div-pthongbao"></p>
+    </div>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="img-responsive" href="@Url.Action("Index","TrangChinh")"><img src="~/Upload/logo.png" width="150" height="50" /></a>
+            </div>
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu message-dropdown">
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading">
+                                            <strong>John Smith</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading">
+                                            <strong>John Smith</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading">
+                                            <strong>John Smith</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-footer">
+                            <a href="#">Read All New Messages</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu alert-dropdown">
+                        <li>
+                            <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">View All</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-user"></i>
+                        @if (Session["DangNhap"] != null)
+                        {
+                            QLVB.Models.NhanVien nv = (QLVB.Models.NhanVien)Session["DangNhap"];
+                            @nv.HoTen
+                        }
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @if (HttpContext.Current.User.IsInRole("XEM-Y-KIEN"))
+                        {
+                            <li>
+                                <a href="@Url.Action("dsYKien","QL_FAQ")"><i class="fa fa-fw fa-envelope"></i> Ý kiến</a>
+                            </li>
+                        }
+                        @if (HttpContext.Current.User.IsInRole("SUA-CAU-HINH"))
+                        {
+                            <li>
+                                <a href="@Url.Action("DSCauHinh","QuanTri")"><i class="fa fa-fw fa-gear"></i> Cấu hình</a>
+                            </li>
+                        }
+                        <li class="divider"></li>
+                        <li>
+                            <a href="@Url.Action("DangXuat","QuanTri")"><i class="fa fa-fw fa-power-off"></i> Đăng xuất</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li class="menul-logo">
+                        <a href="@Url.Action("Index","TrangChinh")"><img src="~/Upload/logo.png" width="100" height="40" /></a>
+                    </li>
+                    @if (HttpContext.Current.User.IsInRole("XEM-QUAN-TRI"))
+                    {
+                        <li id="menul-home">
+                            <a href="@Url.Action("Index","QuanTri")"><i class="fa fa-fw fa-home"></i> Dash Board</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("QL-TAI-KHOAN"))
+                    {
+                        <li id="menul-qltk">
+                            <a href="@Url.Action("DanhSach","QL_TaiKhoan")"><i class="fa fa-fw fa-user"></i> Quản lý tài khoản</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("QL-NHOM"))
+                    {
+                        <li id="menul-qln">
+                            <a href="@Url.Action("DanhSach","QL_Nhom")"><i class="fa fa-fw fa-users"></i> Quản lý nhóm</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("QL-VAN-BAN"))
+                    {
+                        <li id="menul-qlvb">
+                            <a href="@Url.Action("DanhSach","QL_TaiLieu")"><i class="fa fa-fw fa-files-o"></i> Quản lý văn bản</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("QL-FAQ"))
+                    {
+                        <li id="menul-qlfaq">
+                            <a href="@Url.Action("dsFAQ","QL_FAQ")"><i class="fa fa-fw fa-question"></i> Quản lý nội dung FAQ</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("QL-TIN-TUC"))
+                    {
+                        <li id="menul-qltt">
+                            <a href="@Url.Action("DanhSach", "QL_TinTuc")"><i class="fa fa-fw fa-newspaper-o"></i> Quản lý tin tức</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("QL-BANNER"))
+                    {
+                        <li id="menul-qlbn">
+                            <a href="@Url.Action("DanhSach", "QL_Banner")"><i class="fa fa-fw fa-picture-o"></i> Quản lý banner</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("QL-PHONG") || HttpContext.Current.User.IsInRole("QL-LOAIVB") || HttpContext.Current.User.IsInRole("QL-FAQ") || HttpContext.Current.User.IsInRole("SUA-CAU-HINH") || HttpContext.Current.User.IsInRole("QL-PHONG-HOP"))
+                    {
+                        <li id="menul-qldm">
+                            <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Quản lý danh mục <i class="fa fa-fw fa-caret-down"></i></a>
+                            <ul id="demo" class="collapse">
+                                @if (HttpContext.Current.User.IsInRole("QL-PHONG"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DanhSach","QL_DMPhongBan")"><i class="fa fa-fw fa-hospital-o"></i> Phòng ban</a>
+                                    </li>
+                                }
+                                @if (HttpContext.Current.User.IsInRole("QL-LOAIVB"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DanhSach","QL_DMLoaiTaiLieu")"><i class="fa fa-fw fa-file-text"></i> Loại văn bản</a>
+                                    </li>
+                                }
+                                @if (HttpContext.Current.User.IsInRole("QL-FAQ"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DanhSach","QL_FAQ")"><i class="fa fa-fw fa-question-circle"></i> FAQ</a>
+                                    </li>
+                                }
+                                @if (HttpContext.Current.User.IsInRole("SUA-CAU-HINH"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DSCauHinh","QuanTri")"><i class="fa fa-fw fa-cogs"></i> Cấu hình</a>
+                                    </li>
+                                }
+                                @if (HttpContext.Current.User.IsInRole("QL-PHONG-HOP"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DanhSach","QL_DMPhongHop")"><i class="fa fa-fw fa-building"></i> Phòng họp</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if (HttpContext.Current.User.IsInRole("XEM-THONG-KE"))
+                    {
+                        <li id="menul-tk">
+                            <a href="javascript:;" data-toggle="collapse" data-target="#thongke"><i class="fa fa-fw fa-bar-chart"></i> Thống kê <i class="fa fa-fw fa-caret-down"></i></a>
+                            <ul id="thongke" class="collapse">
+                                <li>
+                                    <a href="@Url.Action("ThongKeVanBan","QuanTri")"><i class="fa fa-fw fa-files-o"></i> Văn bản</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("LuotXem","QuanTri")"><i class="fa fa-fw fa-eye"></i> Lượt xem</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ThongKeNguoiXT","QuanTri")"><i class="fa fa-fw fa-eye"></i> Người xem, tải</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("NhatKy","QuanTri")"><i class="fa fa-fw fa-eye"></i> Nhật ký hệ thống</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+        <div id="page-wrapper">
+            <div class="container" style="background:#fff">
+                @RenderBody()
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+
+    <script src="~/Content/mark.js"></script>
+    <script>
+        $('.datepicker').kendoDatePicker({
+            format: "dd/MM/yyyy"
+        });
+        $('.datetimepicker').kendoDateTimePicker({
+            format: "dd/MM/yyyy HH:mm",
+        });
+    </script>
+</body>
+</html>

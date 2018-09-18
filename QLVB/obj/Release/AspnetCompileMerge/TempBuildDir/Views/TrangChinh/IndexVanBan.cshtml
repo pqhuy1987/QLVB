@@ -1,0 +1,362 @@
+﻿@model PagedList.IPagedList<QLVB.Models.TaiLieu>
+@using System.Diagnostics
+@using PagedList.Mvc;
+
+@{
+    IEnumerable<QLVB.Models.LoaiTaiLieu> lstLoaiVanBan = ViewBag.LoaiVanBans;
+    IEnumerable<QLVB.Models.TaiLieu> lstTaiLieu = ViewBag.VanBans;
+
+    ViewBag.Title = "Văn bản nội bộ";
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+
+    string sUrl = "";
+}
+
+<script>
+    // key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+
+<div class="page-content-inner">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="index-trai-duoi">
+                <div class="div-title">
+                    <span class="span-title">
+                        Văn bản nội bộ
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <ul class="ul-content">
+                    @foreach (var item in lstLoaiVanBan)
+                    {
+                        <li>
+                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan=item.MaLoaiTL })">@item.TenLoaiTL <span style="color:#ccc">(@lstTaiLieu.Where(n => n.LoaiVanBan == item.MaLoaiTL).Count())</span></a>
+                            <i class="fa fa-angle-double-right"></i>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="index-trai-duoi">
+                <div class="div-title">
+                    <span class="span-title">
+                        Thống kê
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <ul class="ul-content">
+                    <li>Tổng số văn bản: @lstTaiLieu.Count()</li>
+                    <li>Còn hiệu lực: @lstTaiLieu.Where(x => x.TinhTrang != null).Count(y => y.TinhTrang.Equals("2"))</li>
+                    <li>Hết hiệu lực: @lstTaiLieu.Where(x => x.TinhTrang != null).Count(y => y.TinhTrang.Equals("3"))</li>
+                    @* BEGIN *@
+                    @*<li>Chưa hiệu lực: @lstTaiLieu.Count(x => x.TinhTrang == null)</li>*@
+                    @*<li>Dự thảo: @lstTaiLieu.Count(x => x.TinhTrang == null)</li>*@
+                    <li>Dự thảo: @lstTaiLieu.Where(x => x.TinhTrang != null).Count(y => y.TinhTrang.Equals("1"))</li>
+                    @* END *@
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9 ">
+            <div class="index-phai-tren">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><i class="fa fa-search-plus"></i> Tìm kiếm </h2>
+                    </div>
+                    <br />
+                    @using (Html.BeginForm("IndexVanBan", "TrangChinh", FormMethod.Post))
+                    {
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <span class="input-group-addon timkiem-btn">
+                                    <i class="fa fa-search"></i> Nâng cao <i class="fa fa-chevron-down ic-ud"></i> <i class="fa fa-chevron-up ic-ud" style="display:none;"></i>
+                                </span>
+                                <input id="TenVanBan" name="TenVanBan" type="text" value="@ViewBag.TenVanBan" class="form-control" placeholder="Tiêu đề hoặc nội dung ngắn gọn văn bản">
+                                <span class="input-group-btn">
+                                    <button class="btn-timkiem" type="submit">Tìm kiếm</button>
+                                </span>
+                            </div>
+                            <div class="panel panel-success timkiem-load" hidden>
+                                <div class="panel-body ">
+
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            Số hiệu
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="SoHieu" class="form-control" value="@ViewBag.SoHieu" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            Loại văn bản
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("LoaiVanBan", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            Mã hiệu
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="MaHieu" class="form-control" value="@ViewBag.MaHieu" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            Lần ban hành
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="LanBanHanh" class="form-control" value="@ViewBag.LanBanHanh" onkeypress="return ValidateKeypress(/[0-9]/,event);" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            @*Nơi ban hành*@
+                                            Đơn vị soạn thảo
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("NoiBanHanh", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            Người ký
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NguoiKy" class="form-control" value="@ViewBag.NguoiKy" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label">
+                                            Ngày ban hành
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayBanHanhfrom" class="form-control datepicker" value="@ViewBag.NgayBanHanhfrom" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            đến
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayBanHanhto" class="form-control datepicker" value="@ViewBag.NgayBanHanhto" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label ">
+                                            Ngày hiệu lực
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayHieuLucfrom" class="form-control datepicker" value="@ViewBag.NgayHieuLucfrom" />
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            đến
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="NgayHieuLucto" class="form-control datepicker" value="@ViewBag.NgayHieuLucto" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <label class="col-md-2 control-label">
+                                            Tình trạng
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("TinhTrang", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                        <label class="col-md-2 control-label ">
+                                            @*Phòng ban*@
+                                            Đơn vị áp dụng
+                                        </label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("PhongBan", null, "Tất cả", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                </div>
+            </div>
+
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        @ViewBag.titLoaiVB
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12">
+                    @{ int i = 0; }
+                    @foreach (var item in Model)
+                    {
+                        sUrl = "";
+                        sUrl = "xem-van-ban/" + QLVB.Models.Tools.RemoveDiacritics(item.TenTaiLieu) + "-" + item.MaTaiLieu;
+                        if (item.BaoMat != true)
+                        {
+                            i++;
+                            <div style="margin:5px 0 5px 0">
+                                <div class="col-xs-1 col-md-1">
+                                    <span class="badge">@i</span>
+                                </div>
+                                <div class="col-xs-8 col-md-8">
+                                    <p class="font-16"><a href="@sUrl" class="NameTL">@item.TenTaiLieu</a> </p>
+                                    <a href="@sUrl#noidungTA"><i class="fa fa-font icon-color"></i> Tiếng Anh</a> |
+                                    <a href="@sUrl#vanbangoc"><i class="fa fa-vine icon-color"></i> Văn bản gốc</a> |
+                                    <a href="@sUrl#luocdo"><i class="fa fa-th icon-color"></i> Lược đồ</a> |
+                                    <a href="@sUrl#taive"><i class="fa fa-download icon-color"></i> Tải về</a>
+                                    <br /><br />
+                                    <p>
+                                        @if (item.NoiDungTV != null)
+                                        { 
+                                            // bo het the html
+                                            string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungTV, @"<[^>]*>", String.Empty);
+                                            if (sNoiDung.Length < 500)
+                                            {
+                                                @Html.Raw(sNoiDung)
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(sNoiDung.Substring(0, 499))
+                                            }
+                                        }
+                                    </p>
+                                    <div style="clear:both"></div>
+                                </div>
+                                <div class="col-xs-10 col-md-3">
+                                    <div class="form-group">
+                                        Ban hành:
+                                        @if (item.NgayBanHanh != null)
+                                        { @item.NgayBanHanh.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Hiệu lực:
+                                        @if (item.NgayHieuLuc != null)
+                                        { @item.NgayHieuLuc.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Tình trạng:
+                                        @if (item.TinhTrang == "1")
+                                        {
+                                            // BEGIN
+                                            @*<span>Chưa hiệu lực</span>*@
+                                            <span>Dự thảo</span>
+                                            // END
+                                        }
+                                        @if (item.TinhTrang == "2")
+                                        {
+                                            <span style="color:blue;font-weight:500">Còn hiệu lực</span>
+                                        }
+                                        @if (item.TinhTrang == "3")
+                                        {
+                                            <span style="color: red; font-weight: 500">Hết hiệu lực</span>
+                                        }
+                                        <br />
+                                        Tải lên:
+                                        @item.NgayTaiLen.Value.ToString("dd/MM/yyyy")
+                                    </div>
+                                </div>
+
+                                <div style="clear:both"></div>
+                            </div>
+                        }
+                        else if (HttpContext.Current.User.IsInRole("XEM-VB-MAT"))
+                        {
+                            i++;
+                            <div style="margin:5px 0 5px 0">
+                                <div class="col-xs-1 col-md-1">
+                                    <span class="badge">@i</span>
+                                </div>
+                                <div class="col-xs-8 col-md-8">
+                                    <p class="font-16"><a href="@sUrl" class="NameTL">@item.TenTaiLieu</a> <span class="text-danger">(Văn bản mật)</span></p>
+                                    <a href="@sUrl#noidungTA"><i class="fa fa-font icon-color"></i> Tiếng Anh</a> |
+                                    <a href="@sUrl#vanbangoc"><i class="fa fa-vine  icon-color"></i> Văn bản gốc</a> |
+                                    <a href="@sUrl#luocdo"><i class="fa fa-th icon-color"></i> Lược đồ</a> |
+                                    <a href="@sUrl#taive"><i class="fa fa-download icon-color"></i> Tải về</a>
+                                    <br /><br />
+                                    <p>
+                                        @if (item.NoiDungTV != null)
+                                        { 
+                                            // bo het the html
+                                            string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungTV, @"<[^>]*>", String.Empty);
+                                            if (sNoiDung.Length < 500)
+                                            {
+                                                @Html.Raw(sNoiDung)
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(sNoiDung.Substring(0, 499))
+                                            }
+                                        }
+                                    </p>
+                                    <div style="clear:both"></div>
+                                </div>
+                                <div class="col-xs-10 col-md-3">
+                                    <div class="form-group">
+                                        Ban hành:
+                                        @if (item.NgayBanHanh != null)
+                                        { @item.NgayBanHanh.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Hiệu lực:
+                                        @if (item.NgayHieuLuc != null)
+                                        { @item.NgayHieuLuc.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Tình trạng:
+                                        @if (item.TinhTrang == "1")
+                                        {
+                                            // BEGIN
+                                            @*<span>Chưa hiệu lực</span>*@
+                                            <span>Dự thảo</span>
+                                            // END
+                                        }
+                                        @if (item.TinhTrang == "2")
+                                        {
+                                            <span style="color:blue;font-weight:500">Còn hiệu lực</span>
+                                        }
+                                        @if (item.TinhTrang == "3")
+                                        {
+                                            <span style="color: red; font-weight: 500">Hết hiệu lực</span>
+                                        }
+                                        <br />
+                                        Tải lên:
+                                        @item.NgayTaiLen.Value.ToString("dd/MM/yyyy")
+                                    </div>
+                                </div>
+
+                                <div style="clear:both"></div>
+                            </div>
+                        }
+
+                    }
+                    <div class="dlink">
+                        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+                        @Html.PagedListPager(Model, page => Url.Action("IndexVanBan", new { page = page, TenVanBan = ViewBag.TenVanBan, SoHieu = ViewBag.SoHieu, NoiBanHanh = ViewBag.NoiBanHanhi, NguoiKy = ViewBag.NguoiKy, NgayBanHanhfrom = ViewBag.NgayBanHanhfrom, NgayBanHanhto = ViewBag.NgayBanHanhto, NgayHieuLucfrom = ViewBag.NgayHieuLucfrom, NgayHieuLucto = ViewBag.NgayHieuLucto, LoaiVanBan = ViewBag.LoaiVanBani, TinhTrang = ViewBag.TinhTrangi, PhongBan = ViewBag.PhongBani }))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.timkiem-btn').click(function () {
+        $('.timkiem-load').slideToggle();
+        $('.ic-ud').toggle();
+        $('.div-timkiem-input').slideToggle();
+    });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        var searchTerm = $('#TenVanBan').val();
+        var options = { 'diacritics': true, 'separateWordSearch': true };
+        $("a.NameTL").mark(searchTerm, options);
+    })
+</script>

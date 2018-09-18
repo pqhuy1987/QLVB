@@ -1,0 +1,236 @@
+﻿@model QLVB.Models.NhomTV
+
+@{
+    IEnumerable<QLVB.Models.Quyen> lstQuyen = ViewBag.Quyen;
+
+    ViewBag.Title = "Tạo nhóm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+    
+    <script src="~/Content/chosen_v1.6.2/chosen.jquery.min.js"></script>
+    <link href="~/Content/chosen_v1.6.2/chosen.min.css" rel="stylesheet" />
+}
+
+<h3 class="title-link">
+    <i class="fa fa-users"></i> @Html.ActionLink("Danh sách", "DanhSach") <i class="fa fa-angle-right"></i>
+    Tạo nhóm mới
+</h3>
+<hr />
+
+@using (Html.BeginForm("ThemMoi", "QL_Nhom", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <div class="form-group">
+        <label class="col-md-3 control-label">Tên nhóm</label>
+        <div class="col-md-5">
+            @Html.TextBox("TenNhom", "", new { @class = "form-control" })
+
+        </div>
+        <label id="erTenNhom" class="col-sm-5 text-danger error"></label>
+    </div>
+     <div class="form-group">
+         <label class="col-sm-3 control-label">Nhóm LDAP</label>
+         <div class="col-sm-5">
+             <input name="MacDinh" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+         </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">Chọn tài khoản vào nhóm</label>
+        <div class="col-md-5">
+            @Html.DropDownList("NhanVien", null, "Chọn tài khoản", new { @class = "form-control" })
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div id="dsTaiKhoan" class="col-md-12">
+
+        </div>
+    </div>
+    <hr />
+    <div class="form-group">
+        <label class="col-md-3 control-label">Thêm quyền cho nhóm</label>
+        <div class="col-md-8">
+            <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+                <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                             Quyền
+                        </a>
+                    </li>
+                    <li role="presentation" class="">
+                        <a href="#xemFAQ" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                             Xem FAQ
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent" style="border: 1px solid #428bca;">
+                    <div class="tab-pane fade active in" role="tabpanel" id="home" aria-labelledby="home-tab">
+                        <div class="table-responsive">
+                            <table class="table table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <th>Chức năng </th>
+                                        <th>Dữ liệu</th>
+                                    </tr>
+                                </thead>
+
+                                <tr>
+                                    <td>
+                                        @foreach (var item in lstQuyen.Where(n => n.ChucNang == 1))
+                                        {
+                                            <input type="checkbox" name="Quyen" value="@item.MaQuyen" /> @item.TenQuyen
+                                            <br />
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var item in lstQuyen.Where(n => n.ChucNang != 1))
+                                        {
+                                            <input type="checkbox" name="Quyen" value="@item.MaQuyen" /> @item.TenQuyen
+                                            <br />
+                                        }
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" role="tabpanel" id="xemFAQ" aria-labelledby="home-tab">
+                        @Html.Raw(ViewBag.faq)
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-9">
+            <input id="TaoMoi" type="submit" value="Lưu" class="btn btn-success" />
+        </div>
+    </div>
+}
+
+
+<script>
+    //DuyetSoNu
+    $('.treeFAQ li').each(function () {
+        var i = 0;
+        $(this).children(".mn-child:first").children("li").each(function () {
+            i++;
+        });
+        if (i != 0)
+            $(this).children(".span-soluong").text(" (" + i + " mục)");
+        else
+            $(this).children(".span-soluong").text("");
+    });
+    
+
+    $('body').delegate('.mn-parent', 'click', function () {
+        $(this).parents('li:first').children('.mn-child:first').slideToggle();
+    });
+
+    //checked
+    $('input.cheChild').change(function () {
+        if ($(this).is(':checked')) {
+            $(this).parents().siblings('input:checkbox').prop('checked', true);
+            $(this).siblings().find('input:checkbox').prop('checked', true);
+        }
+        else {
+            $(this).siblings().find('input:checkbox').prop('checked', false);
+        }
+    });
+
+    $('#NhanVien').change(function () {
+        var i = 0;
+        if ($(this).val() != "") {
+            var id = $(this).val();
+            $('.idTK').each(function () {
+                if ($(this).val() == id)
+                    i = 1;
+            });
+            if (i == 0) {
+                var html = ' <span class="col-md-3" style="margin-bottom:5px;"><input hidden name="TaiKhoan" class="idTK" value=' + id + ' /> <input disabled value='+id+' /> <a class="btnxoaTK btn btn-danger fa fa-times" > </a></span>';
+                $('#dsTaiKhoan').append(html);
+            }
+            else {
+                alert("TÀI KHOẢN ĐÃ ĐƯỢC CHỌN");
+            }
+        }
+    });
+
+    $('body').delegate('.btnxoaTK', 'click', function () {
+        $(this).parent().remove();
+    });
+
+    $('#NhanVien').chosen({ no_results_text: "Không tìm thấy!" });
+    $('#TaoMoi').click(function () {
+        $("label.error").text("");
+        var i = 0;
+        if ($('#TenNhom').val() == "") {
+            i++;
+            $('#erTenNhom').text("*Hãy nhập tên nhóm");
+        }
+
+        if (i != 0)
+            return false;
+    });
+
+    $('#menul-qln').addClass("active");
+</script>
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Raw(TempData["thongbao"])
+
+<style>
+    .mn-parent:hover {
+        cursor: pointer;
+    }
+
+    .mn-child {
+        display: none;
+    }
+
+    ul.treeFAQ span {
+        word-wrap: break-word;
+    }
+
+
+    .treeFAQ ul, ul.treeFAQ {
+        list-style: none;
+    }
+
+        ul.treeFAQ li {
+            padding: 5px 0;
+        }
+
+            ul.treeFAQ li a {
+                text-decoration: none !important;
+            }
+
+        ul.treeFAQ .span-soluong {
+            color: silver;
+        }
+</style>

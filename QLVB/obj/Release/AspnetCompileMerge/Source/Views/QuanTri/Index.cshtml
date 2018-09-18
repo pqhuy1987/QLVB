@@ -1,0 +1,465 @@
+﻿@model PagedList.IPagedList<QLVB.Models.FeedBack>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Trang Chủ";
+    IEnumerable<QLVB.Models.LuotXemTai> FullModel = (IEnumerable<QLVB.Models.LuotXemTai>)ViewBag.FullModel;
+    IEnumerable<QLVB.Models.NhanVien> NguoiDung = (IEnumerable<QLVB.Models.NhanVien>)ViewBag.NguoiDung;
+    IEnumerable<QLVB.Models.TaiLieu> TaiLieu = (IEnumerable<QLVB.Models.TaiLieu>)ViewBag.VanBan;
+    IEnumerable<QLVB.Models.CT_LuotXemTai> lstCTXT = ViewBag.lstCTXT;
+
+    QLVB.Models.Tools tool = new QLVB.Models.Tools();
+}
+<link href="~/Content/cssAdmin.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-3" style="">
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data" style="display: none;">5,3,9,6,5,9,7</span><svg class="peity" height="28" width="48"><rect fill="#d84315" x="1.3714285714285717" y="12.444444444444443" width="4.114285714285715" height="15.555555555555557"></rect><rect fill="#d84315" x="8.228571428571428" y="18.666666666666668" width="4.114285714285716" height="9.333333333333332"></rect><rect fill="#d84315" x="15.085714285714287" y="0" width="4.1142857142857086" height="28"></rect><rect fill="#d84315" x="21.942857142857147" y="9.333333333333336" width="4.114285714285707" height="18.666666666666664"></rect><rect fill="#d84315" x="28.800000000000004" y="12.444444444444443" width="4.114285714285707" height="15.555555555555557"></rect><rect fill="#d84315" x="35.65714285714286" y="0" width="4.114285714285707" height="28"></rect><rect fill="#d84315" x="42.51428571428572" y="6.222222222222221" width="4.114285714285707" height="21.77777777777778"></rect></svg></div>
+                <span class="uk-text-muted uk-text-small">Tài khoản</span>
+                <h2 class="uk-margin-remove"><span class="countUpMe">@NguoiDung.Count() tài khoản</span></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" style="">
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_live peity_data" style="display: none;">10,1,8,1,8,1,8,1,1,1,5,5,10,9,8,9,3,9,5,0</span><svg class="peity" height="28" width="64"><polygon fill="#efebe9" points="0 27.5 0 0.5 3.3684210526315788 24.8 6.7368421052631575 5.899999999999999 10.105263157894736 24.8 13.473684210526315 5.899999999999999 16.842105263157894 24.8 20.210526315789473 5.899999999999999 23.57894736842105 24.8 26.94736842105263 24.8 30.31578947368421 24.8 33.68421052631579 14 37.05263157894737 14 40.421052631578945 0.5 43.78947368421052 3.1999999999999993 47.1578947368421 5.899999999999999 50.526315789473685 3.1999999999999993 53.89473684210526 19.4 57.263157894736835 3.1999999999999993 60.63157894736842 14 64 27.5 64 27.5"></polygon><polyline fill="none" points="0 0.5 3.3684210526315788 24.8 6.7368421052631575 5.899999999999999 10.105263157894736 24.8 13.473684210526315 5.899999999999999 16.842105263157894 24.8 20.210526315789473 5.899999999999999 23.57894736842105 24.8 26.94736842105263 24.8 30.31578947368421 24.8 33.68421052631579 14 37.05263157894737 14 40.421052631578945 0.5 43.78947368421052 3.1999999999999993 47.1578947368421 5.899999999999999 50.526315789473685 3.1999999999999993 53.89473684210526 19.4 57.263157894736835 3.1999999999999993 60.63157894736842 14 64 27.5" stroke="#5d4037" stroke-width="1" stroke-linecap="square"></polyline></svg></div>
+                <span class="uk-text-muted uk-text-small">Lượt tải văn bản</span>
+                <h2 class="uk-margin-remove" id="peity_live_text">@FullModel.Sum(n => n.LuotTai) lượt tải</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" style="">
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_sale peity_data" style="display: none;">5,3,9,6,5,9,7,3,5,2</span><svg class="peity" height="28" width="64"><polygon fill="#d1e4f6" points="0 27.5 0 12.5 7.111111111111111 18.5 14.222222222222221 0.5 21.333333333333332 9.5 28.444444444444443 12.5 35.55555555555556 0.5 42.666666666666664 6.5 49.77777777777777 18.5 56.888888888888886 12.5 64 21.5 64 27.5"></polygon><polyline fill="none" points="0 12.5 7.111111111111111 18.5 14.222222222222221 0.5 21.333333333333332 9.5 28.444444444444443 12.5 35.55555555555556 0.5 42.666666666666664 6.5 49.77777777777777 18.5 56.888888888888886 12.5 64 21.5" stroke="#0288d1" stroke-width="1" stroke-linecap="square"></polyline></svg></div>
+                <span class="uk-text-muted uk-text-small">Lượt xem văn bản</span>
+                <h2 class="uk-margin-remove"><span class="countUpMe">@FullModel.Sum(n=>n.LuotXem) lượt xem</span></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" style="">
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_orders peity_data" style="display: none;">64/100</span><svg class="peity" height="24" width="24"><path d="M 12 0 A 12 12 0 1 1 2.753841086690528 19.649087876984275 L 7.376920543345264 15.824543938492138 A 6 6 0 1 0 12 6" fill="#8bc34a"></path><path d="M 2.753841086690528 19.649087876984275 A 12 12 0 0 1 11.999999999999998 0 L 11.999999999999998 6 A 6 6 0 0 0 7.376920543345264 15.824543938492138" fill="#eee"></path></svg></div>
+                <span class="uk-text-muted uk-text-small">Văn bản</span>
+                <h2 class="uk-margin-remove"><span class="countUpMe">@TaiLieu.Count() văn bản</span></h2>
+            </div>
+        </div>
+    </div>
+  
+</div>
+<div class="clearfix"></div><br />
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<div id="container" >
+
+
+</div>
+@{
+    decimal thang1x = 0;
+    decimal thang1t = 0;
+    decimal thang2x = 0;
+    decimal thang2t = 0;
+    decimal thang3x = 0;
+    decimal thang3t = 0;
+    decimal thang4x = 0;
+    decimal thang4t = 0;
+    decimal thang5x = 0;
+    decimal thang5t = 0;
+    decimal thang6x = 0;
+    decimal thang6t = 0;
+    decimal thang7x = 0;
+    decimal thang7t = 0;
+    decimal thang8x = 0;
+    decimal thang8t = 0;
+    decimal thang9x = 0;
+    decimal thang9t = 0;
+    decimal thang10x = 0;
+    decimal thang10t = 0;
+    decimal thang11x = 0;
+    decimal thang11t = 0;
+    decimal thang12x = 0;
+    decimal thang12t = 0;
+
+    if (FullModel.Count() != 0)
+    {
+        thang1x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 1).Sum(n => n.LuotXem).Value;
+        thang1t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 1).Sum(n => n.LuotTai).Value;
+        thang2x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 2).Sum(n => n.LuotXem).Value;
+        thang2t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 2).Sum(n => n.LuotTai).Value;
+        thang3x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 3).Sum(n => n.LuotXem).Value;
+        thang3t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 3).Sum(n => n.LuotTai).Value;
+        thang4x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 4).Sum(n => n.LuotXem).Value;
+        thang4t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 4).Sum(n => n.LuotTai).Value;
+        thang5x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 5).Sum(n => n.LuotXem).Value;
+        thang5t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 5).Sum(n => n.LuotTai).Value;
+        thang6x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 6).Sum(n => n.LuotXem).Value;
+        thang6t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 6).Sum(n => n.LuotTai).Value;
+        thang7x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 7).Sum(n => n.LuotXem).Value;
+        thang7t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 7).Sum(n => n.LuotTai).Value;
+        thang8x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 8).Sum(n => n.LuotXem).Value;
+        thang8t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 8).Sum(n => n.LuotTai).Value;
+        thang9x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 9).Sum(n => n.LuotXem).Value;
+        thang9t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 9).Sum(n => n.LuotTai).Value;
+        thang10x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 10).Sum(n => n.LuotXem).Value;
+        thang10t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 10).Sum(n => n.LuotTai).Value;
+        thang11x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 11).Sum(n => n.LuotXem).Value;
+        thang11t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 11).Sum(n => n.LuotTai).Value;
+        thang12x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 12).Sum(n => n.LuotXem).Value;
+        thang12t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 12).Sum(n => n.LuotTai).Value;
+
+
+    }
+}
+<script>
+    Highcharts.chart('container', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Số lượt xem, tải văn bản năm ' + new Date().getFullYear()
+        },
+
+        xAxis: {
+            categories: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
+        },
+        yAxis: {
+            title: {
+                text: 'Số lượt xem, tải văn bản'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            name: 'Lượt xem',
+            data: [@thang1x, @thang2x, @thang3x, @thang4x, @thang5x, @thang6x, @thang7x, @thang8x, @thang9x, @thang10x, @thang11x, @thang12x]
+        }, {
+            name: 'Lượt tải',
+            data: [@thang1t, @thang2t, @thang3t, @thang4t, @thang5t, @thang6t, @thang7t, @thang8t, @thang9t, @thang10t, @thang11t, @thang12t]
+        }]
+    });
+</script>
+
+<p></p>
+
+<div style="width:100%; background-color:white;padding:10px">
+    <input type="button" value="TOP Tuần " class="btn btn-default btn-primary btn-top" data-char="char-top-week" />
+    <input type="button" value="TOP Tháng " class="btn btn-default btn-top" data-char="char-top-month" />
+    <input type="button" value="TOP Tải nhiều " class="btn btn-default btn-top" data-char="char-top" />
+
+    <script>
+        $('input.btn-top').click(function () {
+            $('input.btn-top').removeClass("btn-primary"); // bo mau class
+            $(this).addClass("btn-primary"); // them mau class nut dang nhan
+            $('div.char-top').slideUp(); // an tat ca chart
+            $('div#'+$(this).attr("data-char")).slideDown(); // hien chart
+        });
+    </script>
+</div>
+
+@* dashboard top 15 tuan  *@
+
+@{
+
+    DateTime dtFrom = tool.FirstDayOfWeek(DateTime.Now);
+    DateTime dtTo = tool.LastDayOfWeek(DateTime.Now);
+
+    List<QLVB.Models.CT_LuotXemTai> lstWeekTOP = new List<QLVB.Models.CT_LuotXemTai>();
+
+    foreach (var item in lstCTXT.Where(n=>n.LuotXemTai.NgayXT>=dtFrom && n.LuotXemTai.NgayXT <= dtTo).GroupBy(n => n.IDNguoiDung).Select(n => new { idUser = n.Key, TongTai = n.Sum(nn => nn.Tai) }).OrderByDescending(n => n.TongTai).Take(15))
+    {
+        QLVB.Models.CT_LuotXemTai itemtop = new QLVB.Models.CT_LuotXemTai();
+        itemtop.IDNguoiDung = item.idUser.Value;
+        itemtop.Tai = item.TongTai;
+        lstWeekTOP.Add(itemtop);
+    }
+    string sTenTopTuan = "";
+    foreach (var item in lstWeekTOP)
+    {
+        sTenTopTuan += "'"+NguoiDung.SingleOrDefault(n => n.Id == item.IDNguoiDung).HoTen+" ("+ NguoiDung.SingleOrDefault(n => n.Id == item.IDNguoiDung).TenDangNhap + ")'" + ",";
+    }
+    string sTaiTopTuan = "";
+    foreach (var item in lstWeekTOP)
+    {
+        sTaiTopTuan += item.Tai + ",";
+    }
+
+}
+<div class="char-top" id="char-top-week" style="width:100%"></div>
+
+<script>
+    Highcharts.chart('char-top-week', {
+        chart: {
+            inverted: true,
+            polar: false
+        },
+        title: {
+            text: 'TOP 15 lượt tải trong tuần'
+        },
+
+
+        xAxis: {
+            categories: [
+               @Html.Raw(sTenTopTuan)
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Số lượt tải văn bản'
+            }
+        },
+        series: [{
+            name:'Lượt tải',
+            type: 'column',
+            colorByPoint: true,
+            data: [ @sTaiTopTuan],
+            showInLegend: false
+        }]
+
+    });
+
+</script>
+
+@*  *@
+
+@* dashboard top 15 thang  *@
+
+@{
+
+    dtFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); // DateTime.Parse("01/" + DateTime.Now.Month + "/" + DateTime.Now.Year);  // ngay dau thang + thang +nam
+    dtTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)); //DateTime.Parse(DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year); // lay ngay cuoi thang + thang + nam;
+
+    lstWeekTOP = new List<QLVB.Models.CT_LuotXemTai>();
+
+    foreach (var item in lstCTXT.Where(n => n.LuotXemTai.NgayXT >= dtFrom && n.LuotXemTai.NgayXT <= dtTo).GroupBy(n => n.IDNguoiDung).Select(n => new { idUser = n.Key, TongTai = n.Sum(nn => nn.Tai) }).OrderByDescending(n => n.TongTai).Take(15))
+    {
+        QLVB.Models.CT_LuotXemTai itemtop = new QLVB.Models.CT_LuotXemTai();
+        itemtop.IDNguoiDung = item.idUser.Value;
+        itemtop.Tai = item.TongTai;
+        lstWeekTOP.Add(itemtop);
+    }
+    sTenTopTuan = "";
+    foreach (var item in lstWeekTOP)
+    {
+        sTenTopTuan += "'" + NguoiDung.SingleOrDefault(n => n.Id == item.IDNguoiDung).HoTen + " (" + NguoiDung.SingleOrDefault(n => n.Id == item.IDNguoiDung).TenDangNhap + ")'" + ",";
+    }
+    sTaiTopTuan = "";
+    foreach (var item in lstWeekTOP)
+    {
+        sTaiTopTuan += item.Tai + ",";
+    }
+
+}
+
+<div class="char-top" id="char-top-month" style="width:100%;display:none"></div>
+
+<script>
+    Highcharts.chart('char-top-month', {
+        chart: {
+            inverted: true,
+            polar: false
+        },
+        title: {
+            text: 'TOP 15 lượt tải trong tháng'
+        },
+
+
+        xAxis: {
+            categories: [
+               @Html.Raw(sTenTopTuan)
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Số lượt tải văn bản'
+            }
+        },
+        series: [{
+            name:'Lượt tải',
+            type: 'column',
+            colorByPoint: true,
+            data: [ @sTaiTopTuan],
+            showInLegend: false
+        }]
+
+    });
+
+</script>
+
+@*  *@
+
+@* dashboard top tai nhieu nhat  *@
+
+@{
+    lstWeekTOP = new List<QLVB.Models.CT_LuotXemTai>();
+
+    foreach (var item in lstCTXT.GroupBy(n => n.IDNguoiDung).Select(n => new { idUser = n.Key, TongTai = n.Sum(nn => nn.Tai) }).OrderByDescending(n => n.TongTai).Take(15))
+    {
+        QLVB.Models.CT_LuotXemTai itemtop = new QLVB.Models.CT_LuotXemTai();
+        itemtop.IDNguoiDung = item.idUser.Value;
+        itemtop.Tai = item.TongTai;
+        lstWeekTOP.Add(itemtop);
+    }
+    sTenTopTuan = "";
+    foreach (var item in lstWeekTOP)
+    {
+        sTenTopTuan += "'" + NguoiDung.SingleOrDefault(n => n.Id == item.IDNguoiDung).HoTen + " (" + NguoiDung.SingleOrDefault(n => n.Id == item.IDNguoiDung).TenDangNhap + ")'" + ",";
+    }
+    sTaiTopTuan = "";
+    foreach (var item in lstWeekTOP)
+    {
+        sTaiTopTuan += item.Tai + ",";
+    }
+
+}
+
+<div class="char-top" id="char-top" style="width:100%;display:none"></div>
+
+<script>
+    Highcharts.chart('char-top', {
+        chart: {
+            inverted: true,
+            polar: false
+        },
+        title: {
+            text: 'TOP 15 lượt tải nhiều nhất'
+        },
+
+
+        xAxis: {
+            categories: [
+               @Html.Raw(sTenTopTuan)
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Số lượt tải văn bản'
+            }
+        },
+        series: [{
+            name:'Lượt tải',
+            type: 'column',
+            colorByPoint: true,
+            data: [ @sTaiTopTuan],
+            showInLegend: false
+        }]
+
+    });
+
+</script>
+
+@*  *@
+
+<style>
+    .highcharts-credits {
+        display: none;
+    }
+</style>
+
+
+
+<div class="table-responsive" style="padding: 20px;margin-top: 20px;background-color: #FFF;">
+    <h3>Phản hồi từ người dùng</h3>
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Điện thoại</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @Html.Hidden("txtHoTenGui", item.HoTenGui)
+                @Html.Hidden("txtEmail", item.Email)
+                @Html.Hidden("txtDienThoai", item.DienThoai)
+                @Html.Hidden("txtNoiDung", item.NoiDung)
+                <td>@item.HoTenGui</td>
+                <td>@item.Email</td>
+                <td>@item.DienThoai</td>
+                <td>
+                    <button class="btn-xemyk btn btn-success fa fa-eye" data-toggle="modal" data-target="#myYKien"></button>
+
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="dlink">
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page }))
+    </div>
+</div>
+
+
+<div id="myYKien" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Gửi góp ý</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Họ & Tên</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbHoTen", "", new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Email</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbEmail", "", new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Điện thoại</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbDienThoai", "", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Nội dung</b></label>
+                    <div class="col-md-12">
+                        @Html.TextArea("fbNoiDung", "", new { @class = "form-control", @rows = "5" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    $('.btn-xemyk').click(function () {
+        var hoten = $(this).parents("tr").find("#txtHoTenGui").val();
+        var email = $(this).parents("tr").find("#txtEmail").val();
+        var dienthoai = $(this).parents("tr").find("#txtDienThoai").val();
+        var noidung = $(this).parents("tr").find("#txtNoiDung").val();
+        $('#fbHoTen').val(hoten);
+        $('#fbEmail').val(email);
+        $('#fbDienThoai').val(dienthoai);
+        $('#fbNoiDung').val(noidung);
+    });
+
+</script>

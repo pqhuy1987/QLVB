@@ -1,0 +1,352 @@
+﻿@model PagedList.IPagedList<QLVB.Models.TaiLieu>
+@using PagedList.Mvc;
+@using QLVB.Models;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách văn bản";
+
+    List<DMPhongBan> lstPhongBan = new List<DMPhongBan>();
+    using (QuanLyVanBanEntities db = new QuanLyVanBanEntities())
+    {
+        lstPhongBan = db.DMPhongBans.ToList();
+    }
+
+    <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+}
+
+<h3><i class="fa fa-files-o"></i> Danh sách văn bản @Html.ActionLink("Thêm văn bản", "ThemMoi", "QL_TaiLieu", null, new { @class = "btn btn-success" })</h3>
+<hr />
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h2 class="panel-title">Tìm kiếm </h2>
+    </div>
+    <br />
+    @using (Html.BeginForm("DanhSach", "QL_TaiLieu", FormMethod.Post))
+    {
+        <div class="col-md-12">
+            <div class="input-group">
+                <span class="input-group-addon timkiem-btn">
+                    <i class="fa fa-search"></i> Nâng cao <i class="fa fa-chevron-down ic-ud"></i> <i class="fa fa-chevron-up ic-ud" style="display:none;"></i>
+                </span>
+                <input id="TenVanBan" name="TenVanBan" type="text" value="@ViewBag.TenVanBan" class="form-control" placeholder="Tiêu đề hoặc nội dung ngắn gọn văn bản">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                </span>
+            </div>
+            <div class="panel panel-success timkiem-load" hidden>
+                <div class="panel-body ">
+
+                    <div class="row">
+                        <label class="col-md-2 control-label ">
+                            Số hiệu
+                        </label>
+                        <div class="col-md-4">
+                            <input name="SoHieu" class="form-control" value="@ViewBag.SoHieu" />
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            Loại văn bản
+                        </label>
+                        <div class="col-md-4">
+                            @Html.DropDownList("LoaiVanBan", null, "Tất cả", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-md-2 control-label ">
+                            Mã hiệu
+                        </label>
+                        <div class="col-md-4">
+                            <input name="MaHieu" class="form-control" value="@ViewBag.MaHieu" />
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            Lần ban hành
+                        </label>
+                        <div class="col-md-4">
+                            <input name="LanBanHanh" class="form-control" value="@ViewBag.LanBanHanh" onkeypress="return ValidateKeypress(/[0-9]/,event);" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-md-2 control-label ">
+                            @*Nơi ban hành*@
+                            Đơn vị soạn thảo
+                        </label>
+                        <div class="col-md-4">
+                            @Html.DropDownList("NoiBanHanh", null, "Tất cả", new { @class = "form-control" })
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            Người ký
+                        </label>
+                        <div class="col-md-4">
+                            <input name="NguoiKy" class="form-control" value="@ViewBag.NguoiKy" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-md-2 control-label">
+                            Ngày ban hành
+                        </label>
+                        <div class="col-md-4">
+                            <input name="NgayBanHanhfrom" class="form-control datepicker" value="@ViewBag.NgayBanHanhfrom" />
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            đến
+                        </label>
+                        <div class="col-md-4">
+                            <input name="NgayBanHanhto" class="form-control datepicker" value="@ViewBag.NgayBanHanhto" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-md-2 control-label ">
+                            Ngày hiệu lực
+                        </label>
+                        <div class="col-md-4">
+                            <input name="NgayHieuLucfrom" class="form-control datepicker" value="@ViewBag.NgayHieuLucfrom" />
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            đến
+                        </label>
+                        <div class="col-md-4">
+                            <input name="NgayHieuLucto" class="form-control datepicker" value="@ViewBag.NgayHieuLucto" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-md-2 control-label">
+                            Tình trạng
+                        </label>
+                        <div class="col-md-4">
+                            @Html.DropDownList("TinhTrang", null, "Tất cả", new { @class = "form-control" })
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            @*Phòng ban*@
+                            Đơn vị áp dụng
+                        </label>
+                        <div class="col-md-4">
+                            @Html.DropDownList("PhongBan", null, "Tất cả", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-md-2 control-label">
+                            Bảo mật
+                        </label>
+                        <div class="col-md-4">
+                            <span>
+                                @if (ViewBag.BaoMat == "true")
+                                {
+                                    <input name="BaoMat" type="checkbox" checked value="true" data-toggle="toggle" data-size="small">
+                                }
+                                else
+                                {
+                                    <input name="BaoMat" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+                                }
+                            </span>
+                        </div>
+                        <label class="col-md-2 control-label ">
+                            
+                        </label>
+                        <div class="col-md-4">
+                           
+                        </div>
+                    </div>
+                    <br />
+
+                </div>
+            </div>
+        </div>
+
+    }
+    <br />
+</div>
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên văn bản</th>
+                <th>Số hiệu</th>
+                <th>Loại văn bản</th>
+                <th>Mã hiệu</th>
+                <th>Lần ban hành</th>
+                @*<th>Nơi ban hành</th>*@
+                <th>Đơn vị soạn thảo</th>
+                <th>Người ký</th>
+                <th>Ngày ban hành</th>
+                <th>Ngày hiệu lực</th>
+                <th>Tình trạng</th>
+                @*<th>Phòng ban</th>*@
+                <th>Đơn vị áp dụng</th>
+                <th>Bảo mật</th>
+                <th width="100"></th>
+            </tr>
+        </thead>
+        @{ int iSTT = 0;}
+        @foreach (var item in Model)
+        {
+            iSTT++;
+            <tr>
+                <td>@iSTT</td>
+                <td class="NameTL">@Html.Raw(item.TenTaiLieu)</td>
+                <td>@item.SoHieu</td>
+                <td>
+                    @if (item.LoaiTaiLieu != null)
+                    {
+                        @item.LoaiTaiLieu.TenLoaiTL
+                    }
+                </td>
+                <td>@item.MaHieu</td>
+                <td>@item.LanBanHanh</td>
+                <td>
+                    @if (item.NoiBanHanh != null && item.DMPhongBan1 != null)
+                    {
+                        @item.DMPhongBan1.TenPhong
+                    }
+                </td>
+                <td>@item.NguoiKy</td>
+                <td>
+                    @if (item.NgayBanHanh != null)
+                    {@item.NgayBanHanh.Value.ToString("dd/MM/yyyy")}
+                </td>
+                <td>
+                    @if (item.NgayHieuLuc != null)
+                    {@item.NgayHieuLuc.Value.ToString("dd/MM/yyyy")}
+                </td>
+                <td>
+                    @if (item.TinhTrang == "1")
+                    {
+                        // BEGIN
+                        @*<span>Chưa hiệu lực</span>*@
+                        <span>Dự thảo</span>
+                        // END
+                    }
+                    @if (item.TinhTrang == "2")
+                    {
+                        <span style="color:blue;font-weight:500">Còn hiệu lực</span>
+                    }
+                    @if (item.TinhTrang == "3")
+                    {
+                        <span style="color: red; font-weight: 500">Hết hiệu lực</span>
+                    }
+                </td>
+
+                <td>
+                    @*@if (item.DMPhongBan != null)
+                    {
+                        @item.DMPhongBan.TenPhong
+                    }*@
+                    @if (!string.IsNullOrEmpty(item.DonViApDung))
+                    {
+                        string[] arrId = item.DonViApDung.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (arrId != null && arrId.Length > 0)
+                        {
+                            List<string> lstText = new List<string>();
+                            foreach (string id in arrId)
+                            {
+                                var tmp = lstPhongBan.Where(x => x.Id.ToString() == id).FirstOrDefault();
+                                if (tmp != null)
+                                {
+                                    lstText.Add(tmp.TenPhong);
+                                }
+                            }
+                            <text>@string.Join(", ", lstText)</text>
+                        }
+                    }
+                </td>
+                @if (item.BaoMat == true)
+                {
+                    <td>Có</td>
+                }
+                else
+                {
+                    <td>Không</td>
+                }
+                <td>
+                    @Html.ActionLink(" ", "ChinhSua", "QL_TaiLieu", new { @id = item.MaTaiLieu, @e = "e" }, new { @class = "btn btn-success fa fa-pencil" })
+                    @Html.ActionLink(" ", "Xoa", "QL_TaiLieu", new { @id = item.MaTaiLieu }, new { @id = item.MaTaiLieu, @class = "btnxoa btn btn-danger fa fa-times" })
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page, TenVanBan = ViewBag.TenVanBan, SoHieu = ViewBag.SoHieu, NoiBanHanh = ViewBag.NoiBanHanhi, NguoiKy = ViewBag.NguoiKy, NgayBanHanhfrom = ViewBag.NgayBanHanhfrom, NgayBanHanhto = ViewBag.NgayBanHanhto, NgayHieuLucfrom = ViewBag.NgayHieuLucfrom, NgayHieuLucto = ViewBag.NgayHieuLucto, LoaiVanBan = ViewBag.LoaiVanBani, TinhTrang = ViewBag.TinhTrangi, PhongBan = ViewBag.PhongBani, MaHieu = ViewBag.MaHieu, LanBanHanh = ViewBag.LanBanHanh, BaoMat = ViewBag.BaoMat }))
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<style>
+    .yellow
+    {
+         background-color: #ffff00;
+    }
+</style>
+<script>
+
+
+
+    $('#btn-dongy').click(function () {
+        location = "Xoa/" + $('#id-xoa').val();
+    });
+    $('.btnxoa').click(function () {
+        $('#btn-dongy').show();
+        $('#btn-thongbao').trigger("click");
+        $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+
+    $('.timkiem-btn').click(function () {
+        $('.timkiem-load').slideToggle();
+        $('.ic-ud').toggle();
+    });
+
+    $(function () {
+        var searchTerm = $('#TenVanBan').val();
+        var options = { 'diacritics': true, 'separateWordSearch': true };
+        $("td.NameTL").mark(searchTerm, options);
+    });
+
+
+    $(document).ready(function () {
+        $('.toggle-on').text("Có");
+        $('.toggle-off').text("Tất cả");
+        $('div.btn-sm').width(50);
+    });
+
+
+    $('#menul-qlvb').addClass("active");
+</script>
+@Html.Raw(TempData["thongbao"])

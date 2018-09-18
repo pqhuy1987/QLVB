@@ -1,0 +1,573 @@
+﻿@model QLVB.Models.TinTuc
+
+@{
+    IEnumerable<QLVB.Models.LoaiTaiLieu> lstLoaiVanBan = ViewBag.LoaiVanBans;
+    IEnumerable<QLVB.Models.TaiLieu> lstTaiLieu = ViewBag.VanBans;
+    IEnumerable<QLVB.Models.DanhMuc> lstDMTinTuc = ViewBag.DMTinTuc;
+    IEnumerable<QLVB.Models.TinTuc> dsTinTuc = ViewBag.dsTinTuc;
+
+    IEnumerable<QLVB.Models.Banner> lstBanner = ViewBag.lstBanner;
+
+    IEnumerable<QLVB.Models.BinhLuan> lstBinhLuan = ViewBag.lstBinhLuan;
+    IEnumerable<QLVB.Models.DanhGia> lstDanhGia = ViewBag.lstDanhGia;
+
+    ViewBag.Title = Model.TieuDe;
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+}
+<div class="page-content-inner" >
+    <div class="row">
+        @{ int iBanner = 0; string sClassAcBanner = "";}
+        <div class="col-md-12" style="padding:0px;">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    @foreach (var item in lstBanner)
+                    {
+                        sClassAcBanner = "";
+                        if (iBanner == 0)
+                        {
+                            sClassAcBanner = "active";
+                        }
+
+                        <li data-target="#myCarousel" data-slide-to="@iBanner" class="@sClassAcBanner"></li>
+                        iBanner++;
+                    }
+                </ol>
+
+
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    @{ iBanner = 0;}
+                    @foreach (var item in lstBanner)
+                    {
+                        sClassAcBanner = "";
+                        if (iBanner == 0)
+                        {
+                            sClassAcBanner = "active";
+                        }
+
+                        <div class="item @sClassAcBanner">
+                            <a href="@item.Url" target="_blank">
+                                <img src="~/Upload/@item.Image" alt="@item.TieuDe">
+                                <div class="carousel-caption">
+                                    <h3>@item.TieuDe</h3>
+                                </div>
+                            </a>
+                        </div>
+
+                        iBanner++;
+                    }
+
+                </div>
+
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-9 ">
+            <div class="index-trai-duoi">
+                @{  
+                    string sClassGrab2 = "";
+                    if (Model.MaDanhMuc == 5)
+                    {
+                        sClassGrab2 = "gradBlue";
+                    }
+                    if (Model.MaDanhMuc == 6)
+                    {
+                        sClassGrab2 = "gradRed";
+                    }
+                    if (Model.MaDanhMuc == 7)
+                    {
+                        sClassGrab2 = "gradGreen";
+                    }
+                 }
+                <div class="col-md-12" style="padding:0;">
+                   <div id="@sClassGrab2">@lstDMTinTuc.SingleOrDefault(n => n.MaDanhMuc == Model.MaDanhMuc).TenDanhMuc.ToUpper()</div>
+                </div>
+
+                <h3><b>@Model.TieuDe</b></h3>
+                <span class="body-content"><i class="fa fa-clock-o color-sea"></i> @Model.NgayDang.Value.ToString("HH:mm dd/MM/yyyy")</span>
+                <span class="body-content"><i class="fa fa-eye color-sea"></i> @Model.LuotXem</span>
+                <span class="body-content"><i class="fa fa-comment color-sea"></i> @Model.LuotBinhLuan</span>
+                <span class="body-content"><i class="fa fa-thumbs-up color-sea"></i> @Model.LuotThich</span>
+                <hr style="margin:20px 0" />
+
+                <div class="col-md-12 chitiettin-noidung" style="padding:0">
+                    @Html.Raw(Model.NoiDung)
+                </div>
+
+                <hr />
+                @{ 
+                    QLVB.Models.NhanVien nv = (QLVB.Models.NhanVien)Session["DangNhap"];
+
+                    string sClsDanhGia = "";
+
+                    if (lstDanhGia.Where(n => n.MaTin == Model.MaTinTuc && n.IdNhanVien == nv.Id).Count() > 0)
+                    {
+                        sClsDanhGia = "a-liked";
+                    }
+                }
+                <div class="a-like @sClsDanhGia" > Like</div>
+                <div class="a-binhluan " ><i style="position: relative;top: 3px;" class="glyphicon glyphicon-comment"></i> Bình luận tin tức</div>
+               
+                <div class="clearfix"></div>
+
+                <div class="col-md-12" style="padding:0">
+
+                    @Html.Hidden("MaTin", Model.MaTinTuc) 
+                      
+                    @if (Model.ChoPhepBinhLuan == true)
+                    {
+                        <img  width="40" src="~/Upload/Avatar/@nv.HinhDaiDien" />     
+
+                        
+                        <textarea type="text" class="txt-binhluan" placeholder="Viết bình luận của bạn..." ></textarea>
+
+                    }
+                <div class="hienthi-binhluan">
+                    @{ int iAnDiv = 0; string clsAn = ""; string sTheA = "";}
+
+                    @foreach (var item in lstBinhLuan.Where(n => n.MaBinhLuanCha == 0).OrderByDescending(n=>n.NgayBinhLuan))
+                    {
+                        iAnDiv++;
+                        if(iAnDiv>3)
+                        {
+                            clsAn = "hidden";
+                            sTheA = "<a id='hien-binhluan'>Hiển thị tất cả bình luận</a>";
+                        }
+
+                        <div @clsAn class="hienthi-binhluan-item">
+                            <textarea hidden id="txt-noidung" >@item.NoiDung</textarea>
+                            <div class="hienthi-binhluan-img">
+                                <img width="40" src="~/Upload/Avatar/@item.NhanVien.HinhDaiDien" />
+                            </div>
+                            <div class="hienthi-binhluan-noidung">
+                                <b>@item.NhanVien.HoTen</b> <span class="noidung-chinhsua" data-MaCha="@item.Id">  @item.NoiDung</span>
+                                <p style="font-size:12px"> <a class="txt-traloi">Trả lời</a> - <span style="color:silver">
+                                    @QLVB.Models.Tools.ThoiGianBinhLuan(item.NgayBinhLuan.Value)
+                                    </span></p>
+                            </div>
+
+                            @if (item.IdNhanVien == nv.Id)
+                            {
+                                <i class="fa fa-pencil btn-suaBL" data-MaCha="@item.Id"></i> 
+                            }
+                            @if (item.IdNhanVien == nv.Id || HttpContext.Current.User.IsInRole("XOA-CM"))
+                            {
+                                <i data-MaCha="@item.Id" class="fa fa-times btn-xoaBL"></i>
+                            }
+
+                            <div class="clearfix" style="margin-bottom:10px"></div>
+
+                            <div class="hienthi-binhluan-con">
+
+                                <div class="div-traloi-binhluan-con">
+
+                                    @foreach (var itemcon in lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).OrderBy(n => n.NgayBinhLuan))
+                                    {
+
+                                        <div hidden class="hienthi-binhluan-item">
+                                            <textarea hidden id="txt-noidung" >@itemcon.NoiDung</textarea>
+                                            <div class="hienthi-binhluan-img">
+                                                <img width="40" src="~/Upload/Avatar/@itemcon.NhanVien.HinhDaiDien" />
+                                            </div>
+                                            <div class="hienthi-binhluan-noidung">
+                                                <b>@itemcon.NhanVien.HoTen</b> <span class="noidung-chinhsua" data-MaCha="@itemcon.Id">@itemcon.NoiDung</span>
+                                                <p style="font-size:12px"> <a class="txt-traloi">Trả lời</a> - <span style="color:silver">@QLVB.Models.Tools.ThoiGianBinhLuan(itemcon.NgayBinhLuan.Value)</span></p>
+                                            </div>
+                                            @if (itemcon.IdNhanVien == nv.Id)
+                                            {
+                                                <i class="fa fa-pencil btn-suaBL" data-MaCha="@itemcon.Id"></i> 
+                                            }
+                                            @if (itemcon.IdNhanVien == nv.Id || HttpContext.Current.User.IsInRole("XOA-CM"))
+                                            {
+                                                <i data-MaCha="@itemcon.Id" class="fa fa-times btn-xoaBL"></i>
+                                            }
+
+                                            <div class="clearfix" style="margin-bottom:10px"></div>
+                                        </div>
+                                    }
+
+                                    @if (lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).Count() > 0)
+                                    {
+                                        <a id='hien-binhluan'>Hiển thị @lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).Count() trả lời</a>;
+                                    }
+                                    <div style="margin-bottom:10px"></div>
+                                </div>
+
+                                <div class="div-traloi-binhluan" style="margin-bottom:10px;display:none;">
+
+                                    <img width="40" src="~/Upload/Avatar/@nv.HinhDaiDien" />
+                                    <textarea type="text" data-MaCha="@item.Id" class="txt-traloi-binhluan" placeholder="Viết bình luận của bạn..." ></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                  @Html.Raw(sTheA)
+                </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3 ">
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        Tìm kiếm
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12" style="padding:0">
+                    @using (Html.BeginForm("dsTinTuc", "TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        <input name="txtTimKiem" class="text-sea" placeholder="Nội dung tìm kiếm" />
+                        <p></p>
+                        <input class="btn-sea" style="width:100%" type="submit" value="Tìm kiếm" />
+                    }
+                </div>
+
+            </div>
+            <div class="index-phai-tren">
+
+                <div class="div-title">
+                    <span class="span-title">
+                        Tin tức
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                @*<ul class="ul-content">
+                    @foreach (var item in lstDMTinTuc)
+                    {
+                        <li>
+                            <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })">@item.TenDanhMuc <span style="color:#ccc">(@dsTinTuc.Where(n => n.MaDanhMuc == item.MaDanhMuc).Count())</span></a>
+                            <i class="fa fa-angle-double-right"></i>
+                        </li>
+                    }
+                </ul>*@
+                @{ int iSTTTin = 0; }
+                @foreach (var item in lstDMTinTuc)
+                {
+                    iSTTTin++;
+                    string sClassGrab = "";
+                    if (iSTTTin == 1)
+                    {
+                        sClassGrab = "gradBlue";
+                    }
+                    if (iSTTTin == 2)
+                    {
+                        sClassGrab = "gradRed";
+                    }
+                    if (iSTTTin == 3)
+                    {
+                        sClassGrab = "gradGreen";
+                    }
+
+                    <div class="col-md-12" style="padding: 0 0 2px 0;">
+
+                        <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })"> <div id="@sClassGrab">@item.TenDanhMuc.ToUpper()</div></a>
+                    </div>
+
+                }
+            </div>
+
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        Văn bản nội bộ
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <ul class="ul-content">
+                    @foreach (var item in lstLoaiVanBan)
+                    {
+                        <li>
+                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan=item.MaLoaiTL })">@item.TenLoaiTL <span style="color:#ccc">(@lstTaiLieu.Where(n => n.LoaiVanBan == item.MaLoaiTL).Count())</span></a>
+                        <i class="fa fa-angle-double-right" ></i>
+                    </li>
+                    }
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .active{
+        color:black !important;
+    }
+       #myCarousel .carousel-inner img
+    {
+        height: 450px;
+    }
+       .chitiettin-noidung img 
+       {
+           height:auto !important;
+           max-width:100%;
+       }
+</style>
+
+<script>
+    $('.timkiem-btn').click(function () {
+        $('.timkiem-load').slideToggle();
+        $('.ic-ud').toggle();
+        $('.div-timkiem-input').slideToggle();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+    $('body').delegate('textarea', 'keydown', function (e) {
+        if (e.which == 13 && e.altKey) {
+            if ($(this).val().trim() != "")
+                $(this).val($(this).val() + "\n");
+            else
+                e.preventDefault();
+        }
+    });
+
+</script>
+
+<script>
+    $('body').delegate('.hienthi-binhluan-item', 'mouseover', function () {
+        $(this).children('.btn-suaBL').show();
+        $(this).children('.btn-xoaBL').show();
+    });
+    $('body').delegate('.hienthi-binhluan-item', 'mouseout', function () {
+        $(this).children('.btn-suaBL').hide();
+        $(this).children('.btn-xoaBL').hide();
+    });
+
+    //sua binh luan
+    $('body').delegate('.txt-huy-sua', 'click', function (e) {
+        var element = $(this);
+        var noidung = element.parents('.hienthi-binhluan-item:first').find("#txt-noidung").val();
+        element.parents('.hienthi-binhluan-item:first').find("span.noidung-chinhsua:first").html(noidung);
+    });
+
+    $('body').delegate('.btn-suaBL', 'click', function (e) {
+       
+        var element = $(this);
+        var noidung = element.parents('.hienthi-binhluan-item:first').find("#txt-noidung").val();
+        element.parents('.hienthi-binhluan-item:first').find("span.noidung-chinhsua:first").html("<textarea class='txt-sua-binhluan'>" + noidung + " </textarea><a class='txt-huy-sua'>Hủy</a>");
+    });
+
+    $('body').delegate('.txt-sua-binhluan', 'keypress', function (e) {
+
+        var element = $(this);
+        if (e.which == 13 && $(this).val() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("SuaBinhLuan_ajax", "TinTuc")',
+                type: "POST",
+                data: { macha: element.parent().attr('data-MaCha'), noidung: $(this).val() },
+                success: function (result) {
+                    element.parents('.hienthi-binhluan-item:first').find("#txt-noidung").val(result);
+
+                    element.parent().html(result);
+
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    //xoa binh luan
+    $('body').delegate('.btn-xoaBL', 'click', function (e) {
+
+        if (confirm('Bạn có chắc muốn xóa bình luận này ?')) {
+
+            var element = $(this);
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("XoaBinhLuan_ajax", "TinTuc")',
+                type: "POST",
+                data: { matin: $('#MaTin').val(), macha: $(this).attr('data-MaCha') },
+                success: function (result) {
+                    if (result == "1") {
+                        element.parents('.hienthi-binhluan-item:first').remove();
+                    }
+                    else {
+                        alert('Đã xảy ra lỗi !');
+                    }
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+
+    });
+
+    $('body').delegate('.txt-traloi', 'click', function (e) {
+        $(this).parents('.hienthi-binhluan-item').find('.div-traloi-binhluan').show();
+        $(this).parents('.hienthi-binhluan-item').find('.div-traloi-binhluan').find('.txt-traloi-binhluan').focus();
+
+        $(this).parents('.hienthi-binhluan-item').find('.div-traloi-binhluan-con').find('#hien-binhluan').trigger('click');
+    });
+
+
+    //them binh luan
+    $('body').delegate('.txt-binhluan', 'keypress', function (e) {
+
+        if (e.which == 13 && $(this).val().trim() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("luuBinhLuan_ajax", "TinTuc")',
+                type: "POST",
+                data: { matin: $('#MaTin').val(), noidung: $(this).val() },
+                success: function (result) {
+                    $('.hienthi-binhluan').prepend(result);
+                    $('.txt-binhluan').val("");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    //tra loi binh luan
+    $('body').delegate('.txt-traloi-binhluan', 'keypress', function (e) {
+        var element = $(this)
+        if (e.which == 13 && $(this).val() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("TraLoiBinhLuan_ajax", "TinTuc")',
+                type: "POST",
+                data: { matin: $('#MaTin').val(), noidung: $(this).val(), macha: $(this).attr('data-MaCha') },
+                success: function (result) {
+                    element.parents(".hienthi-binhluan-con:first").find('.div-traloi-binhluan-con').append(result);
+                    $('.txt-traloi-binhluan').val("");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    //hien thi binh luan
+    $('body').delegate('#hien-binhluan', 'click', function (e) {
+        $(this).hide();
+        $(this).parent().children('.hienthi-binhluan-item').show();
+    });
+
+    $('.a-binhluan').click(function () {
+        $('.txt-binhluan').focus();
+    });
+
+    //like 
+    $('body').delegate('.a-like', 'click', function (e) {
+        var element = $(this);
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("DanhGia_ajax", "TinTuc")',
+            type: "POST",
+            data: { matin: $('#MaTin').val() },
+            success: function (result) {
+                if (result == "1") {
+                    element.toggleClass('a-liked');
+                }
+                else {
+                    element.toggleClass('a-liked');
+                }
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+</script>
+<style>
+    .btn-suaBL, .btn-xoaBL {
+        display: none;
+    }
+
+    .hienthi-binhluan i:hover {
+        cursor: pointer;
+    }
+
+    .hienthi-binhluan-con {
+        width: 90%;
+        margin-left: 40px;
+        padding-left: 10px;
+        border-left: 2px solid silver;
+    }
+    
+    .hienthi-binhluan-img {
+        float: left;
+        width: 6%;
+    }
+
+    @@media screen and (max-width: 700px)  {
+    .hienthi-binhluan-img {
+        float: left;
+        width: 90%;
+    }
+    }
+
+
+    .txt-traloi, .txt-huy-sua , #hien-binhluan{
+        cursor: pointer;
+        color: blue;
+    }
+
+    .hienthi-binhluan-noidung {
+        float: left;
+        width: 90%;
+        word-wrap: break-word;
+    }
+    .noidung-chinhsua
+    {
+        white-space:pre-line;
+    }
+    .hienthi-binhluan {
+        margin: 10px 0;
+    }
+
+    .txt-sua-binhluan {
+        height: 35px;
+        padding-left: 10px;
+        width: 50%;
+    }
+
+    .txt-binhluan, .txt-traloi-binhluan {
+        height: 35px;
+        padding-left: 10px;
+        width: 90%;
+    }
+
+      .a-like, .a-binhluan {
+          font-weight:bold;
+        cursor: pointer;
+        margin: 20px 10px;
+        float: left;
+    }
+      .a-liked
+      {
+          color:#5890ff;
+      }
+       .a-liked::before 
+      {
+            
+            background-position: -49px -101px !important; 
+      }
+
+      .a-like::before 
+      {
+              background-image: url(../../Upload/iconfacebook.png);
+            background-repeat: no-repeat;
+            background-size: auto;
+            background-position: -49px -71px; 
+                content: '';
+    display: inline-block;
+    height: 14px;
+    margin:0 2px 0px 0;
+    width: 14px;
+      }
+
+</style>

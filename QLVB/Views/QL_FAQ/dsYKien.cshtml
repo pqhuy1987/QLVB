@@ -1,0 +1,103 @@
+﻿@model PagedList.IPagedList<QLVB.Models.FeedBack>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+
+}
+
+<h3><i class="fa fa-comments"></i> Danh sách ý kiến </h3>
+<hr />
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th >Họ tên</th>
+                <th>Email</th>
+                <th>Điện thoại</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @Html.Hidden("txtHoTenGui", item.HoTenGui)
+                @Html.Hidden("txtEmail", item.Email)
+                @Html.Hidden("txtDienThoai", item.DienThoai)
+                @Html.Hidden("txtNoiDung",item.NoiDung)
+                <td>@item.HoTenGui</td>
+                <td>@item.Email</td>
+                <td>@item.DienThoai</td>
+                <td>
+                    <button class="btn-xemyk btn btn-success fa fa-eye" data-toggle="modal" data-target="#myYKien"></button>
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page }))
+</div>
+<div id="myYKien" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Gửi góp ý</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Họ & Tên</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbHoTen", "", new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Email</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbEmail", "", new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Điện thoại</b></label>
+                    <div class="col-md-12">
+                        @Html.TextBox("fbDienThoai", "", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label"><b>Nội dung</b></label>
+                    <div class="col-md-12">
+                        @Html.TextArea("fbNoiDung", "", new { @class = "form-control", @rows = "5" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    $('.btn-xemyk').click(function () {
+        var hoten = $(this).parents("tr").find("#txtHoTenGui").val();
+        var email = $(this).parents("tr").find("#txtEmail").val();
+        var dienthoai = $(this).parents("tr").find("#txtDienThoai").val();
+        var noidung = $(this).parents("tr").find("#txtNoiDung").val();
+        $('#fbHoTen').val(hoten);
+        $('#fbEmail').val(email);
+        $('#fbDienThoai').val(dienthoai);
+        $('#fbNoiDung').val(noidung);
+    });
+
+</script>
+@Html.Raw(TempData["thongbao"])

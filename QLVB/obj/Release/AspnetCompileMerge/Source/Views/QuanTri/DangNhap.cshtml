@@ -1,0 +1,67 @@
+﻿<!doctype html>
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+ <!--<![endif]-->
+<head>
+    <link rel="shortcut icon" href="~/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+    <title>Login</title>
+        @Scripts.Render("~/bundles/jquery")
+    
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
+
+    <link href="~/Content/Login/login.css" rel="stylesheet" />
+    <link href="../../Content/ThemeAdmin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<body class="login_page">
+  <div class="login-container">
+      <img src="~/Upload/img-login.jpg" class="login-img"/>
+      <div style="clear:both"></div>
+      <div class="login-content">
+          <div class="login-logo">
+              <img src="~/Upload/logo.jpg" width="100%"/>
+          </div>
+
+          <div class="login-form">
+              <p id="div-pthongbao"></p>
+              @using (Html.BeginForm("DangNhap", "QuanTri", FormMethod.Post))
+              {
+                  <input id="btn-user" name="TenDangNhap" placeholder="Username" style="margin-top:20px" />
+                  <br />
+                  <input id="btn-pass" type="password" name="MatKhau" placeholder="Password" />
+                  <br/>
+                  <input id="chkRememberMe" name="GhiNho" type="checkbox" value="true" /> <label for="chkRememberMe">Ghi nhớ đăng nhập</label>
+                  <br />
+                  <input id="btn-login" type="submit" value="Đăng nhập" />
+              }
+          </div>
+
+          <div class="login-footer">
+              <p>
+                  © 2017 Coteccons Group
+              </p>
+            
+          </div>
+      </div>
+  </div>
+
+    @Html.Raw(TempData["ThongBao"])
+
+    <script>
+        $('.login-img').fadeIn(1000);
+    </script>
+    <style>
+        #div-pthongbao
+        {
+            color:red;
+        }
+    </style>
+</body>
+</html>

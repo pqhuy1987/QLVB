@@ -1,0 +1,157 @@
+﻿@using PagedList.Mvc;
+
+@model PagedList.IPagedList<QLVB.Models.NhatKy>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Nhật ký hệ thống";
+}
+
+<h3><i class="fa fa-fw fa-files-o"></i> THỐNG KÊ NHẬT KÝ SỬ DỤNG HỆ THỐNG VĂN BẢN QUẢN LÝ NỘI BỘ</h3>
+
+<hr />
+<div class="panel panel-primary">
+    <div class="panel-heading PhongThu">
+        <h2 class="panel-title"><i class="fa fa-search"></i> Tìm kiếm <span style="float:right;"><i class="fa fa-chevron-down"></i> <i style="display:none" class="fa fa-chevron-up"></i></span></h2>
+    </div>
+    <br>
+    <form action="/QuanTri/NhatKy" method="post" style="display:none" class="FormTK">
+        <div class="col-md-12">
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Thao tác
+                </label>
+                <div class="col-md-4">
+                    @{ 
+                        string strAdd = "";
+                        if (ViewBag.Action == "Thêm mới")
+                        {
+                            strAdd = "selected";
+                        }
+                        string strEdit = "";
+                        if (ViewBag.Action == "Chỉnh sửa")
+                        {
+                            strEdit = "selected";
+                        }
+                        string strDelete = "";
+                        if (ViewBag.Action == "Xóa")
+                        {
+                            strDelete = "selected";
+                        }
+                    }
+                    <select name="actionText" class="form-control">
+                        <option value="">Tất cả</option>
+                        <option value="Thêm mới" @strAdd>Thêm mới</option>
+                        <option value="Chỉnh sửa" @strEdit>Chỉnh sửa</option>
+                        <option value="Xóa" @strDelete>Xóa</option>
+                    </select>
+                </div>
+                <label class="col-md-2 control-label ">
+                    Tài khoản
+                </label>
+                <div class="col-md-4">
+                    <input name="author" class="form-control" value="@ViewBag.Author" />
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Từ ngày
+                </label>
+                <div class="col-md-4">
+                    <input name="fromDate" class="form-control datepicker" value="@ViewBag.FromDate" />
+                </div>
+                <label class="col-md-2 control-label ">
+                    Đến ngày
+                </label>
+                <div class="col-md-4">
+                    <input name="toDate" class="form-control datepicker" value="@ViewBag.ToDate" />
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" value="Tìm kiếm" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+
+    </form>    <br>
+
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <td valign="middle" align="center" style="vertical-align:middle;">STT </td>
+                <td valign="middle" align="center" style="vertical-align:middle;">Thời gian</td>
+                <td valign="middle" align="center" style="vertical-align:middle;">Tài khoản</td>
+                <td valign="middle" align="center" style="vertical-align:middle;">Thao tác</td>
+                <td valign="middle" align="center" style="vertical-align:middle;">Nội dung</td>
+            </tr>
+        </thead>
+        @{ int i = 0; }
+        @foreach (var item in Model)
+        {
+            i += 1;
+            <tr>
+                <td style="text-align: center;">@i</td>
+                <td>@item.DateTime.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                <td>@item.Author</td>
+                <td>@item.Action</td>
+                <td>@item.Description</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("NhatKy", new { page = page, action = ViewBag.Action, author = ViewBag.Author, fromDate = ViewBag.FromDate, toDate = ViewBag.ToDate }))
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<style>
+    .PhongThu {
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 20px;
+    }
+</style>
+<script>
+    $(".PhongThu").click(function () {
+        $(".FormTK").slideToggle();
+        $(".fa-chevron-down").toggle();
+        $(".fa-chevron-up").toggle();
+    });
+
+    $('#menul-tk').addClass("active");
+</script>

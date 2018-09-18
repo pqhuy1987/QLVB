@@ -1,0 +1,1293 @@
+﻿@model QLVB.Models.TaiLieu
+
+@{
+    IEnumerable<QLVB.Models.VB_VBCC> VBCanCu = ViewBag.VBCC;
+    IEnumerable<QLVB.Models.VB_VBSD> VBSuaDoi = ViewBag.VBSD;
+    IEnumerable<QLVB.Models.VB_VBHD> VBHuongDan = ViewBag.VBHD;
+    IEnumerable<QLVB.Models.VB_VBLQ> VBLienQuan = ViewBag.VBLQ;
+    IEnumerable<QLVB.Models.Revision> lstRevision = ViewBag.Revision;
+
+    // BEGIN
+    IEnumerable<QLVB.Models.VB_BMLQ> BMLienQuan = ViewBag.BMLQ;
+    // END
+
+    ViewBag.Title = Session["lbl"] + " văn bản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+
+    <script src="~/Content/chosen_v1.6.2/chosen.jquery.min.js"></script>
+    <script src="~/Content/chosen_v1.6.2/chosen.order.jquery.min.js"></script>
+    <link href="~/Content/chosen_v1.6.2/chosen.min.css" rel="stylesheet" />
+}
+
+<style type="text/css">
+    #PhongBan_chosen ul {
+        min-height: 33px !important;
+    }
+</style>
+
+<script>
+    // Key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {
+            // Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+
+<h3 class="title-link"><i class="fa fa-files-o"></i> @Html.ActionLink("Danh sách", "DanhSach") <i class="fa fa-angle-right"></i> @Session["lbl"] văn bản</h3>
+<hr />
+
+@using (Html.BeginForm("ChinhSua", "QL_TaiLieu", FormMethod.Post, new { @id = "form", @class = "form-horizontal", @enctype = "multipart/form-data" }))
+{
+    @Html.Hidden("LanHieuChinh", Model.LanHieuChinh)
+    @Html.Hidden("MaTaiLieu", Model.MaTaiLieu)
+
+    <div class="them-tl-duoi">
+        <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+            <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <i class="fa fa-bars text-danger"></i> Tóm tắt văn bản
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#noidungTV" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                        <i class="fa fa-vine text-danger"></i> Nội dung TV
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#noidungTA" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                        <i class="fa fa-font text-danger"></i> Nội dung TA
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#vanbangoc" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                        <i class="fa fa-file-image-o text-danger"></i> Văn bản gốc
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#luocdo" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                        <i class="fa fa-th text-danger"></i> Lược đồ
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#taive" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                        <i class="fa fa-download text-danger"></i> Tải về
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a href="#revision" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                        <i class="fa fa-pencil-square text-danger"></i> revision
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade container  active in" role="tabpanel" id="home" aria-labelledby="profile-tab">
+                    <div class="form-group">
+                        <div class="col-md-2">Tiêu đề</div>
+                        <div class="col-md-4">
+                            @Html.TextBox("TenTaiLieu", Model.TenTaiLieu, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">Bảo mật</div>
+                        <div class="col-md-4">
+                            <span>
+                                @if (Model.BaoMat != null && Model.BaoMat.Value)
+                                {
+                                    <input name="BaoMat" type="checkbox" checked value="true" data-toggle="toggle" data-size="small">
+                                }
+                                else
+                                {
+                                    <input name="BaoMat" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2">Số hiệu: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("SoHieu", Model.SoHieu, new { @class = "form-control" })
+                        </div>
+
+                        <div class="col-md-2">Loại văn bản: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("LoaiVanBan", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2">Mã hiệu: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("MaHieu", Model.MaHieu, new { @class = "form-control" })
+                        </div>
+
+                        <div class="col-md-2">Lần ban hành: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("LanBanHanh", Model.LanBanHanh, new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @* BEGIN *@
+                        @*<div class="col-md-2">Nơi ban hành: </div>*@
+                        <div class="col-md-2">Đơn vị soạn thảo: </div>
+                        @* END *@
+                        <div class="col-md-4">
+                            @Html.DropDownList("NoiBanHanh", null, new { @class = "form-control" })
+                        </div>
+
+                        <div class="col-md-2">Người ký: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("NguoiKy", Model.NguoiKy, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2">Ngày ban hành: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("NgayBanHanhs", Model.NgayBanHanh != null ? Model.NgayBanHanh.Value.ToString("dd/MM/yyyy") : "", new { @class = "form-control datepicker" })
+                        </div>
+                        <div class="col-md-2">Ngày hiệu lực: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("NgayHieuLucs", Model.NgayHieuLuc != null ? Model.NgayHieuLuc.Value.ToString("dd/MM/yyyy") : "", new { @class = "form-control datepicker" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @* BEGIN *@
+                        @*<div class="col-md-2">Phòng ban: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("PhongBan", null, new { @class = "form-control" })
+                        </div>*@
+                        <div class="col-md-2">Đơn vị áp dụng: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("PhongBan", null, new { @class = "form-control chosen-select", @multiple = "multiple" })
+                            @Html.HiddenFor(x => x.DonViApDung)
+                        </div>
+                        @* END *@
+                        <div class="col-md-2">Tình trạng: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("TinhTrang", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @Html.TextArea("NoiDungTomTat", Model.NoiDungTomTat)
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="noidungTV" aria-labelledby="profile-tab">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @Html.TextArea("NoiDungTV", Model.NoiDungTV)
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="noidungTA" aria-labelledby="profile-tab">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @Html.TextArea("NoiDungTA", Model.NoiDungTA)
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="vanbangoc" aria-labelledby="profile-tab">
+                    <div class="form-group">
+                        <div class="col-md-2 text-right"><i class="fa fa-upload"></i> <b>Tải lên:</b> </div>
+                        <div class="col-md-4">
+                            <input type="file" id="TaiLieuGoc" name="fileGOC" class="form-control" accept="application/pdf" />
+                        </div>
+                        <br /><br />
+                        <div class="col-md-12" id="loadfileGoc">
+                            @if (Model.fileGOC != null)
+                            {
+                                @*<iframe src="~/Upload/TaiLieuGoc/@Model.fileGOC#zoom=50" style="width:100%;" height="500"></iframe>*@
+                                if (Model.fileGOC.ToLower().EndsWith(".pdf"))
+                                    {
+                                        <iframe src="/Pdf/Preview/@Model.MaTaiLieu" style="width:100%;" height="500"></iframe>
+                                    }
+                                    else
+                                    {
+                                        <p>PHẦN MỀM CHỈ HỖ TRỢ XEM ONLINE VĂN BẢN GỐC ĐỊNH DẠNG PDF</p>
+                                        <p><a href="~/Upload/TaiLieuGoc/@Model.fileGOC">Tải về</a></p>
+                                    }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="luocdo" aria-labelledby="home-tab">
+                    <div class="col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-tag"></i> Văn bản được căn cứ <span class="numVBCC" style="color:greenyellow">(@VBCanCu.Count())</span></h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("VanBan", null, "Chọn văn bản", new { @class = "form-control VanBancancu" })
+                                    <hr />
+                                    <div class="loadVBCanCu">
+                                        @foreach (var item in VBCanCu)
+                                        {
+                                            <a id="@item.ID" class="xoaVBCC btn btn-danger fa fa-times"></a> <a class=" text-success" href="@Url.Action("ChinhSua", "QL_TaiLieu", new {@id=item.MaVanBanCC })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                            <hr />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-tags"></i> Văn bản được sửa đổi, bổ sung, thay thế <span class="numVBSD" style="color:greenyellow">(@VBSuaDoi.Count())</span></h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("VanBan", null, "Chọn văn bản", new { @class = "form-control VanBanSuaDoi" })
+                                    <hr />
+                                    <div class="loadVBSuaDoi">
+                                        @foreach (var item in VBSuaDoi)
+                                        {
+                                            <a id="@item.ID" class="xoaVBSD btn btn-danger fa fa-times"></a> <a class=" text-success" href="@Url.Action("ChinhSua", "QL_TaiLieu", new {@id=item.MaVanBanSD })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                            <hr />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-eye"></i> Văn bản đang xem</h3>
+                            </div>
+                            <div class="panel-body">
+                                <label>
+                                    @if (Model.TenTaiLieu != null)
+                                    {
+                                        @Model.TenTaiLieu
+                                    }
+                                </label>
+                                <table class="table table-bordered table-striped">
+                                    <tr>
+                                        <td>Số hiệu: </td>
+                                        <td> @Model.SoHieu</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Loại văn bản: </td>
+                                        <td>
+                                            @if (Model.LoaiTaiLieu != null)
+                                            {
+                                                @Model.LoaiTaiLieu.TenLoaiTL
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @* BEGIN *@
+                                        @*<td>Nơi ban hành </td>*@
+                                        <td>Đơn vị soạn thảo </td>
+                                        @* END *@
+                                        <td>
+                                            @if (Model.NoiBanHanh != null && Model.DMPhongBan1 != null)
+                                            {
+                                                @Model.DMPhongBan1.TenPhong
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Người ký </td>
+                                        <td>@Model.NguoiKy</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày ban hành </td>
+                                        <td>
+                                            @if (Model.NgayBanHanh != null)
+                                            {
+                                                @Model.NgayBanHanh.Value.ToString("dd/MM/yyyy")
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày hiệu lực </td>
+                                        <td>
+                                            @if (Model.NgayHieuLuc != null)
+                                            {
+                                                @Model.NgayHieuLuc.Value.ToString("dd/MM/yyyy")
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tình trạng </td>
+                                        <td>
+                                            @if (Model.TinhTrang == "1")
+                                            {
+                                                // BEGIN
+                                                @*<span>Chưa có hiệu lực</span>*@
+                                                <span>Dự thảo</span>
+                                                // END
+                                            }
+                                            @if (Model.TinhTrang == "2")
+                                            {
+                                                <span>Còn hiệu lực</span>
+                                            }
+                                            @if (Model.TinhTrang == "3")
+                                            {
+                                                <span>Hết hiệu lực</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            @if (Model.NoiDungTomTat != null)
+                                            { 
+                                                // Bo het the html
+                                                string sNoiDung = System.Text.RegularExpressions.Regex.Replace(Model.NoiDungTomTat, @"<[^>]*>", String.Empty);
+                                                if (sNoiDung.Length < 500)
+                                                {
+                                                    @Html.Raw(sNoiDung)
+                                                }
+                                                else
+                                                {
+                                                    @Html.Raw(sNoiDung.Substring(0, 499))                                                                       <span>...</span>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @*
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><i class="fa fa-hand-o-right"></i> Văn bản hướng dẫn <span class="numVBHD" style="color:greenyellow">(@VBHuongDan.Count())</span></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        @Html.DropDownList("VanBan", null, "Chọn văn bản", new { @class = "form-control VanBanHuongDan" })
+                                        <hr />
+                                        <div class="loadVBHuongDan">
+                                            @foreach (var item in VBHuongDan)
+                                            {
+                                                <a id="@item.ID" class="xoaVBHD btn btn-danger fa fa-times"></a> <a class=" text-success" href="@Url.Action("ChinhSua", "QL_TaiLieu", new {@id=item.MaVanBanHD })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                                <hr />
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        *@
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-link"></i> Văn bản liên quan <span class="numVBLQ" style="color:greenyellow">(@VBLienQuan.Count())</span></h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("VanBan", null, "Chọn văn bản", new { @class = "form-control VanBanLienQuan" })
+                                    <hr />
+                                    <div class="loadVBLienQuan">
+                                        @foreach (var item in VBLienQuan)
+                                        {
+                                            <a id="@item.ID" class="xoaVBLQ btn btn-danger fa fa-times"></a> <a class="text-success" href="@Url.Action("ChinhSua", "QL_TaiLieu", new {@id=item.MaVanBanLQ })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                            <hr />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* BEGIN *@
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-link"></i> Biểu mẫu liên quan <span class="numBMLQ" style="color: greenyellow;">(@BMLienQuan.Count())</span></h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("VanBan", null, "Chọn biểu mẫu", new { @class = "form-control BieuMauLienQuan" })
+                                    <hr />
+                                    <div class="loadBMLienQuan">
+                                        @foreach (var item in BMLienQuan)
+                                        {
+                                            <a id="@item.ID" class="xoaBMLQ btn btn-danger fa fa-times"></a> <a class="text-success" href="@Url.Action("ChinhSua", "QL_TaiLieu", new {@id=item.MaBieuMau })"><i class="fa fa-caret-right "></i> @item.TaiLieu1.TenTaiLieu</a>
+                                            <hr />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @* END *@
+
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="taive" aria-labelledby="profile-tab">
+                    <div class="container">
+                        <div class="form-group">
+                            <div class="col-md-2"><i class="fa fa-file-pdf-o"></i> Bản pdf: </div>
+                            <div class="col-md-10">
+                                <div id="loadfilePDF">
+                                    <a href="~/Upload/filePDF/@Model.filePDF">@Model.filePDF</a>
+                                </div>
+                                <input type="file" id="filePDF" class="form-control" accept="application/pdf" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"><i class="fa fa-vine"></i> Bản word tiếng Việt: </div>
+                            <div class="col-md-10">
+                                <div id="loadfileDOCV">
+                                    <a href="~/Upload/fileDOCTV/@Model.fileDOCV">@Model.fileDOCV</a>
+                                </div>
+                                <input type="file" id="fileDOCV" class="form-control" accept="application/.doc,.docx" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"><i class="fa fa-font"></i> Bản word tiếng Anh: </div>
+                            <div class="col-md-10">
+                                <div id="loadfileDOCA">
+                                    <a href="~/Upload/fileDOCTA/@Model.fileDOCA">@Model.fileDOCA</a>
+                                </div>
+                                <input type="file" id="fileDOCA" class="form-control" accept="application/.doc,.docx" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="revision" aria-labelledby="profile-tab">
+                    <div class="container table-responsive">
+                        <table id="tbRevision" class="table table-bordered table-striped text-center">
+                            <tr>
+                                <td>Phiên bản (Version) <button id="btn-add-revision" type="button" class="btn btn-success fa fa-plus"></button></td>
+                                <td>Tiếng Việt (word doc, docx)</td>
+                                <td>Tiếng Anh (word doc, docx)</td>
+                            </tr>
+                            @foreach (var item in lstRevision)
+                            {
+                                <tr>
+                                    <td>
+                                        <input hidden class="MaRevision" value="@item.MaRevision" /><input id="reTen" class="form-control" value="@item.TenRevision" />
+                                    </td>
+                                    <td id="tdReTV">
+                                        @if (!string.IsNullOrEmpty(item.fileTV))
+                                        {
+                                            <a href="/Upload/revision/@item.fileTV"> @item.fileTV  </a> <button type="button" class="btn-xoa-revisionTV btn btn-danger fa fa-times"></button>
+                                        }
+                                        else
+                                        {
+                                            <input type="file" class="refileV form-control" accept="application/.doc,.docx" />
+                                        }
+                                    </td>
+                                    <td id="tdReTA">
+                                        @if (!string.IsNullOrEmpty(item.fileTA))
+                                        {
+                                            <a href="/Upload/revision/@item.fileTA">@item.fileTA </a> <button type="button" class="btn-xoa-revisionTA btn btn-danger fa fa-times"></button>
+                                        }
+                                        else
+                                        {
+                                            <input type="file" class="refileA form-control" accept="application/.doc,.docx" />
+                                        }
+                                    </td>
+                                    <td><button type="button" class="btn-remove-revision btn btn-danger fa fa-times"></button></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group container">
+        <div class="col-sm-12">
+            <input id="Luu" type="submit" value="Lưu" class="btn btn-success" onclick="return setDonViApDung();" />
+        </div>
+    </div>
+}
+
+<table id="apRevision" hidden>
+    <tr>
+        <td><input hidden class="MaRevision" value="0" /><input id="reTen" class="form-control" /> </td>
+        <td id="tdReTV"><input type="file" class="refileV form-control" accept="application/.doc,.docx" /></td>
+        <td id="tdReTA"> <input type="file" class="refileA form-control" accept="application/.doc,.docx" /></td>
+        <td><button type="button" class="btn-remove-revision btn btn-danger fa fa-times"></button></td>
+    </tr>
+</table>
+
+<script>
+    // ==== luu revision ====
+
+    $('#btn-add-revision').click(function () {
+        var html = $('#apRevision').html();
+        $('#tbRevision').append(html);
+    });
+
+    //=== xoa dong revision ====
+    $('body').delegate('.btn-remove-revision', 'click', function () {
+        var iMaRe = $(this).parents('tr').find('.MaRevision').val();
+        if (iMaRe != 0) {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("XoaRevisionRow", "QL_TaiLieu")',
+                type: "POST",
+                data: { MaRevision: iMaRe },
+                success: function (result) {
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+        $(this).parents('tr').remove();
+    });
+
+    // ===== xoa file tv ====
+    $('body').delegate('.btn-xoa-revisionTV', 'click', function () {
+        var vThis = $(this).parents('tr');
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("XoaRevisionTV", "QL_TaiLieu")',
+            type: "POST",
+            data: { MaRevision: vThis.find('.MaRevision').val() },
+            success: function (result) {
+                if (result != "0") {
+                    vThis.find('.MaRevision').remove();
+                    vThis.find('#tdReTV').html(result);
+                }
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+    // ===== luu file tv ====
+    $('body').delegate('.refileV', 'change', function (e) {
+        var vThis = $(this).parents('tr');
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('username', 'username');
+            fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+            fileData.append('MaRevision', vThis.find('.MaRevision').val());
+            fileData.append('TenRevision', vThis.find('#reTen').val());
+
+            $.ajax({
+                url: '@Url.Action("LuuRevisionTV", "QL_TaiLieu")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result != "0") {
+                        vThis.find('.MaRevision').remove();
+                        vThis.find('#tdReTV').html(result);
+                    }
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+
+    // ===== xoa file TA ====
+    $('body').delegate('.btn-xoa-revisionTA', 'click', function () {
+        var vThis = $(this).parents('tr');
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("XoaRevisionTA", "QL_TaiLieu")',
+            type: "POST",
+            data: { MaRevision: vThis.find('.MaRevision').val() },
+            success: function (result) {
+                if (result != "0") {
+                    vThis.find('.MaRevision').remove();
+                    vThis.find('#tdReTA').html(result);
+                }
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+    // ===== luu file TA ====
+    $('body').delegate('.refileA', 'change', function (e) {
+        var vThis = $(this).parents('tr');
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('username', 'username');
+            fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+            fileData.append('MaRevision', vThis.find('.MaRevision').val());
+            fileData.append('TenRevision', vThis.find('#reTen').val());
+
+            $.ajax({
+                url: '@Url.Action("LuuRevisionTA", "QL_TaiLieu")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result != "0") {
+                        vThis.find('.MaRevision').remove();
+                        vThis.find('#tdReTA').html(result);
+                    }
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+
+    // ==== luu luoc do ====
+
+    $('.VanBancancu').chosen({ no_results_text: "Không tìm thấy!" });
+    $('.VanBancancu').on('change', function () {
+        if ($(this).val().trim() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("LuuVBCanCu", "QL_TaiLieu")',
+                type: "POST",
+                data: { MaVBChinh: $('#MaTaiLieu').val(), MaVBCanCu: $(this).val() },
+                success: function (result) {
+                    if (result != "0")
+                        $('.loadVBCanCu').html(result);
+                    else
+                        alert("Văn bản đã được chọn!");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    $('body').delegate('.xoaVBCC', 'click', function () {
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("XoaVBCanCu", "QL_TaiLieu")',
+            type: "POST",
+            data: { MaVBChinh: $('#MaTaiLieu').val(), idXoa: $(this).attr("id") },
+            success: function (result) {
+                if (result != "0")
+                    $('.loadVBCanCu').html(result);
+                else
+                    alert("Đã có lỗi!");
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+    //================
+    $('.VanBanSuaDoi').chosen({ no_results_text: "Không tìm thấy!" });
+    $('.VanBanSuaDoi').on('change', function () {
+        if ($(this).val().trim() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("LuuVBSuaDoi", "QL_TaiLieu")',
+                type: "POST",
+                data: { MaVBChinh: $('#MaTaiLieu').val(), MaVBSuaDoi: $(this).val() },
+                success: function (result) {
+                    if (result != "0")
+                        $('.loadVBSuaDoi').html(result);
+                    else
+                        alert("Văn bản đã được chọn!");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    $('body').delegate('.xoaVBSD', 'click', function () {
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("XoaVBSuaDoi", "QL_TaiLieu")',
+            type: "POST",
+            data: { MaVBChinh: $('#MaTaiLieu').val(), idXoa: $(this).attr("id") },
+            success: function (result) {
+                if (result != "0")
+                    $('.loadVBSuaDoi').html(result);
+                else
+                    alert("Đã có lỗi!");
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+    //================
+    $('.VanBanLienQuan').chosen({ no_results_text: "Không tìm thấy!" });
+    $('.VanBanLienQuan').on('change', function () {
+        if ($(this).val().trim() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("LuuVBLienQuan", "QL_TaiLieu")',
+                type: "POST",
+                data: { MaVBChinh: $('#MaTaiLieu').val(), MaVBLienQuan: $(this).val() },
+                success: function (result) {
+                    if (result != "0")
+                        $('.loadVBLienQuan').html(result);
+                    else
+                        alert("Văn bản đã được chọn!");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    $('body').delegate('.xoaVBLQ', 'click', function () {
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("XoaVBLienQuan", "QL_TaiLieu")',
+            type: "POST",
+            data: { MaVBChinh: $('#MaTaiLieu').val(), idXoa: $(this).attr("id") },
+            success: function (result) {
+                if (result != "0")
+                    $('.loadVBLienQuan').html(result);
+                else
+                    alert("Đã có lỗi!");
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+
+    //================
+    $('.VanBanHuongDan').chosen({ no_results_text: "Không tìm thấy!" });
+    $('.VanBanHuongDan').on('change', function () {
+        if ($(this).val().trim() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("LuuVBHuongDan", "QL_TaiLieu")',
+                type: "POST",
+                data: { MaVBChinh: $('#MaTaiLieu').val(), MaVBHuongDan: $(this).val() },
+                success: function (result) {
+                    if (result != "0")
+                        $('.loadVBHuongDan').html(result);
+                    else
+                        alert("Văn bản đã được chọn!");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    $('body').delegate('.xoaVBHD', 'click', function () {
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("XoaVBHuongDan", "QL_TaiLieu")',
+            type: "POST",
+            data: { MaVBChinh: $('#MaTaiLieu').val(), idXoa: $(this).attr("id") },
+            success: function (result) {
+                if (result != "0")
+                    $('.loadVBHuongDan').html(result);
+                else
+                    alert("Đã có lỗi!");
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+    // BEGIN
+    $('.BieuMauLienQuan').chosen({ no_results_text: "Không tìm thấy!" });
+    $('.BieuMauLienQuan').on('change', function () {
+        if ($(this).val().trim() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("LuuBMLienQuan", "QL_TaiLieu")',
+                type: "POST",
+                data: { MaVBChinh: $('#MaTaiLieu').val(), MaVBLienQuan: $(this).val() },
+                success: function (result) {
+                    if (result != "0")
+                        $('.loadBMLienQuan').html(result);
+                    else
+                        alert("Văn bản đã được chọn!");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });
+
+    $('body').delegate('.xoaBMLQ', 'click', function () {
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("XoaBMLienQuan", "QL_TaiLieu")',
+            type: "POST",
+            data: { MaVBChinh: $('#MaTaiLieu').val(), idXoa: $(this).attr("id") },
+            success: function (result) {
+                if (result != "0")
+                    $('.loadBMLienQuan').html(result);
+                else
+                    alert("Đã có lỗi!");
+                $('#loading_gif').hide();
+            },
+        });
+    });
+    // END
+
+    // ==== editor =====
+
+    var editor;
+
+    function createEditor(languageCode, id) {
+        editor = CKEDITOR.replace(id, {
+            height: 200,
+            language: 'vi',
+            toolbar: 'basic',
+            toolbar:
+                [
+	{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
+	{ name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+	{ name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+	{ name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+	{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+	{
+	    name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
+	},
+	{ name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+	{ name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+	'/',
+	{ name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+	{ name: 'colors', items: ['TextColor', 'BGColor'] },
+    { name: 'tools', items: ['Maximize', 'btn-cm'] }
+                ],
+        });
+    }
+
+    $(function () {
+        createEditor('vi', 'NoiDungTomTat');
+
+        // BEGIN
+        $(".chosen-select").chosen({ no_results_text: "Không tìm thấy!", placeholder_text_multiple: "Chọn đơn vị áp dụng" });
+        ready_chosen('PhongBan', '@Model.DonViApDung');
+        // END
+    });
+
+    function setDonViApDung() {
+        var selectedValue = $(".chosen-select").chosen().val();
+        $("#DonViApDung").val(selectedValue);
+        return true;
+    }
+
+    function ready_chosen(id, value) {
+        var selectId = value;
+        if (selectId != 'null' && selectId != '') {
+            var selectedmulti = selectId.split(',');
+            var selectedvalue = new Array();
+            if (selectedmulti != null && selectedmulti.length > 0) {
+                for (var y = 0; y < selectedmulti.length; y++) {
+                    if (selectedmulti[y] != '') {
+                        selectedvalue.push(selectedmulti[y]);
+                    }
+                }
+            }
+            
+            $("#" + id).setSelectionOrder(selectedvalue, true);
+        }
+    }
+
+    function change_chosen(id, hiddenId) {
+        var selected = ChosenOrder.getSelectionOrder($("#" + id).chosen());
+        var AfterSelected = $("#" + id).chosen().val();
+        var lstId = '';
+        if (selected != null) {
+            for (var i = 0; i < selected.length; i++) {
+                if (selected[i] != '' && $.inArray(selected[i], AfterSelected) >= 0) {
+                    lstId += selected[i] + ',';
+                }
+            }
+        }
+        $("#" + hiddenId).val(lstId);
+    }
+
+    $(document).on('change', '#PhongBan', function () {
+        change_chosen("PhongBan", "DonViApDung");
+        //$('#PhongBan').trigger("chosen:updated");
+        //ready_chosen("PhongBan", $("#DonViApDung").val());
+    });
+
+    $('#menul-qlvb').addClass("active");
+
+    $('#SoHieu').keydown(function () {
+        $('#SoHieu').css("border-color", "#cccccc");
+    });
+
+    $('input#Luu').click(function () {
+        if ($('#SoHieu').val().trim() == "") {
+            $('#SoHieu').css("border-color", "Red");
+            alert('SỐ HIỆU KHÔNG ĐƯỢC TRỐNG !');
+            return false;
+        }
+        if ($('#TenTaiLieu').val().trim() == "") {
+            $('#TenTaiLieu').css("border-color", "Red");
+            alert('TIÊU ĐỀ KHÔNG ĐƯỢC TRỐNG !');
+            return false;
+        }
+    });
+
+    // ==== luu tai lieu goc ====
+    $('#TaiLieuGoc').on('change', function (e) {
+
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $("#TaiLieuGoc").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('username', 'username');
+            fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+
+            $.ajax({
+                url: '@Url.Action("LuuFileGoc", "QL_TaiLieu")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result != "0")
+                        $('#loadfileGoc').html(result);
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+
+    // ==== luu PDF ====
+    $('#filePDF').on('change', function (e) {
+
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $("#filePDF").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('username', 'username');
+            fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+
+            $.ajax({
+                url: '@Url.Action("LuuFilePDF", "QL_TaiLieu")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result != "0")
+                        $('#loadfilePDF').html(result);
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+
+
+    // ==== luu DOC TV ====
+    $('#fileDOCV').on('change', function (e) {
+
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $("#fileDOCV").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('username', 'username');
+            fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+
+            $.ajax({
+                url: '@Url.Action("LuuFileDOCV", "QL_TaiLieu")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result != "0")
+                        $('#loadfileDOCV').html(result);
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+
+
+    // ==== luu DOC TA ====
+    $('#fileDOCA').on('change', function (e) {
+
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $("#fileDOCA").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('username', 'username');
+            fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+
+            $.ajax({
+                url: '@Url.Action("LuuFileDOCA", "QL_TaiLieu")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result != "0")
+                        $('#loadfileDOCA').html(result);
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+
+</script>
+<div hidden id="loading_gif" style="position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%; background: black; opacity: 0.5;">
+    <div style=" width 10%; left 50%; position absolute; top 25%; ">
+        <img src="~/Content/loading.gif" width="50">
+    </div>
+</div>
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Raw(TempData["thongbao"])
+<button id="btn-HightLight" data-toggle="modal" data-target="#myHL" style="display:none"></button>
+<div id="myHL" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">High light</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Tiêu đề</label>
+                    <div class="col-md-8">
+                        <input id="HLTieuDe" class="form-control" />
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <br />
+                <div class="form-group">
+                    <label class="col-md-12 control-label">Nội dung</label>
+                    <div class="col-md-12">
+                        <textarea id="HLNoiDung" class="HLNoiDung form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input id="HLsub" hidden />
+                    <button id="HL-Luu2" type="button" class=" btn-success btn">Lưu</button>
+                    <button id="HL-Luu" type="button" class=" btn-success btn">Đồng ý</button>
+                    <button id="HL-Dong" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="HLContent">
+    <div class="subHL" style="display:none">
+        <span id="CTlabel"><b>NỘI DUNG </b><span class="CTclose">X</span></span>
+        <b><span id="CTTieuDe"></span></b>
+        <span id="CTNoiDung"></span>
+    </div>
+</div>
+<script>
+    var i = 0;
+    var layI = 0;
+    var editor;
+
+    function createEditorHL(languageCode, id) {
+        editor = CKEDITOR.replace(id, {
+            height: 500,
+            language: 'vi',
+            toolbar: 'basic',
+            toolbar:
+                [
+	{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
+	{ name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+	{ name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+	{ name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+	{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+	{
+	    name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
+	},
+	{ name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+	{ name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+	'/',
+	{ name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+	{ name: 'colors', items: ['TextColor', 'BGColor'] },
+    { name: 'tools', items: ['Maximize', 'btn-cm'] }
+                ],
+        });
+
+        editor.addCommand("mySimpleCommand", { // create named command
+            exec: function (edt) {
+                if (!CKEDITOR.env.ie) {
+                    $('#HLTieuDe').val("");
+                    CKEDITOR.instances["HLNoiDung"].setData("");
+                    $('#btn-HightLight').trigger("click");
+                    $('#HL-Luu').show();
+                    $('#HL-Luu2').hide();
+                }
+            }
+        });
+
+        editor.ui.addButton('btn-cm', { // add new button and bind our command
+            label: "Tô me",
+            command: 'mySimpleCommand',
+            toolbar: 'insert',
+            icon: 'icoHL.png'
+        });
+    }
+
+    function waitInit(i) {
+        // Gan noi dung div an vao editor
+        var subs = $(CKEDITOR.instances["NoiDungTV"].window.getFrame().$).contents().find('.sub_' + i);
+        $('#CTTieuDe').text($('#HLTieuDe').val());
+        $('#CTNoiDung').text(CKEDITOR.instances["HLNoiDung"].getData());
+        var html = $('#HLContent').html();
+        $(subs).append(html);
+    }
+
+    $('#HL-Luu').click(function () {
+        // Luu noi dung moi
+        // Lay so i de gan tiep class
+        var subs = $(CKEDITOR.instances["NoiDungTV"].window.getFrame().$).contents().find(".sub");
+        if (layI == 0) {
+            $(subs).each(function () {
+                i++;
+            });
+        }
+        layI = 1;
+        var editor = CKEDITOR.instances["NoiDungTV"];
+        var selected_text = editor.getSelection().getSelectedText();    // Get Text select
+        var newElement = new CKEDITOR.dom.element("div");               // Make Paragraff
+        newElement.setAttributes({ 'ondblclick': 'window.parent.NoiDungHL(".sub_' + i + '")', 'class': "sub sub_" + i, 'style': 'background-color:yellow;display:inline' })                 // Set Attributes
+        newElement.setHtml(selected_text);                              // Set text to element
+        editor.insertElement(newElement);
+
+
+        waitInit(i); // them div an
+        i++;
+        $('#HL-Dong').trigger("click");
+    });
+
+    $('#HL-Luu2').click(function () {
+        // luu noi dung chinh sua
+        var sub = $('#HLsub').val();
+        var subs = $(CKEDITOR.instances["NoiDungTV"].window.getFrame().$).contents().find(sub);
+        $(subs).find('.subHL').find('#CTTieuDe').text($('#HLTieuDe').val());
+        $(subs).find('.subHL').find('#CTNoiDung').text(CKEDITOR.instances["HLNoiDung"].getData());
+
+        $('#HL-Dong').trigger("click");
+    });
+
+    function NoiDungHL(sub) 
+    {
+        // lay noi dung chinh sua
+        var subs = $(CKEDITOR.instances["NoiDungTV"].window.getFrame().$).contents().find(sub);
+        $('#HLTieuDe').val($(subs).find('.subHL').find('#CTTieuDe').text());
+        CKEDITOR.instances["HLNoiDung"].setData($(subs).find('.subHL').find('#CTNoiDung').text());
+        $('#HLsub').val(sub);
+        $('#btn-HightLight').trigger("click");
+        $('#HL-Luu2').show();
+        $('#HL-Luu').hide();
+
+        return subs;
+    }
+
+    $(function () {
+        createEditorHL('vi', 'NoiDungTV');
+        createEditor('vi', 'HLNoiDung');
+        createEditorHL('vi', 'NoiDungTA');
+    });
+    CKEDITOR.env.isCompatible = true;
+</script>

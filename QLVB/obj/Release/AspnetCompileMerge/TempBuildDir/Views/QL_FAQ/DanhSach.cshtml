@@ -1,0 +1,520 @@
+﻿@model PagedList.IPagedList<QLVB.Models.FAQ>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+    
+    <script src="~/Content/jquery-sortable.js"></script>
+    <link href="~/Content/dragdrop.css" rel="stylesheet" />
+}
+
+<h3><i class="fa fa-question-circle"></i> Danh sách FAQ  </h3> 
+<hr />
+<button id="btn-themmoi" class="btn btn-primary">Thêm mới</button> 
+<button class="btn-ex btn btn-default"><i class="fa fa-expand"></i> Mở rộng</button> 
+<button class="btn-co btn btn-default" style="display:none"><i class="fa fa-compress"></i> Thu gọn</button> 
+@Html.Raw(ViewBag.DuyetFAQ)
+
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('.btn-ex').click(function () {
+        $(this).hide();
+        $('.btn-co').show();
+        $('.mn-child').slideDown();
+    });
+    $('.btn-co').click(function () {
+        $(this).hide();
+        $('.btn-ex').show();
+        $('.mn-child').slideUp();
+    });
+
+    $('.mn-child').each(function () {
+        if ($(this).html().trim() != "") {
+            $(this).hide();
+        }
+    });
+
+    DuyetNutLa();
+    DuyetSoNut();
+
+    DuyetNutCha();
+    // duyet nut cha dau tien de them btn-hinh
+    function DuyetNutCha()
+    {
+        $('.btn-image').hide();
+        $('.nested_with_switch').children('li').each(function () {
+            $(this).find(".btn-image:first").show();
+        })
+    }
+    function DuyetSoNut() {
+        $('.nested_with_switch li').each(function () {
+            var i = 0;
+            $(this).children(".mn-child:first").children("li").each(function () {
+                i++;
+            });
+            if (i != 0)
+                $(this).children(".span-soluong").text(" (" + i + ")");
+            else
+                $(this).children(".span-soluong").text("");
+        });
+    }
+    //duyet stt va luu vao csdl
+    function DuyetSoSTT(li) {
+        var i = 1;
+        $('#loading_gif').show();
+        li.parents("ol:first").children("li").each(function () {
+            $.ajax({
+                url: '@Url.Action("saveSTT_ajax", "QL_FAQ")',
+                type: "POST",
+                data:{ id: $(this).attr("data-id"), stt : i },
+            });
+            i++; 
+           
+        });
+        $('#loading_gif').hide();
+    }
+
+    // dblclick tieu de hien textbox
+    $('body').delegate('.span-tieude', 'dblclick', function () {
+        $(this).parents('li:first').find('.mn-parent:first').after(' <input class="txt-tieude" value="' + $(this).text() + '" /> <a class="txt-check btn btn-success btn-xs fa fa-check" type="button" ></a>');
+
+        $(this).parents('li:first').find('.txt-tieude').select();
+        $(this).hide();
+    });
+    // click luu save tieu de
+    $('body').delegate('.txt-check', 'click', function () {
+
+        var tieude = $(this).parents('li:first').find('.txt-tieude:first').val();
+        if(tieude.trim()=="")
+        {
+            $('#btn-dongy').hide();
+            $('#pthongbao').text("Hãy nhập tiêu đề !");
+            $('#btn-thongbao').trigger("click");
+
+            return;
+        }
+        editTieuDe($(this).parents("li:first").attr("data-id"), tieude); // luu csdl tieu de
+
+        $(this).parents('li:first').children(".span-tieude").text(tieude);
+        $(this).parents('li:first').children(".span-tieude").show();
+        $(this).parents('li:first').children('.txt-tieude').remove();
+        $(this).remove();
+
+    });
+
+    //duyet nut: la -> hien them button noi dung, cha -> hien button scroll
+    function DuyetNutLa() {
+        $('.mn-child').each(function () {
+            if ($(this).html().trim() == "") {
+               // $(this).parents("li:first").find('.btn-noidung').show();
+                $(this).parents("li:first").find('.mn-parent').hide();
+            }
+            else {
+               // $(this).parents("li:first").find('.btn-noidung').hide();
+                $(this).parents("li:first").find('.mn-parent').show();
+            }
+        });
+    }
+    
+    //xu ly scroll
+    $('body').delegate('.mn-parent', "click", function () {
+
+        $(this).parents("li:first").find('.mn-child').first().slideToggle();
+    });
+
+    //drag & drop
+    var oldContainer;
+    $("ol.nested_with_switch").sortable({
+        group: 'nested',
+        afterMove: function (placeholder, container) {
+            if (oldContainer != container) {
+                if (oldContainer)
+                    oldContainer.el.removeClass("active");
+                container.el.addClass("active");
+
+                oldContainer = container;
+
+            }
+        },
+        onDrop: function ($item, container, _super) {
+            container.el.removeClass("active");
+            _super($item, container);
+
+            DuyetNutLa();
+            DuyetSoNut();
+
+            DuyetNutCha();
+            //duyet stt
+            DuyetSoSTT($item);
+
+            editNutCha($item.attr("data-id"), $item.parents("li").attr("data-id")); //luu nut cha xuong csdl khi drop
+        }
+    });
+
+    //them mot nut
+    $('#btn-themmoi').click(function () {
+
+        $('#loading_gif').show();
+
+        $.ajax({
+            url: '@Url.Action("insertNut_ajax", "QL_FAQ")',
+            type: "POST",
+            success: function (result) {
+                $('ol.nested_with_switch').prepend(result);
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+    function editNutCha(idcon, idcha)
+    {
+        $('#loading_gif').show();
+        if (idcha == undefined)
+            idcha = 0;
+        $.ajax({
+            url: '@Url.Action("editCha_ajax", "QL_FAQ")',
+            type: "POST",
+            data: { idcon: idcon, idcha: idcha },
+            success: function (result) {
+                $('#loading_gif').hide();
+            },
+        });
+    }
+
+    function editTieuDe(idcon,noidung) {
+        $('#loading_gif').show();
+
+        $.ajax({
+            url: '@Url.Action("editTieuDe_ajax", "QL_FAQ")',
+            type: "POST",
+            data: { idcon: idcon , noidung:noidung },
+            success: function (result) {
+                $('#loading_gif').hide();
+            },
+        });
+    }
+
+    var element;
+    //xu ly nut xoa du lieu
+    $('body').delegate('.btn-xoa', 'click', function () {
+
+        $('#btn-dongy').show();
+        $('#pthongbao').text("Các dữ liệu con sẽ bị xóa hết. Bạn muốn tiếp tục?");
+        $('#btn-thongbao').trigger("click");
+        $('#id-xoa').val($(this).parents("li:first").attr("data-id"));
+
+        element=$(this);
+    });
+    $('body').delegate('#btn-dongy', 'click', function () {
+        xoaNut($('#id-xoa').val());
+    });
+    function xoaNut(idcon) {
+
+        $('#loading_gif').show();
+
+        $.ajax({
+            url: '@Url.Action("deleteNut_ajax", "QL_FAQ")',
+            type: "POST",
+            data: { idcon: idcon },
+            success: function (result) {
+
+                element.parents("li:first").remove();
+                DuyetNutLa();
+                DuyetSoNut();
+                $('#loading_gif').hide();
+            },
+        });
+    }
+
+    // bao mat
+    $('body').delegate('.btn-baomat', 'click', function () {
+    
+        var id = $(this).parents('li:first').attr('data-id');
+        var ele = $(this).parent("span").find('.btn-baomat').toggle();
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("baomatNut_ajax", "QL_FAQ")',
+            type: "POST",
+            data: { id: id },
+            success: function (result) {
+                ele;
+                $('#loading_gif').hide();
+            },
+        });
+    });
+</script>
+
+
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<button id="btn-sua" data-toggle="modal" data-target="#myChinhSua" style="display:none"></button>
+<div id="myChinhSua" class="modal fade" role="dialog">
+
+        @Html.Hidden("idFAQ")
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chỉnh sửa nội dung FAQ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-12 control-label">Tiêu đề / câu hỏi FAQ</label>
+                        <div class="col-md-12">
+                            @Html.TextArea("CauHoi", "", new { @class = "CauHoi form-control" })
+
+                            <label id="erCauHoi" class=" text-danger error"></label>
+                        </div>
+
+                        <label class="col-md-12 control-label">Nội dung trả lời</label>
+                        <div class="col-md-12">
+                            @Html.TextArea("TraLoi", "", new { @class = "TraLoi form-control", @rows = "10" })
+
+                            <label id="erTraLoi" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" id="btn-luu" class="btn btn-success" value="Lưu" />
+                    <button type="button" id="btn-luu-dong" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>  
+</div>
+
+<button id="btn-them-hinh" data-toggle="modal" data-target="#myHinhAnh" style="display:none"></button>
+<div id="myHinhAnh" class="modal fade" role="dialog">
+
+    @Html.Hidden("idimgFAQ")
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm hình danh mục</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <input type="file" id="txt-dmhinh" accept="image/*" />
+                    </div>
+                    <div class="col-md-12" id="div-dm-img">
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="btn-luu-hinh" class="btn btn-success" value="Lưu" />
+                <button type="button" id="btn-luu-dong" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // xu ly lay hinh va luu hinh
+    $('body').delegate('.btn-image', 'click', function () {
+        $('#txt-dmhinh').val("");
+        var idFAQ = $(this).parents("li:first").attr("data-id");
+
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("selectImageFAQ_ajax", "QL_FAQ")',
+            type: "POST",
+            data: { id: idFAQ },
+            success: function (result) {
+                $('#idimgFAQ').val(idFAQ);
+                $('#div-dm-img').html(result);
+                $('#btn-them-hinh').trigger('click');
+
+                $('#loading_gif').hide();
+            },
+        });
+
+    });
+
+    $('#btn-luu-hinh').click(function () {
+       
+        $('#loading_gif').show();
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+
+            var fileUpload = $('#txt-dmhinh').get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('idFAQ', $('#idimgFAQ').val());
+
+            $.ajax({
+                url: '@Url.Action("saveimgFAQ_ajax", "QL_FAQ")',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result != "0") {
+                        $('#div-dm-img').html(result);
+
+                        $('#div-pthongbao').text('Lưu thành công !');
+                        $('#div-thongbao').show();
+                        $('#div-thongbao').fadeOut(5000);
+                    }
+                    $('#loading_gif').hide();
+                },
+            });
+        } else {
+            alert("Không lưu được tập tin !");
+        }
+    });
+
+    //xu ly luu noi dung
+    @*$('body').delegate('.btn-noidung', 'click', function () {
+        
+        var idFAQ = $(this).parents("li:first").attr("data-id");
+        var tieude = $(this).parents("li:first").find(".span-tieude").text();
+
+        element = $(this).parents("li:first").find(".span-tieude");
+
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("selectFAQ_ajax", "QL_FAQ")',
+            type: "POST",
+            data: { id: idFAQ },
+            success: function (result) {
+                $('#btn-sua').trigger('click');
+                $('#idFAQ').val(idFAQ);
+                $('#CauHoi').val(tieude);
+                CKEDITOR.instances['TraLoi'].setData(result);
+                $('#loading_gif').hide();
+            },
+        });
+
+    });*@
+
+    $('#btn-luu').click(function () {
+        $('.error').text("");
+        if ($(this).parents(".modal-dialog").find('#CauHoi').val().trim() == "") {
+            $(this).parents(".modal-dialog").find('#erCauHoi').text("Hãy nhập tiêu đề !");
+            return false;
+        }
+
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("saveNoiDungFAQ_ajax", "QL_FAQ")',
+            type: "POST",
+            data: { id: $('#idFAQ').val(), cauhoi: $('#CauHoi').val(),traloi:CKEDITOR.instances['TraLoi'].getData() },
+            success: function (result) {
+                if (result == "1") {
+                    element.text($('#CauHoi').val());
+                    $('#div-thongbao').css("background-color", "limegreen");
+                    $('#div-pthongbao').text("Lưu thành công !");
+                }
+                else
+                {
+                    $('#div-thongbao').css("background-color", "darkred");
+                    $('#div-pthongbao').text("Lưu thất bại !");
+                }
+
+                $('#div-thongbao').show();
+                $('#div-thongbao').fadeOut(5000);
+                $('#btn-luu-dong').trigger("click");
+                $('#loading_gif').hide();
+            },
+        });
+    });
+
+    function createEditor(languageCode, id) {
+        editor = CKEDITOR.replace(id, {
+            language: 'vi',
+            toolbar: 'basic',
+            toolbar:
+                [
+	//{ name: 'document', items : [ 'Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates' ] },
+	{ name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+	{ name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+	//{ name: 'forms', items : [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+	{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+	{
+	    name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
+	},
+	//{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+	//{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+	'/',
+	{ name: 'styles', items: ['Link', 'Table', 'Styles', 'Format', 'Font', 'FontSize'] },
+	{ name: 'colors', items: ['TextColor', 'BGColor'] },
+    { name: 'tools', items: ['Maximize', 'btn-cm'] }
+                ],
+        });
+
+    }
+
+    $(function () {
+        createEditor('vi', 'TraLoi');
+    });
+
+    $('#menul-qldm').addClass("active");
+</script>
+
+<div hidden id="loading_gif" style="position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%; background: black; opacity: 0.5;">
+    <div style=" width: 10%; left: 50%; position: absolute; top: 25%; ">
+        <img src="~/Content/loading.gif" width="50">
+    </div>
+</div>
+
+@Html.Raw(TempData["thongbao"])
+
+@*<ol class="nested_with_switch vertical">
+        <li data-id="1" >
+
+            <span class="span-tieude">First</span>
+            <span style="float:right">
+
+                <a class="mn-parent fa fa-unsorted btn btn-default btn-xs"></a>
+                <a class="btn-noidung fa fa-edit btn btn-primary btn-xs"></a>
+                <a class="btn-xoa fa fa-times btn btn-danger btn-xs"></a>
+            </span>
+            <ol class="mn-child">
+
+            </ol>
+    </ol>*@

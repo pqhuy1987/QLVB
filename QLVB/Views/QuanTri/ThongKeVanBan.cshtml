@@ -1,0 +1,224 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Thống kê";
+}
+@model PagedList.IPagedList<QLVB.Models.TaiLieu>
+@using PagedList.Mvc;
+
+
+<h3><i class="fa fa-fw fa-files-o"></i> BÁO CÁO THỐNG KÊ HỆ THỐNG VĂN BẢN QUẢN LÝ NỘI BỘ <a href="@Url.Action("XuatBaoCao","QuanTri")" class="btn btn-success">Xuất báo cáo</a></h3>
+
+<hr />
+<div class="panel panel-primary">
+    <div class="panel-heading PhongThu">
+        <h2 class="panel-title"><i class="fa fa-search" ></i> Tìm kiếm <span style="float:right;"><i class="fa fa-chevron-down"></i> <i style="display:none" class="fa fa-chevron-up"></i></span></h2>
+    </div>
+    <br>
+    <form action="/QuanTri/ThongKeVanBan" method="post" style="display:none" class="FormTK">
+        <div class="col-md-12">
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Số hiệu
+                </label>
+                <div class="col-md-10">
+                    <input name="SoHieu" class="form-control" value="@ViewBag.SoHieu" />
+                </div>
+              
+            </div>
+            <div class="clearfix"></div><br />
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Ngày ban hành
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayBanHanhfrom" class="form-control datepicker" value="@ViewBag.NgayBanHanhfrom" />
+                </div>
+                <label class="col-md-2 control-label ">
+                    đến
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayBanHanhto" class="form-control datepicker" value="@ViewBag.NgayBanHanhto" />
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Ngày hiệu lực
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayHieuLucfrom" class="form-control datepicker" value="@ViewBag.NgayHieuLucfrom" />
+                </div>
+                <label class="col-md-2 control-label ">
+                    đến
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayHieuLucto" class="form-control datepicker" value="@ViewBag.NgayHieuLucto" />
+                </div>
+            </div>
+            <div class="clearfix" ></div><br />
+            <div class="row">
+                <div class="col-md-12" >
+                    <input type="submit" value="Tìm kiếm" class="btn btn-success" />
+                </div>
+                </div>
+            </div>
+   
+    </form>    <br>
+
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">STT </td>
+                <td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">Số hiệu</td>
+                <td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">Tên văn bản</td>
+                @*<td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">Nơi ban hành</td>*@
+                <td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">Đơn vị soạn thảo</td>
+                <td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">Ngày ban hành</td>
+                <td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">Ngày hiệu lực</td>
+                <td rowspan="2" valign="middle" align="center" style="vertical-align:middle;">Người ký</td>
+                <td colspan="3" valign="middle" align="center" style="vertical-align:middle;">Tình trạng</td>
+                <td valign="middle" align="center"></td>
+            </tr>
+            <tr>
+                <td  valign="middle" align="center">
+                    Còn hiệu lực
+                </td >
+                <td  valign="middle" align="center">
+                    Hết hiệu lực
+                </td>
+                <td  valign="middle" align="center">
+                    @*Chưa hiệu lực*@
+                    Dự thảo
+                </td>
+                <td  valign="middle" align="center">
+                    Lần hiệu chỉnh
+                </td>
+            </tr>
+
+        </thead>
+        @{int STTloai = 1;}
+        @foreach (var grbLoaiTaiLieu in Model.GroupBy(n => n.LoaiTaiLieu))
+        {
+            int STTVP = 1;
+
+                <tr>
+                    <td><b>@STTloai</b></td>
+                    <td colspan="5">Loại văn bản: @grbLoaiTaiLieu.Key.TenLoaiTL</td>
+                    <td colspan="5">Số lượng: @grbLoaiTaiLieu.Count()</td>
+                </tr>
+               STTloai++;
+                    
+                    foreach (var tailieu in grbLoaiTaiLieu.OrderBy(n => n.SoHieu))
+                    {
+                <tr>
+                    <td>
+                        @STTVP
+                    </td>
+                    <td>@tailieu.SoHieu</td>
+                    <td>
+                       @tailieu.TenTaiLieu
+
+                </td>
+                    <td>
+                    
+                    @if (tailieu.NoiBanHanh != null)
+                    {
+                        @tailieu.DMPhongBan1.TenPhong
+                    }
+                    </td>
+                    @if (tailieu.NgayBanHanh != null)
+                    {
+                    <td>@tailieu.NgayBanHanh.Value.ToString("dd/MM/yyyy")</td>
+                    }
+                    else {<td></td> }
+                    @if (tailieu.NgayHieuLuc != null)
+                    {
+                        <td>@tailieu.NgayHieuLuc.Value.ToString("dd/MM/yyyy")</td>
+                    }
+                    else
+                    {
+                    <td></td> }
+                    <td>@tailieu.NguoiKy</td>
+                    @if (tailieu.TinhTrang == "1")
+                    {
+                        <td></td>
+                        <td></td>
+                        <td><i class="fa fa-check"></i></td>
+                    }
+                    else if (tailieu.TinhTrang == "2")
+                    {
+                        <td><i class="fa fa-check"></i></td>
+                        <td></td>
+                        <td></td>
+
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td><i class="fa fa-check"></i></td>
+                        <td></td>
+                    }
+                    <td>@tailieu.LanHieuChinh</td>
+            
+                </tr>
+                STTVP++;
+            }
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("ThongKeVanBan", new { page = page, SoHieu=ViewBag.SoHieu, NgayBanHanhfrom=ViewBag.NgayBanHanhfrom, NgayBanHanhto=ViewBag.NgayBanHanhto, NgayHieuLucfrom=ViewBag.NgayHieuLucfrom, NgayHieuLucto=ViewBag.NgayHieuLucto }))
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<style>
+
+    .PhongThu {
+        cursor:pointer;
+        font-weight:bold;
+        font-size:20px;
+    }
+</style>
+<script>
+    $(".PhongThu").click(function () {
+        $(".FormTK").slideToggle();
+        $(".fa-chevron-down").toggle();
+        $(".fa-chevron-up").toggle();
+    });
+
+    $('#menul-tk').addClass("active");
+</script>

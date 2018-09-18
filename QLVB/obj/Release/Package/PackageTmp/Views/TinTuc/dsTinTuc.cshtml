@@ -1,0 +1,155 @@
+﻿@model PagedList.IPagedList<QLVB.Models.TinTuc>
+@using PagedList.Mvc;
+
+@{
+    IEnumerable<QLVB.Models.LoaiTaiLieu> lstLoaiVanBan = ViewBag.LoaiVanBans;
+    IEnumerable<QLVB.Models.TaiLieu> lstTaiLieu = ViewBag.VanBans;
+    IEnumerable<QLVB.Models.DanhMuc> lstDMTinTuc = ViewBag.DMTinTuc;
+    IEnumerable<QLVB.Models.TinTuc> dsTinTuc = ViewBag.dsTinTuc;
+
+    ViewBag.Title = "Chi tiết tin";
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+}
+<div class="page-content-inner">
+    <div class="row">
+        <div class="col-md-9 ">
+            <div class="index-trai-tren">
+                @{int i = 0; string sClass = "";}
+                @foreach (var item in Model)
+                {
+                    i++;
+                    if (i == 1)
+                    {
+                        sClass = "class=col-md-12";
+                    }
+                    else
+                    {
+                        sClass = "class=col-md-6";
+                    }
+                    <div @sClass>
+                        <a href="@Url.Action("XemTin", "TinTuc", new {@id=item.MaTinTuc })"><img class="img-responsive" src="~/Upload/@item.HinhDaiDien" /> </a>
+                    </div>
+                    <div @sClass>
+                        <h4><a href="@Url.Action("XemTin", "TinTuc", new {@id=item.MaTinTuc })">@item.TieuDe</a></h4>
+                        <span>
+                            @if (item.NoiDungThuGon != null)
+                            { // bo het the html
+                                string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungThuGon, @"<[^>]*>", String.Empty);
+                                if (sNoiDung.Length < 200)
+                                {
+                                    @Html.Raw(sNoiDung)
+                                }
+                                else
+                                {
+                                    @Html.Raw(sNoiDung.Substring(0, 199))
+                                }
+                            }
+                        </span>
+                        <br />
+                        <a href="@Url.Action("XemTin", "TinTuc", new { @id = item.MaTinTuc })"><input type="button" class="btn-sea" value="Xem thêm" /></a> 
+                    </div>
+                    <div style="clear:both"></div>
+                    <hr style="margin:20px 0" />
+                }
+
+                <div class="dlink">
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+                    @Html.PagedListPager(Model, page => Url.Action("dsTinTuc", new { page = page, @txtTimKiem = ViewBag.txtTimKiem, @muctin = ViewBag.muctin }))
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-3 ">
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        Tìm kiếm
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12" style="padding:0">
+                    @using (Html.BeginForm("dsTinTuc", "TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        <input name="txtTimKiem" class="text-sea" placeholder="Nội dung tìm kiếm" />
+                        <p></p>
+                        <input class="btn-sea" style="width:100%" type="submit" value="Tìm kiếm" />
+                    }
+                </div>
+
+            </div>
+            <div class="index-phai-tren">
+
+                <div class="div-title">
+                    <span class="span-title">
+                        Tin tức
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                @{ int iSTTTin = 0; }
+                @foreach (var item in lstDMTinTuc)
+                {
+                    iSTTTin++;
+                    string sClassGrab = "";
+                    if (iSTTTin == 1)
+                    {
+                        sClassGrab = "gradBlue";
+                    }
+                    if (iSTTTin == 2)
+                    {
+                        sClassGrab = "gradRed";
+                    }
+                    if (iSTTTin == 3)
+                    {
+                        sClassGrab = "gradGreen";
+                    }
+
+                    <div class="col-md-12" style="padding: 0 0 2px 0;">
+
+                        <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })"> <div id="@sClassGrab">@item.TenDanhMuc.ToUpper()</div></a>
+                    </div>
+
+                }
+
+            </div>
+
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        Văn bản nội bộ
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <ul class="ul-content">
+                    @foreach (var item in lstLoaiVanBan)
+                    {
+                        <li>
+                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan=item.MaLoaiTL })">@item.TenLoaiTL <span style="color:#ccc">(@lstTaiLieu.Where(n => n.LoaiVanBan == item.MaLoaiTL).Count())</span></a>
+                            <i class="fa fa-angle-double-right"></i>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .active {
+        color: black !important;
+    }
+</style>
+
+<script>
+    $('.timkiem-btn').click(function () {
+        $('.timkiem-load').slideToggle();
+        $('.ic-ud').toggle();
+        $('.div-timkiem-input').slideToggle();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+
+</script>

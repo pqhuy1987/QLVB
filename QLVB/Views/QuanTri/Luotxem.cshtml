@@ -1,0 +1,269 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Lượt xem";
+}
+@model PagedList.IPagedList<QLVB.Models.LuotXemTai>
+@using PagedList.Mvc;
+
+
+<h3><i class="fa fa-fw fa-eye"></i> BÁO CÁO THỐNG KÊ LƯỢT XEM, LƯỢT TẢI VĂN BẢN QUẢN LÝ NỘI BỘ</h3>
+
+<hr />
+<div class="panel panel-primary">
+    <div class="panel-heading PhongThu">
+        <h2 class="panel-title"><i class="fa fa-search"></i> Tìm kiếm <span style="float:right;"><i class="fa fa-chevron-down"></i> <i style="display:none" class="fa fa-chevron-up"></i></span></h2>
+    </div>
+    <br>
+    <form action="/QuanTri/LuotXem" method="post" style="display:none" class="FormTK">
+        <div class="col-md-12">
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Số hiệu
+                </label>
+                <div class="col-md-10">
+                    <input name="SoHieu" class="form-control" value="@ViewBag.SoHieu" />
+                </div>
+
+            </div>
+            <div class="clearfix"></div><br />
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Ngày xem, tải
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayXTfrom" class="form-control datepicker" value="@ViewBag.NgayXTfrom" />
+                </div>
+                <label class="col-md-2 control-label ">
+                    đến
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayXTto" class="form-control datepicker" value="@ViewBag.NgayXTto" />
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+            
+            <div class="clearfix"></div><br />
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" value="Tìm kiếm" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+
+    </form>    <br>
+
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <td  valign="middle" align="center" style="vertical-align:middle;">STT </td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Tên văn bản</td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Số hiệu</td>
+                <td valign="middle" align="center" style="vertical-align:middle;">Ngày xem, tải</td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Lượt xem</td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Lượt tải</td>  
+                <td></td>
+            </tr>
+        </thead>
+        @{int STT = 1;
+            if (Model.PageNumber != 0)
+            {
+                STT = ((Model.PageNumber - 1) * Model.PageSize);
+                STT = STT + 1;
+            }
+         }
+        @foreach (var item in Model)
+        {
+            <tr>
+                @Html.Hidden("MaLuotXemTai",item.Id)
+                <td valign="top" align="center" style="vertical-align:top;">@STT </td>
+                <td >@item.TaiLieu.TenTaiLieu</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.TaiLieu.SoHieu</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.NgayXT.Value.ToString("dd/MM/yyyy")</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.LuotXem</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.LuotTai</td>
+                <td><a class="btn-ct_xemtai fa fa-eye btn btn-success" data-toggle="modal" data-target="#myCT_xemtai"></a></td>
+            </tr>
+            STT++;
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("LuotXem", new { page = page, SoHieu = ViewBag.SoHieu, NgayBanHanhfrom = ViewBag.NgayBanHanhfrom, NgayBanHanhto = ViewBag.NgayBanHanhto }))
+</div>
+
+
+<!-- Modal -->
+<div id="myCT_xemtai" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông tin chi tiết</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<style>
+    .PhongThu {
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 20px;
+
+    }
+    #container {
+	min-width: 310px;
+	max-width: 800px;
+	height: 400px;
+	margin: 0 auto
+}
+</style>
+<script>
+    $('.btn-ct_xemtai').click(function () {
+        $("#loading_gif").show();
+        $.ajax({
+            type: 'POST',
+            url: '/QuanTri/LayCTXemTai',
+            data: { MaLuotXemTai: $(this).parents("tr").find('#MaLuotXemTai').val() },
+
+            success: function (result) {
+                $("#loading_gif").hide();
+                $('#pthongbao').html(result);
+            }
+        });
+    });
+
+    $(".PhongThu").click(function () {
+        $(".FormTK").slideToggle();
+        $(".fa-chevron-down").toggle();
+        $(".fa-chevron-up").toggle();
+    });
+</script>
+<div hidden id="loading_gif" style="position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%; background: black; opacity: 0.5;">
+    <div style=" width: 10%; left: 50%; position: absolute; top: 25%; ">
+        <img src="~/Content/loading.gif" width="50">
+    </div>
+</div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<div id="container">
+
+
+</div>
+@{ 
+    decimal thang1x = 0;
+    decimal thang1t = 0;
+    decimal thang2x = 0;
+    decimal thang2t = 0;
+    decimal thang3x = 0;
+    decimal thang3t = 0;
+    decimal thang4x = 0;
+    decimal thang4t = 0;
+    decimal thang5x = 0;
+    decimal thang5t = 0;
+    decimal thang6x = 0;
+    decimal thang6t = 0;
+    decimal thang7x = 0;
+    decimal thang7t = 0;
+    decimal thang8x = 0;
+    decimal thang8t = 0;
+    decimal thang9x = 0;
+    decimal thang9t = 0;
+    decimal thang10x = 0;
+    decimal thang10t = 0;
+    decimal thang11x = 0;
+    decimal thang11t = 0;
+    decimal thang12x = 0;
+    decimal thang12t = 0;
+    IEnumerable<QLVB.Models.LuotXemTai> FullModel = (IEnumerable < QLVB.Models.LuotXemTai>)ViewBag.FullModel;
+    if (FullModel.Count() != 0)
+    {
+        thang1x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 1 ).Sum(n => n.LuotXem).Value;
+        thang1t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 1).Sum(n => n.LuotTai).Value;
+        thang2x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 2).Sum(n => n.LuotXem).Value;
+        thang2t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 2).Sum(n => n.LuotTai).Value;
+        thang3x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 3).Sum(n => n.LuotXem).Value;
+        thang3t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 3).Sum(n => n.LuotTai).Value;
+        thang4x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 4).Sum(n => n.LuotXem).Value;
+        thang4t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 4).Sum(n => n.LuotTai).Value;
+        thang5x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 5).Sum(n => n.LuotXem).Value;
+        thang5t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 5).Sum(n => n.LuotTai).Value;
+        thang6x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 6).Sum(n => n.LuotXem).Value;
+        thang6t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 6).Sum(n => n.LuotTai).Value;
+        thang7x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 7).Sum(n => n.LuotXem).Value;
+        thang7t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 7).Sum(n => n.LuotTai).Value;
+        thang8x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 8).Sum(n => n.LuotXem).Value;
+        thang8t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 8).Sum(n => n.LuotTai).Value;
+        thang9x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 9).Sum(n => n.LuotXem).Value;
+        thang9t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 9).Sum(n => n.LuotTai).Value;
+        thang10x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 10).Sum(n => n.LuotXem).Value;
+        thang10t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 10).Sum(n => n.LuotTai).Value;
+        thang11x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 11).Sum(n => n.LuotXem).Value;
+        thang11t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 11).Sum(n => n.LuotTai).Value;
+        thang12x = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 12).Sum(n => n.LuotXem).Value;
+        thang12t = FullModel.Where(n => n.NgayXT.Value.Year == DateTime.Now.Year && n.NgayXT.Value.Month == 12).Sum(n => n.LuotTai).Value;
+      
+
+    }
+}
+<script>
+    Highcharts.chart('container', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Số lượt xem tải ' + new Date().getFullYear()
+        },
+       
+        xAxis: {
+            categories: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
+        },
+        yAxis: {
+            title: {
+                text: 'Số lượt xem tải'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            name: 'Lượt xem',
+            data: [@thang1x, @thang2x, @thang3x, @thang4x, @thang5x, @thang6x, @thang7x, @thang8x, @thang9x, @thang10x, @thang11x, @thang12x]
+        }, {
+            name: 'Lượt tải',
+            data: [@thang1t, @thang2t, @thang3t, @thang4t, @thang5t, @thang6t, @thang7t, @thang8t, @thang9t, @thang10t, @thang11t, @thang12t]
+        }]
+    });
+
+    $('#menul-tk').addClass("active");
+</script>
+<style>
+    .highcharts-credits {
+        display: none;
+    }
+</style>

@@ -1,0 +1,90 @@
+﻿@model PagedList.IPagedList<QLVB.Models.NhomTV>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+
+}
+
+<h3><i class="fa fa-users"></i> Danh sách nhóm @Html.ActionLink("Tạo nhóm", "ThemMoi", "QL_Nhom", null, new { @class = "btn btn-primary" })</h3>
+<hr />
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên nhóm </th>
+                <th width="100">Nhóm LDAP</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{int iSTT = 0;}
+        @foreach (var item in Model)
+        {
+            iSTT++;
+            <tr>
+                <td>@iSTT</td>
+                <td>@item.TenNhom</td>
+                <td class="text-center">
+                    @if(item.MacDinh.Value)
+                    {
+                        <i class="fa fa-check"></i>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink(" ", "ChinhSua", "QL_Nhom", new { @id = item.MaNhom }, new { @class = "btn btn-success fa fa-pencil" })
+                    @Html.ActionLink(" ", "Xoa", "QL_Nhom", new { @id = item.MaNhom }, new { @id = item.MaNhom, @class = "btnxoa btn btn-danger fa fa-times" })
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page }))
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('#btn-dongy').click(function () {
+        location = "Xoa/" + $('#id-xoa').val();
+    });
+    $('.btnxoa').click(function () {
+        $('#btn-dongy').show();
+        $('#btn-thongbao').trigger("click");
+        $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+
+    $('#menul-qln').addClass("active");
+</script>
+@Html.Raw(TempData["thongbao"])

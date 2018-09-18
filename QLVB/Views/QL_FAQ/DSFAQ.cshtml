@@ -1,0 +1,337 @@
+﻿@model PagedList.IPagedList<QLVB.Models.FAQ_NoiDung>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+
+        <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+    
+    <script src="~/Content/chosen_v1.6.2/chosen.jquery.min.js"></script>
+    <link href="~/Content/chosen_v1.6.2/chosen.min.css" rel="stylesheet" />
+}
+<script>
+    //key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+<h3><i class="fa fa-question"></i> Danh sách nội dung FAQ <button data-toggle="modal" data-target="#myTaoMoi" class="btn btn-primary">Thêm nội dung</button></h3>
+<hr />
+
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>Danh mục</th>
+                <th>STT</th>
+                <th>Câu hỏi</th>
+                <th>Trả lời</th>
+                <th>Thứ tự</th>
+                <th width="100"></th>
+            </tr>
+        </thead>
+        @{ int iSTT = 0;}
+        @foreach (var itemGroup in Model.OrderBy(n => n.STT).GroupBy(n => n.MaDanhMuc))
+        {
+            int slrow = 1;
+            slrow += Model.Where(n => n.MaDanhMuc == itemGroup.Key.Value).Count();
+            <tr>
+                <td rowspan="@slrow">
+                    @Model.Where(n => n.MaDanhMuc == itemGroup.Key.Value).FirstOrDefault().FAQ.CauHoi
+                </td>
+
+            </tr>
+            foreach(var item in itemGroup)
+            {
+                iSTT++;
+                <tr>
+                @Html.Hidden("txtMaFAQ", item.Id)
+                @Html.Hidden("txtCauHoi", item.CauHoi)
+                @Html.Hidden("txtTraLoi", item.TraLoi)
+                @Html.Hidden("txtSTT", item.STT)
+                @Html.Hidden("txtMaDanhMuc", item.MaDanhMuc)
+
+                <td>@iSTT</td>
+                <td>@item.CauHoi</td>
+                <td>
+                    @if (item.TraLoi != null)
+                    { // bo het the html
+                        string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.TraLoi, @"<[^>]*>", String.Empty);
+                        if (sNoiDung.Length < 500)
+                        {
+                            @Html.Raw(sNoiDung)
+                        }
+                        else
+                        {
+                            @Html.Raw(sNoiDung.Substring(0, 499))
+                        }
+                    }
+                </td>
+                <td>@item.STT</td>
+               
+                <td>
+                    <button class="btn-sua btn btn-success fa fa-pencil" data-toggle="modal" data-target="#myChinhSua"></button>
+                    @Html.ActionLink(" ", "Xoa", "QL_FAQ", new { @id = item.Id }, new { @id = item.Id, @class = "btnxoa btn btn-danger fa fa-times" })
+
+                </td>
+            </tr>
+            }
+     
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page }))
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="myTaoMoi" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ThemMoiFAQ", "QL_FAQ", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo mới nội dung FAQ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-12">Câu hỏi</label>
+                        <div class="col-md-12">
+                            @Html.TextBox("CauHoi", "", new { @class = "form-control" })
+
+                            <label id="erCauHoi" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+               
+                    <div class="form-group">
+                        <label class="col-md-12">Danh mục FAQ</label>
+                        <div class="col-md-12">
+                            @Html.DropDownList("MaDanhMuc", null, "Chọn danh mục", new { @class = "form-control" })
+                            <label id="erDanhMuc" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-12">Thứ tự</label>
+                        <div class="col-md-12">
+                            @Html.TextBox("STT", "", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                            <label id="erThuTu" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-12 ">Trả lời</label>
+                        <div class="col-md-12">
+                            @Html.TextArea("TraLoi", "", new { @class = "form-control" })
+
+                            <label id="erTraLoi" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-taomoi" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="myChinhSua" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ChinhSuaFAQ", "QL_FAQ", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.Hidden("ID")
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chỉnh sửa nội dung FAQ</h4>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-md-12">Câu hỏi</label>
+                            <div class="col-md-12">
+                                @Html.TextBox("CauHoi", "", new { @class = "form-control cauhoi" })
+
+                                <label id="erCauHoi" class=" text-danger error"></label>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-12">Danh mục FAQ</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("MaDanhMuc", null, "Chọn danh mục", new { @class = "form-control madanhmuc" })
+                                <label id="erDanhMuc" class=" text-danger error"></label>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Thứ tự</label>
+                            <div class="col-md-12">
+                                @Html.TextBox("STT", "", new { @class = "form-control ThuTu", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                                <label id="erThuTu" class=" text-danger error"></label>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12 ">Trả lời</label>
+                            <div class="col-md-12">
+                                @Html.TextArea("edTraLoi", "", new { @class = "form-control traloi" })
+
+                                <label id="erTraLoi" class=" text-danger error"></label>
+                            </div>
+
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-luu" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<style>
+    .toggle
+    {
+        width:68px !important;
+    }
+    @@media screen and (min-width: 768px)
+    {
+    #myChinhSua .modal-dialog,  #myTaoMoi .modal-dialog {
+        width:1000px;
+        }
+    }
+</style>
+
+<script>
+    $('#MaDanhMuc').chosen({ no_results_text: "Không tìm thấy!" });
+    $('.madanhmuc').chosen({ no_results_text: "Không tìm thấy!" });
+
+    $('#btn-taomoi').click(function () {
+        if ($('#CauHoi').val().trim() == "") {
+            $('#erCauHoi').text("Hãy nhập câu hỏi !");
+            return false;
+        }
+        if ($('#MaDanhMuc').val().trim() == "") {
+            $('#erDanhMuc').text("Hãy chọn danh mục !");
+            return false;
+        }
+    });
+    $('#btn-luu').click(function () {
+        if ($(this).parents(".modal-dialog").find('#CauHoi').val().trim() == "") {
+            $(this).parents(".modal-dialog").find('#erCauHoi').text("Hãy nhập câu hỏi !");
+            return false;
+        }
+        if ($(this).parents(".modal-dialog").find('#MaDanhMuc').val().trim() == "") {
+            $(this).parents(".modal-dialog").find('#erDanhMuc').text("Hãy chọn danh mục !");
+            return false;
+        }
+    });
+
+    $('.btn-sua').click(function () {
+        var mafaq = $(this).parents("tr").find("#txtMaFAQ").val();
+        var cauhoi = $(this).parents("tr").find("#txtCauHoi").val();
+        var traloi = $(this).parents("tr").find("#txtTraLoi").val();
+        var thutu = $(this).parents("tr").find("#txtSTT").val();
+        var madanhmuc = $(this).parents("tr").find("#txtMaDanhMuc").val();
+        $('#ID').val(mafaq);
+        $('.ThuTu').val(thutu);
+        $('.cauhoi').val(cauhoi);
+        CKEDITOR.instances["edTraLoi"].setData(traloi);
+
+        $('.madanhmuc').val(madanhmuc);
+        $('.madanhmuc').trigger("chosen:updated");
+    });
+
+    $('#btn-dongy').click(function () {
+        location = "Xoa/" + $('#id-xoa').val();
+    });
+    $('.btnxoa').click(function () {
+        $('#btn-dongy').show();
+        $('#btn-thongbao').trigger("click");
+        $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+
+
+    function createEditor(languageCode, id) {
+        editor = CKEDITOR.replace(id, {
+            language: 'vi',
+            height:500,
+            toolbar: 'basic',
+            toolbar:
+                [
+	{ name: 'document', items : [ 'Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates' ] },
+	{ name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+	{ name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+	{ name: 'forms', items : [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+	{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+	{
+	    name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
+	},
+	{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+	{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+	'/',
+	{ name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+	{ name: 'colors', items: ['TextColor', 'BGColor'] },
+    { name: 'tools', items: ['Maximize', 'btn-cm'] }
+                ],
+        });
+
+    }
+
+    $(function () {
+        createEditor('vi', 'TraLoi');
+        createEditor('vi', 'edTraLoi');
+    });
+
+    $('#menul-qlfaq').addClass("active");
+</script>
+@Html.Raw(TempData["thongbao"])

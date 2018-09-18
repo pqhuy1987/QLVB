@@ -1,0 +1,24 @@
+﻿@model QLVB.Models.FAQ_NoiDung
+
+@{
+    ViewBag.Title = Model.CauHoi;
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+}
+
+<div class="index-phai-tren" style="margin:15px 0">
+    <div class="col-md-12 ">
+        <div class=" text-center">
+            <h2> Các câu hỏi thường gặp</h2>
+            <h5> Câu trả lời đơn giản cho những câu hỏi phổ biến nhất</h5>
+            <hr />
+            <div class="text-left">
+                <h3><i class="fa fa-question-circle"></i> 
+                @Model.CauHoi 
+                    
+                </h3>
+                @Html.Raw(Model.TraLoi)
+            </div>
+        </div>
+    </div>
+
+</div>

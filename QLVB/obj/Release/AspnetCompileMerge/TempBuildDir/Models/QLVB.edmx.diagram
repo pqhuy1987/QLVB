@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9d94843f9b9b43099dcf7ffa93c10360" Name="Diagram1" ZoomLevel="67">
+        <EntityTypeShape EntityType="QLVBModel.Banner" Width="1.5" PointX="0.75" PointY="3" />
+        <EntityTypeShape EntityType="QLVBModel.BinhLuan" Width="1.5" PointX="7.5" PointY="1.375" />
+        <EntityTypeShape EntityType="QLVBModel.CauHinh" Width="1.5" PointX="0.75" PointY="6" />
+        <EntityTypeShape EntityType="QLVBModel.CT_LuotXemTai" Width="1.5" PointX="7.5" PointY="8.5" />
+        <EntityTypeShape EntityType="QLVBModel.DanhGia" Width="1.5" PointX="0.75" PointY="9" />
+        <EntityTypeShape EntityType="QLVBModel.DanhMuc" Width="1.5" PointX="11.75" PointY="9" />
+        <EntityTypeShape EntityType="QLVBModel.DMBanLanhDao" Width="1.5" PointX="12.75" PointY="13" />
+        <EntityTypeShape EntityType="QLVBModel.DMPhongBan" Width="1.5" PointX="0.75" PointY="15.5" />
+        <EntityTypeShape EntityType="QLVBModel.FAQ" Width="1.5" PointX="7.75" PointY="12.25" />
+        <EntityTypeShape EntityType="QLVBModel.FAQ_NoiDung" Width="1.5" PointX="10" PointY="12.25" />
+        <EntityTypeShape EntityType="QLVBModel.FeedBack" Width="1.5" PointX="13.75" PointY="9" />
+        <EntityTypeShape EntityType="QLVBModel.GhiChu" Width="1.5" PointX="8.25" PointY="15.5" />
+        <EntityTypeShape EntityType="QLVBModel.LichHop" Width="1.5" PointX="10.75" PointY="16" />
+        <EntityTypeShape EntityType="QLVBModel.LichHop_BLD" Width="1.5" PointX="12.75" PointY="16" />
+        <EntityTypeShape EntityType="QLVBModel.LoaiTaiLieu" Width="1.5" PointX="0.75" PointY="12.625" />
+        <EntityTypeShape EntityType="QLVBModel.LuotXemTai" Width="1.5" PointX="5.25" PointY="8.5" />
+        <EntityTypeShape EntityType="QLVBModel.NhanVien" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="QLVBModel.Nhom_FAQ" Width="1.5" PointX="14.75" PointY="3" />
+        <EntityTypeShape EntityType="QLVBModel.Nhom_Nhanvien" Width="1.5" PointX="12" PointY="2.75" />
+        <EntityTypeShape EntityType="QLVBModel.Nhom_Quyen" Width="1.5" PointX="12" PointY="5.75" />
+        <EntityTypeShape EntityType="QLVBModel.NhomTV" Width="1.5" PointX="9.75" PointY="4.75" />
+        <EntityTypeShape EntityType="QLVBModel.PhongHop" Width="1.5" PointX="14.75" PointY="12" />
+        <EntityTypeShape EntityType="QLVBModel.Quyen" Width="1.5" PointX="9.75" PointY="7.75" />
+        <EntityTypeShape EntityType="QLVBModel.Revision" Width="1.5" PointX="5.25" PointY="28.25" />
+        <EntityTypeShape EntityType="QLVBModel.TaiLieu" Width="1.5" PointX="3" PointY="12.375" />
+        <EntityTypeShape EntityType="QLVBModel.ThuMuc" Width="1.5" PointX="14.75" PointY="6" />
+        <EntityTypeShape EntityType="QLVBModel.TinTuc" Width="1.5" PointX="5.25" PointY="31.75" />
+        <EntityTypeShape EntityType="QLVBModel.VB_VBCC" Width="1.5" PointX="5.25" PointY="22.75" />
+        <EntityTypeShape EntityType="QLVBModel.VB_VBHD" Width="1.5" PointX="5.25" PointY="5.75" />
+        <EntityTypeShape EntityType="QLVBModel.VB_VBLQ" Width="1.5" PointX="5.25" PointY="11.625" />
+        <EntityTypeShape EntityType="QLVBModel.VB_VBSD" Width="1.5" PointX="5.25" PointY="20" />
+        <EntityTypeShape EntityType="QLVBModel.VBLuuTru" Width="1.5" PointX="5.25" PointY="25.5" />
+        <AssociationConnector Association="QLVBModel.FK_BinhLuan_NhanVien" />
+        <AssociationConnector Association="QLVBModel.FK_BinhLuan_TinTuc" />
+        <AssociationConnector Association="QLVBModel.FK_CT_LuotXemTai_LuotXemTai" />
+        <AssociationConnector Association="QLVBModel.FK_CT_LuotXemTai_NhanVien" />
+        <AssociationConnector Association="QLVBModel.FK_TaiLieu_PhongBan" />
+        <AssociationConnector Association="QLVBModel.FK_TaiLieu_PhongBan2" />
+        <AssociationConnector Association="QLVBModel.FK_FAQNoiDung_FAQ" />
+        <AssociationConnector Association="QLVBModel.FK_GhiChu_NhanVien" />
+        <AssociationConnector Association="QLVBModel.FK_GhiChu_VanBan" />
+        <AssociationConnector Association="QLVBModel.FK_TaiLieu_LoaiTaiLieu" />
+        <AssociationConnector Association="QLVBModel.FK_LuotXemTai_TaiLieu" />
+        <AssociationConnector Association="QLVBModel.FK_Nhom_Nhanvien_NhanVien" />
+        <AssociationConnector Association="QLVBModel.FK_Nhom_Nhanvien_Nhom" />
+        <AssociationConnector Association="QLVBModel.FK_Nhom_Quyen_Nhom" />
+        <AssociationConnector Association="QLVBModel.FK_Nhom_Quyen_Quyen" />
+        <AssociationConnector Association="QLVBModel.FK_Revision_VanBan" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBCC1" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBCC2" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBHD1" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBHD2" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBLQ1" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBLQ2" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBSD1" />
+        <AssociationConnector Association="QLVBModel.FK_VB_VBSD2" />
+        <AssociationConnector Association="QLVBModel.FK_VBLuuTru_TaiLieu" />
+        <EntityTypeShape EntityType="QLVBModel.VB_BMLQ" Width="1.5" PointX="5.25" PointY="17.25" />
+        <AssociationConnector Association="QLVBModel.FK_VB_BMLQ1" />
+        <AssociationConnector Association="QLVBModel.FK_VB_BMLQ2" />
+        <EntityTypeShape EntityType="QLVBModel.NhatKy" Width="1.5" PointX="15.375" PointY="15.75" />
+        <EntityTypeShape EntityType="QLVBModel.PdfPage" Width="1.5" PointX="16.375" PointY="8.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

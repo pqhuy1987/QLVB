@@ -1,0 +1,407 @@
+﻿@model IEnumerable<QLVB.Models.TinTuc>
+
+@{
+    IEnumerable<QLVB.Models.DanhMuc> lstMucTin = ViewBag.lstMucTin;
+    IEnumerable<QLVB.Models.Banner> lstBanner = ViewBag.lstBanner;
+
+    ViewBag.Title = "Hệ thống thông tin nội bộ";
+    Layout = null;
+
+    <title>Hệ thống thông tin nội bộ</title>
+    
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="~/Content/SiteIndex.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,‌​100italic,300,300ita‌​lic,400italic,500,50‌​0italic,700,700itali‌​c,900italic,900' rel='stylesheet' type='text/css'>
+    <!-- Custom Fonts -->
+    <link href="../../Content/ThemeAdmin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="~/Content/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Content/ckeditor/ckeditor.js"></script>
+
+    @*<link href="~/Content/DateTimePicker/jquery-ui.css" rel="stylesheet" />
+        <script src="~/Content/DateTimePicker/jquery-ui.js"></script>*@
+
+    <link rel="stylesheet" href="~/Content/alilas/bower_components/kendo-ui/styles/kendo.common-material.min.css" />
+    <link rel="stylesheet" href="~/Content/alilas/bower_components/kendo-ui/styles/kendo.material.min.css" />
+
+    <script src="~/Content/alilas/assets/js/common.min.js"></script>
+
+    <script src="~/Content/alilas/assets/js/kendoui_custom.min.js"></script>
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    string sUrl = "";
+}
+
+<div class="container" style="padding:0 30px ;">
+    <div style="font-size: 13pt; margin: 10px 0;border-bottom: 1px solid steelblue;padding-bottom:10px">
+        <table>
+            <tr>
+                <td><a href="@Url.Action("Index","TrangChinh")">  <img src="~/Upload/logo.png" /></a> </td>
+                <td style="padding-top: 25px; font-size:25px;"><span>HỆ THỐNG THÔNG TIN NỘI BỘ</span></td>
+            </tr>
+        </table>
+
+    </div>
+    @{ int iBanner = 0; string sClassAcBanner = "";}
+    <div class="col-md-9 " style="padding:0px">
+
+        <div class="col-md-12" style="padding:0px;margin-bottom:20px;">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    @foreach (var item in lstBanner)
+                    {
+                        sClassAcBanner = "";
+                        if (iBanner == 0)
+                        {
+                            sClassAcBanner = "active";
+                        }
+
+                        <li data-target="#myCarousel" data-slide-to="@iBanner" class="@sClassAcBanner"></li>
+                        iBanner++;
+                    }
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    @{ iBanner = 0;}
+                    @foreach (var item in lstBanner)
+                    {
+                        sClassAcBanner = "";
+                        if (iBanner == 0)
+                        {
+                            sClassAcBanner = "active";
+                        }
+
+                        <div class="item @sClassAcBanner">
+                            <a href="@item.Url" target="_blank">
+                                <img src="~/Upload/@item.Image" alt="@item.TieuDe">
+                                <div class="carousel-caption">
+                                    <h3>@item.TieuDe</h3>
+                                </div>
+                            </a>
+                        </div>
+
+                        iBanner++;
+                    }
+
+                </div>
+
+  <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+
+        @{ int iSTTTin = 0; int iSTT = 0;}
+        @foreach (var itemTin in lstMucTin.Take(3))
+        {
+            iSTTTin++;
+            string sClassGrab = "";
+            if (iSTTTin == 1)
+            {
+                sClassGrab = "gradBlue";
+            }
+            if (iSTTTin == 2)
+            {
+                sClassGrab = "gradRed";
+            }
+            if (iSTTTin == 3)
+            {
+                sClassGrab = "gradGreen";
+            }
+
+        <div class="col-md-12" style="padding:0;margin-bottom:10px;">
+
+            <div id="@sClassGrab">@itemTin.TenDanhMuc</div>
+        </div>
+
+            if(Model.Where(n => n.MaDanhMuc == itemTin.MaDanhMuc).FirstOrDefault() != null)
+                {
+        <div class="col-md-4 index-thong-tin-chinh" style="padding:0">
+
+            @{
+                QLVB.Models.TinTuc tin1 = Model.Where(n => n.MaDanhMuc == itemTin.MaDanhMuc).FirstOrDefault();
+                sUrl = "xem-tin/" + QLVB.Models.Tools.RemoveDiacritics(tin1.TieuDe) + "-" + tin1.MaTinTuc;
+
+            }
+
+            <a href="@sUrl">
+                <img src="~/Upload/@tin1.HinhDaiDien" class="img-responsive" />
+            </a>
+
+        </div>
+
+        <div class="col-md-4">
+            <p class="font-16" style="font-weight:bold;padding-top:10px">
+                <a href="@sUrl">  @tin1.TieuDe</a>
+            </p>
+            <p>
+                <span>
+                    <i>
+                        @if (tin1.NoiDungThuGon != null)
+                        { // bo het the html
+                            string sNoiDung = System.Text.RegularExpressions.Regex.Replace(tin1.NoiDungThuGon, @"<[^>]*>", String.Empty);
+                            if (sNoiDung.Length < 200)
+                            {
+                            @Html.Raw(sNoiDung)
+                            }
+                            else
+                            {
+                            @Html.Raw(sNoiDung.Substring(0, 199))
+                            }
+                        }
+                    </i>
+                </span>
+            </p>
+
+        </div>
+                }
+
+        <div class="col-md-4">
+            @{ iSTT = 0;}
+            @foreach (var item in Model.Where(n => n.MaDanhMuc == itemTin.MaDanhMuc).Take(3))
+                {
+                    iSTT++;
+                    if (iSTT > 1)
+                    {
+                        sUrl = "";
+                        sUrl = "xem-tin/" + QLVB.Models.Tools.RemoveDiacritics(item.TieuDe) + "-" + item.MaTinTuc;
+
+                <div class="index-thong-tin-phu">
+                    <div class="col-xs-4 col-md-6" style="padding: 0 0 10px 0">
+                        <a href="@sUrl">
+                            <img src="~/Upload/@item.HinhDaiDien" class="img-responsive" />
+                        </a>
+                    </div>
+                    <div class="col-xs-8 col-md-6" style="padding:0 5px; text-align:justify">
+                        <p>
+                            <a href="@sUrl"> @item.TieuDe</a>
+                        </p>
+
+                    </div>
+
+                </div>
+                <div style="clear:both"></div>
+                    }
+                }
+        </div>
+
+        <div class="clearfix"></div>
+        }
+
+
+    </div>
+
+  <div class="col-md-3" style="padding:0;">
+
+        <div class="col-md-12" style="padding:0 0 0 10px">
+            <a href="@Url.Action("Index","TrangChinh")">
+                <div class="boxx box-1">
+                    <table>
+                        <tr>
+                            <td width="80" valign="middle"><img src="~/Upload/global.png" /></td>
+                            <td valign="middle">Cổng thông tin (Portal)</td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-12" style="padding: 0 0 0 10px">
+            <a href="https://hrm.coteccons.vn/">
+                <div class="boxx box-2">
+                    <table>
+                        <tr>
+                            <td width="80" valign="middle"><img src="~/Upload/hrm.png" /></td>
+                            <td valign="middle">Quản lý nhân sự (HRM)</td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-12" style="padding: 0 0 0 10px">
+            <a href="https://elearning.coteccons.vn/">
+                <div class="boxx box-3">
+                    <table>
+                        <tr>
+                            <td width="80" valign="middle"><img src="~/Upload/learn.png" /></td>
+                            <td valign="middle">E-learning</td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-12" style="padding: 0 0 0 10px">
+            <a href="https://cms.coteccons.vn/">
+                <div class="boxx box-4">
+                    <table>
+                        <tr>
+                            <td width="80" valign="middle"><img src="~/Upload/icon_earthwork.png" /></td>
+                            <td valign="middle">Quản lý thiết bị (CMS)</td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-12" style="padding: 0 0 0 10px">
+            <a href="https://qlncc.coteccons.vn/">
+                <div class="boxx box-5">
+                    <table>
+                        <tr>
+                            <td width="80" valign="middle"><img src="~/Upload/construction-icon.png" /></td>
+                            <td valign="middle">Quản lý NTP/NCC/ĐTC (CMS)</td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-12" style="padding: 0 0 0 10px">
+            <a href="https://ims.coteccons.vn/">
+                <div class="boxx box-6">
+                    <table>
+                        <tr>
+                            <td width="80" valign="middle"><img src="~/Upload/MyPC-website-icon-2-books.png" /></td>
+                            <td valign="middle">Quản lý hồ sơ (IMS)</td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-12" style="padding: 0 0 0 10px">
+            <a href="https://dms.coteccons.vn/">
+                <div class="boxx box-7">
+                    <table>
+                        <tr>
+                            <td width="80" valign="middle"><img src="~/Upload/note.png" /></td>
+                            <td valign="middle">Quản lý thanh toán (DMS)</td>
+                        </tr>
+                    </table>
+                </div>
+            </a>
+        </div>
+
+      <div class="col-md-12" style="padding: 0 0 0 10px">
+          <a href="https://wms.coteccons.vn/">
+              <div class="boxx box-6">
+                  <table>
+                      <tr>
+                          <td width="80" valign="middle"><img src="~/Upload/worker.svg"/></td>
+                          <td valign="middle">Quản lý Công nhân (WMS)</td>
+                      </tr>
+                  </table>
+              </div>
+          </a>
+      </div>
+
+      <div class="col-md-12" style="padding: 0 0 0 10px">
+          <a href="http://rms.coteccons.vn/">
+              <div class="boxx box-5">
+                  <table>
+                      <tr>
+                          <td width="80" valign="middle"><img src="~/Upload/ticket.png"/></td>
+                          <td valign="middle">Quản lý yêu cầu CNTT (RMS)</td>
+                      </tr>
+                  </table>
+              </div>
+          </a>
+      </div>
+
+      <div class="col-md-12" style="padding: 0 0 0 10px">
+          <a href="#">
+              <div class="boxx box-99">
+                  <table>
+                      <tr>
+                          <td width="80" valign="middle"><img src="~/Upload/coming-soon.png" /></td>
+                          <td valign="middle">Coming soon...</td>
+                      </tr>
+                  </table>
+              </div>
+          </a>
+      </div>
+  </div>
+</div>
+
+<style>
+    .blank-trai {
+        background-color: white;
+        margin-bottom: 10px;
+    }
+
+    .box-1 {
+        background-color: #e26a6a;
+    }
+
+    .box-2 {
+        
+        background-color: #f7ca18;
+    }
+
+    .box-3 {
+        background-color: #26a69a;
+    }
+
+    .box-4 {
+        background-color: #578ebe;
+    }
+
+    .box-5 {
+        background-color: #67809f;
+    }
+
+    .box-6 {
+        background-color: #3c7780;
+    }
+
+    .box-7 {
+        background-color: #b382c8;
+    }
+
+    .box-99 {
+        background-color: #cccccc;
+    }
+    .boxx {
+        height: 55px;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+        .boxx tr {
+            height: 55px;
+            color: white;
+            font-weight: bold;
+            font-size: 11pt;
+        }
+
+        .boxx img {
+            width: 65%;
+            margin-left: 10px;
+        }
+</style>
+<script>
+    $('.carousel-inner .item').hover(function () {
+        $(this).find('.carousel-caption').fadeIn(200);
+    });
+
+    $('.carousel-inner .item').mouseleave(function () {
+        $(this).find('.carousel-caption').fadeOut(200);
+    });
+</script>

@@ -1,0 +1,316 @@
+﻿@model PagedList.IPagedList<QLVB.Models.PhongHop>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+
+        <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+}
+<script>
+    //key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+<h3><i class="fa fa-hospital-o"></i> Danh sách phòng họp <button data-toggle="modal" data-target="#myTaoMoi" class="btn btn-primary">Thêm phòng họp</button></h3>
+<hr />
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên phòng họp</th>
+                <th>Vị trí</th>
+                <th>Tài nguyên</th>
+                <th>Chỗ ngồi</th>
+                <th>Thứ tự</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{ int iSTT = 0;}
+        @foreach (var item in Model)
+        {
+            iSTT++;
+            <tr>
+                @Html.Hidden("txtMaPhong", item.Id)
+                @Html.Hidden("txtTenPhong", item.Name)
+                @Html.Hidden("txtViTri", item.Location)
+                @Html.Hidden("txtTaiNguyen", item.Resources)
+                @Html.Hidden("txtChoNgoi", item.Seats)
+                @Html.Hidden("txtThuTu", item.Ordering)
+                @Html.Hidden("txtTrangThai", item.Status)
+                <td>@iSTT</td>
+                <td>@item.Name</td>
+                <td>@item.Location</td>
+                <td>@item.Resources</td>
+                <td>@item.Seats</td>
+                <td>@item.Ordering</td>
+                <td>
+                    @if (item.Status == true)
+                    {
+                        @Html.ActionLink("Sử dụng", "KichHoat", "QL_DMPhongHop", new { @id = item.Id, @id2 = false }, new { @class = "btn btn-warning" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Không sử dụng", "KichHoat", "QL_DMPhongHop", new { @id = item.Id, @id2 = true }, new { @class = "btn btn-default" })
+                    }
+                </td>
+
+                <td>
+                    <button class="btn-sua btn btn-success fa fa-pencil" data-toggle="modal" data-target="#myChinhSua"></button>
+                    @Html.ActionLink(" ", "Xoa", "QL_DMPhongHop", new { @id = item.Id }, new { @id = item.Id, @class = "btnxoa btn btn-danger fa fa-times" })
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page }))
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="myTaoMoi" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ThemMoi", "QL_DMPhongHop", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo mới phòng họp</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tên phòng họp</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Name", "", new { @class = "form-control" })
+
+                            <label id="erName" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Vị trí</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Location", "", new { @class = "form-control" })
+
+                            <label id="erViTri" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tài nguyên</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Resources", "", new { @class = "form-control" })
+
+                            <label id="erTaiNguyen" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Sổ chỗ</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Seats", "", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                            <label id="erSoCho" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Thứ tự</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Ordering", "", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                            <label id="erThuTu" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Sử dụng</label>
+
+                        <div class="col-md-6">
+                            <input name="Status" type="checkbox" checked value="true" data-toggle="toggle" data-size="small">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-taomoi" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="myChinhSua" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ChinhSua", "QL_DMPhongHop", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.Hidden("ID")
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chỉnh sửa phòng họp</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tên phòng họp</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Name", "", new { @class = "Name form-control" })
+
+                            <label id="erName" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Vị trí</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Location", "", new { @class = "Location form-control" })
+
+                            <label id="erViTri" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tài nguyên</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Resources", "", new { @class = "Resources form-control" })
+
+                            <label id="erTaiNguyen" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Sổ chỗ</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Seats", "", new { @class = "Seats form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                            <label id="erSoCho" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Thứ tự</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Ordering", "", new { @class = "Ordering form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                            <label id="erThuTu" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Sử dụng</label>
+
+                        <div class="col-md-6">
+                            <input name="Status" type="checkbox" class="KichHoat" value="true" data-toggle="toggle" data-size="small">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-luu" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<style>
+    .toggle
+    {
+        width:68px !important;
+    }
+</style>
+<script>
+    $('#btn-taomoi').click(function () {
+        if ($('#Name').val().trim() == "") {
+            $('#erName').text("Hãy nhập tên phòng họp !");
+            return false;
+        }
+    });
+    $('#btn-luu').click(function () {
+        if ($(this).parents(".modal-dialog").find('#Name').val().trim() == "") {
+            $(this).parents(".modal-dialog").find('#erName').text("Hãy nhập tên phòng họp !");
+            return false;
+        }
+    });
+    $('.btn-sua').click(function () {
+        var maphong = $(this).parents("tr").find("#txtMaPhong").val();
+        var tenphong = $(this).parents("tr").find("#txtTenPhong").val();
+        var chongoi = $(this).parents("tr").find("#txtChoNgoi").val();
+        var tainguyen = $(this).parents("tr").find("#txtTaiNguyen").val();
+        var vitri = $(this).parents("tr").find("#txtViTri").val();
+        var thutu = $(this).parents("tr").find("#txtThuTu").val();
+        var kichhoat = $(this).parents("tr").find("#txtTrangThai").val();
+        $('#ID').val(maphong);
+        $('.Name').val(tenphong);
+        $('.Location').val(vitri);
+        $('.Resources').val(tainguyen);
+        $('.Seats').val(chongoi);
+        $('.Ordering').val(thutu);
+        if (kichhoat.trim() == "True") {
+            $('.KichHoat ').prop("checked",true);
+            $('.toggle ').removeClass("off btn-default");
+            $('.toggle ').addClass("btn-primary");
+        }
+        else {
+            $('.KichHoat ').prop("checked", false);
+            $('.toggle ').addClass("off btn-default");
+            $('.toggle ').removeClass("btn-primary");
+        }
+    });
+
+    $('#btn-dongy').click(function () {
+        location = "Xoa/" + $('#id-xoa').val();
+    });
+    $('.btnxoa').click(function () {
+        $('#btn-dongy').show();
+        $('#btn-thongbao').trigger("click");
+        $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+
+    $('#menul-qldm').addClass("active");
+</script>
+@Html.Raw(TempData["thongbao"])

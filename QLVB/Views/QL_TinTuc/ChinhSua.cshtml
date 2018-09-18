@@ -1,0 +1,283 @@
+﻿@model QLVB.Models.TinTuc
+
+@{
+    
+    ViewBag.Title = Session["lbl"] + " tin tức";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+      <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+}
+<script>
+    //key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+
+<h3 class="title-link">
+    <i class="fa fa-newspaper-o"></i> @Html.ActionLink("Danh sách", "DanhSach") <i class="fa fa-angle-right"></i>
+    @Session["lbl"] tin tức
+</h3>
+<hr />
+
+@using (Html.BeginForm("ChinhSua", "QL_TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.Hidden("MaTinTuc",Model.MaTinTuc)
+    
+    @Html.Hidden("LuotBinhLuan", Model.LuotBinhLuan)
+    @Html.Hidden("LuotThich", Model.LuotThich)
+    @Html.Hidden("LuotXem", Model.LuotXem)
+    @Html.Hidden("NgayTao", Model.NgayTao)
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Tiêu đề</label>
+        <div class="col-sm-6">
+            @Html.TextBox("TieuDe", Model.TieuDe, new { @class = "form-control" })
+            <label id="erHoTen" class="text-danger error"></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Mục tin</label>
+        <div class="col-sm-6">
+            @Html.DropDownList("MaDanhMuc", null, new { @class = "form-control" })
+            <label id="erMucTin" class="text-danger error"></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Loại tin</label>
+        <div class="col-sm-6">
+            @Html.DropDownList("LoaiTinTuc", null, new { @class = "form-control" })
+            <label id="erLoaiTin" class="text-danger error"></label>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Hình đại diện</label>
+        <div class="col-sm-6">
+            <div id="img-dai-dien" style="margin-bottom:5px">
+                @Html.Hidden("HinhDaiDien", Model.HinhDaiDien)
+                <img src="~/Upload/@Model.HinhDaiDien" width="100%" />
+            </div>
+            <input id="btn-luu-hinh" type="file"/>
+        </div>
+        <script>
+            $('#btn-luu-hinh').change(function () {
+
+                $('#loading_gif').show();
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $(this).get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+
+                    // Adding one more key to FormData object
+                    fileData.append('MaTinTuc', $('#MaTinTuc').val());
+
+                    $.ajax({
+                        url: '@Url.Action("saveimgTinTuc_ajax", "QL_TinTuc")',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            if (result != "0") {
+                                $('#img-dai-dien').html(result);
+
+                                $('#div-pthongbao').text('Lưu thành công !');
+                                $('#div-thongbao').show();
+                                $('#div-thongbao').fadeOut(5000);
+                            }
+                            $('#loading_gif').hide();
+                        },
+                    });
+                } else {
+                    alert("Không lưu được tập tin !");
+                }
+            });
+        </script>
+    </div>
+          
+    <br />
+    
+    <div class="form-group">
+
+        <label class="col-sm-2 control-label">Tin hot</label>
+        @{string sHidden = "";}
+        <div class="col-md-1">
+            <span>
+                @if (Model.TinHot != null && Model.TinHot.Value)
+                {
+                   
+                    <input id="TinHot" name="TinHot" type="checkbox" checked value="true" data-toggle="toggle" data-size="small">
+                }
+                else
+                {
+                    sHidden = "hidden";
+                    <input id="TinHot" name="TinHot" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+                }
+            </span>
+            <script>
+                $('#TinHot').change(function () {
+                    $('#EndHot').toggle(500);
+                });
+            </script>
+        </div>
+        <div id="EndHot" @sHidden>
+            <label class="col-sm-2 control-label">End Hot</label>
+            <div class="col-md-3">
+                @Html.TextBox("EndHotDates",Model.EndHotDate!=null ? Model.EndHotDate.Value.ToString("dd/MM/yyyy"):"", new { @class = "form-control datepicker" })
+            </div>
+        </div>
+
+    </div>
+    <br />
+      <div class="form-group">
+          <label class="col-sm-2 control-label">Cho phép bình luận</label>
+          <div class="col-md-1">
+              <span>
+                  @if (Model.ChoPhepBinhLuan != null && Model.ChoPhepBinhLuan.Value)
+                  {
+                      <input name="ChoPhepBinhLuan" type="checkbox" checked value="true" data-toggle="toggle" data-size="small">
+                  }
+                  else
+                  {
+                      <input name="ChoPhepBinhLuan" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+                  }
+              </span>
+          </div>
+
+        <label class="col-sm-2 control-label">Đăng tin</label>
+        <div class="col-md-1">
+            <span class="span-dangtin">
+                @if (Model.TrangThai != null && Model.TrangThai.Value)
+                {
+                    <input name="TrangThai" type="checkbox" checked value="true" data-toggle="toggle" data-size="small">
+                }
+                else
+                {
+                    <input name="TrangThai" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+                }
+            </span>
+        </div>
+
+
+    </div>
+       <div class="form-group">
+        <label class="col-sm-2 control-label">Ngày đăng</label>
+        <div class="col-sm-6">
+            @Html.TextBox("NgayDangs", Model.NgayDang != null ? Model.NgayDang.Value.ToString("dd/MM/yyyy HH:mm:aa") : "", new { @class = "form-control datetimepicker" })
+            <label id="erNgayDang" class="text-danger error"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Nội dung tóm tắt</label>
+        <div class="col-sm-10">
+            @Html.TextArea("NoiDungThuGon", Model.NoiDungThuGon , new { @class = "form-control", @rows="7" })
+            <label id="erNoiDungTomTat" class="text-danger error"></label>
+        </div>
+    </div>
+       <div class="form-group">
+        <label class="col-sm-2 control-label">Nội dung</label>
+        <div class="col-sm-10">
+            @Html.TextArea("NoiDung", Model.NoiDung , new { @class = "form-control" })
+            <label id="erNoiDung" class="text-danger error"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <input id="ChinhSua" type="submit" value="Lưu" class="btn btn-success" />
+        </div>
+    </div>
+}
+
+<script>
+    $('#ChinhSua').click(function () {
+        if ($('#TieuDe').val() == "") {
+            alert("Hãy nhập tiêu đề");
+            return false;
+        }
+        
+    });
+   
+    function createEditor(languageCode, id) {
+        editor = CKEDITOR.replace(id, {
+            height: 500,
+            language: 'vi',
+            toolbar: 'basic',
+            toolbar:
+                [
+	{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
+	{ name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+	{ name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+	{ name: 'forms', items : [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+	{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+	{
+	    name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
+	},
+	{ name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+	{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+	{ name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+	{ name: 'colors', items: ['TextColor', 'BGColor'] },
+    { name: 'tools', items: ['Maximize', 'btn-cm'] }
+                ],
+        });
+
+    }
+    $(function () {
+        createEditor('vi', 'NoiDung');
+    });
+    CKEDITOR.env.isCompatible = true;
+
+    $('#menul-qltt').addClass("active");
+</script>
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao"  data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Raw(TempData["thongbao"])
+<script>
+    $(document).ready(function () {
+        $('.span-dangtin .toggle-on').text("Đăng");
+        $('.span-dangtin .toggle-off').text("Nháp");
+    });
+
+</script>

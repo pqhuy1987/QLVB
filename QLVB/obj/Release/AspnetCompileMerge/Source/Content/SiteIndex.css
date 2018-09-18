@@ -1,0 +1,660 @@
+﻿body {
+    background-color: #fff;
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+}
+.bs-docs-container
+{
+    background-color:#eee;
+}
+.color-sea
+{
+   color:#00ada7;
+}
+ .activeTT a
+ {
+     background-color:white ;
+     color:#00ada7 ;
+ }
+ .activeTT:after {
+	content: '';
+	display: block;
+	margin: auto;
+	height: 2px;
+	width: 0px !important;
+	background: transparent !important;
+    transition: width .5s ease, background-color .5s ease;
+}
+ .activeTT:after {
+	width: 100%;
+	background: #00ada7;
+}
+ .datetimepicker, .datepicker
+ {
+     width:100% !important;
+ }
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.font-16
+{
+    font-size:16px;
+}
+.font-12
+{
+     font-size:12px;
+}
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+/*lay out responsive*/
+@media screen and (max-width: 767px) {
+    .menu-top-user {
+        position: absolute;
+        top: 80px;
+    }
+
+        .menu-top-user .dropdown a.dropdown-toggle {
+            color: black !important;
+        }
+
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: black;
+    }
+
+    .menu-top2 .dropdown-menu li:hover {
+        background-color: white;
+    }
+     .div-logo-1{
+        display:inline-block !important;
+    }
+    .div-logo-2{
+        display:none !important;
+    }
+    .navbar-2 
+    {
+        float:none !important;
+    }
+    .navbar-2 > li
+    {
+        padding:10px !important;
+    }
+    #myCarousel .carousel-inner img
+    {
+        height:auto !important;
+    }
+}
+/* layout user main*/
+.menu-top-user
+{
+    font-size:12px;
+}
+.menu-top {
+    background-color: white;
+    margin-bottom: 0;
+    border-bottom: none;
+    z-index: 1001;
+    min-height:30px;
+}
+
+    .menu-top .dropdown {
+        color: gray;
+        margin-top: 5px;
+        padding:0 5px
+    }
+
+        .menu-top .dropdown a {
+            color: gray;
+            text-decoration: none;
+        }
+
+            .menu-top .dropdown a:hover {
+                color: black;
+            }
+
+.menu-top2 {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    margin-bottom: 0px;
+}
+.menu-top2 .navbar-2
+{
+    float:right;
+}
+    .menu-top2 .navbar-nav > li > a {
+        color: black;
+    }
+
+        .menu-top2 .navbar-nav > li > a:hover {
+            color: #00ada7;
+        }
+  .navbar-2 > li
+  {
+      padding:23px 20px 10px 20px;
+  }
+
+  .navbar-2 > li > a
+  {
+      padding: 0;
+  }
+ .navbar-2 > li:after {
+	content: '';
+	display: block;
+	margin: auto;
+	height: 2px;
+	width: 0px;
+	background: transparent;
+    transition: width .5s ease, background-color .5s ease;
+}
+ .navbar-2 > li:hover:after {
+	width: 100%;
+	background: #00ada7;
+}
+ /* xu ly logo */
+ .div-logo-1
+ {
+     display:none;
+ }
+   .menu-top2 li.div-logo-2 a
+ {
+     padding:0px;
+ }
+  .menu-top2 li.div-logo-2
+  {
+      padding:5px 0;
+  }
+ .menu-top2 li.div-logo-2:hover:after {
+	width: 100%;
+	background: none;
+}
+/* trang chu*/
+.page-content-inner > div.row > div
+{
+    padding:0px;
+}
+.index-phai-tren {
+    background-color: white;
+    padding: 20px;
+    margin: 10px 10px 10px 5px;
+}
+.index-trai-tren-tin
+{
+    background-color: white;
+    margin: 10px 5px 10px 0px;
+}
+
+.index-trai-tren-tin-con  {
+    background-color: white;
+        min-height: 430px;
+         max-height: 430px;
+}
+
+.index-trai-tren, .index-trai-duoi {
+    background-color: white;
+    padding: 20px;
+     margin: 10px 5px 10px 10px;
+}
+.index-trai-tren > div > p > .fa , div .icon-color, .index-trai-tren-tin-con > div > p > .fa 
+{
+    color:#00ada7;
+}
+a
+{
+    color:black;
+    
+}
+a:hover
+{
+    text-decoration:none;
+}
+    .timkiem-btn:hover {
+        cursor: pointer;
+    }
+
+
+    .index-phai-tren #myTabContent {
+        border: 1px solid #00ada7;
+    }
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    background-color: #00ada7;
+    color: white;
+    border-radius:0;
+    border: 1px solid #00ada7;
+}
+
+.tab-pane {
+    padding-top: 10px;
+}
+
+#myTabContent a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#myTabContent h4 {
+    margin: 0 0 5px 0;
+}
+
+hr {
+    margin: 5px 0 5px 0;
+}
+
+.bs-docs-footer {
+    padding: 20px 0;
+    color: #ccc;
+    background-color: #313030;
+}
+
+
+    .bs-docs-footer a {
+        color: #ccc;
+    }
+    
+
+    .index-trai-duoi .btn-a
+    {
+        text-decoration: none;
+        color: silver;
+        font-size: 12pt;
+    }
+    .index-trai-duoi .btn-a:hover
+    {
+        color:black;
+    }
+
+   .index-trai-duoi .badge ,  .index-phai-tren .badge
+   {
+        background-color: #00ada7;
+   }
+
+     .index-trai-duoi .div-title
+    {
+        font-size: 13pt;
+        padding-bottom: 10px;
+        float:left;
+    }
+   .index-trai-duoi .span-title:after {
+	content: '';
+	display: block;
+	height: 2px;
+	width: 0px;
+	background: transparent;
+    transition: width .5s ease, background-color .5s ease-in-out;
+}
+    .index-trai-duoi .span-title:after {
+	width: 100%;
+	background: #00ada7;
+}
+    .img-responsive
+    {
+        min-width:100%;
+        max-height:450px;
+    }
+
+    .div-tin-dau p
+    {
+        line-height:1.3em;
+    }
+
+    .index-trai-tren-tin-con .div-tin-dau
+    {
+        padding:10px;
+    }
+    .index-trai-tren .div-tin-dau
+    {
+        margin: -80px 70px 0 70px;
+        padding-bottom: 20px;
+        background-color: white;
+        position:relative;
+        padding: 10px;
+    }
+    /* index phai */
+    .index-phai-tren .div-title
+    {
+        font-size: 13pt;
+        padding-bottom: 10px;
+          float:left;
+    }
+   .index-phai-tren .span-title:after {
+	content: '';
+	display: block;
+	height: 2px;
+	width: 0px;
+	background: transparent;
+    transition: width .5s ease, background-color .5s ease-in-out;
+}
+    .index-phai-tren .span-title:after {
+	width: 100%;
+	background: #00ada7;
+}
+     .index-phai-tren .ul-content, .index-trai-duoi .ul-content
+     {
+         padding:0;
+     }
+      .index-phai-tren .ul-content li , .index-trai-duoi .ul-content li
+      {
+            list-style: none;
+            padding: 10px 0;
+             border-bottom: 1px solid #ccc;
+      }
+      .index-phai-tren .ul-content li:last-child , .index-trai-duoi .ul-content li:last-child
+      {
+          border-bottom:none;
+      }
+       .index-phai-tren .ul-content li a , .index-trai-duoi .ul-content li a
+       {
+           text-decoration:none;
+           color:black;
+       }
+       .index-phai-tren .ul-content li .fa-angle-double-right , .index-trai-duoi .ul-content li .fa-angle-double-right
+       {
+           float:right;
+           font-size:13pt;
+           color:#ccc
+       }
+       .text-sea
+       {
+            width: 100%;
+            border: 1px solid #00ada7;
+            height: 30px;
+            padding-left: 5px;
+       }
+       .btn-sea, .btn-timkiem
+       {
+           color:white;
+            background-color: #00ada7;
+            border: 1px solid #00ada7;
+            height: 30px;
+       }
+       .timkiem-btn
+       {
+           border-radius:0px;
+       }
+       .btn-timkiem
+       {
+           height:34px;
+       }
+/*high light */
+.sub:hover {
+    cursor: default;
+}
+
+.subHL .CTclose:hover {
+    cursor: pointer;
+}
+
+.subHL {
+    position: fixed;
+    top: 10%;
+    z-index: 9999;
+    background-color: white;
+    width: 80%;
+    border-radius: 5px;
+}
+
+    .subHL #CTTieuDe {
+        float: left;
+        width: 35%;
+        padding: 10px;
+    }
+
+    .subHL .CTclose {
+        float: right;
+        padding: 1px 10px;
+        background-color: #d9534f;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .subHL #CTNoiDung {
+        float: left;
+        width: 64%;
+        border: 1px solid silver;
+        overflow-y: scroll;
+        max-height: 500px;
+        margin-top: 10px;
+    }
+
+    .subHL #CTlabel {
+        float: left;
+        width: 100%;
+        background-color: #47a447;
+        color: white;
+        padding: 10px;
+        border-radius: 3px;
+    }
+    @media screen and (max-width: 767px) {
+
+    .subHL
+    {
+        left:0;
+        width:100%;
+        max-height: 450px;
+        overflow-y: scroll;
+    }
+}
+   
+
+.tooltip .tooltip-inner {
+  max-width: 600px;
+  word-wrap:break-word;
+  text-align: left;
+  font-size:11pt;
+}
+#noidungTV, #noidungTA
+{
+    position:relative;
+}
+.img-moc
+{
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    top: 100px;
+    right: 2%;
+    transform: rotate(30deg);
+
+}
+@media screen and (max-width: 767px) {
+    .img-moc
+{
+     left:20%;
+     top:10%;
+}
+}
+
+
+@media screen and (max-width: 500px) {
+ 
+  .nav-tabs > li
+  {
+      width:100%;
+  }
+}
+
+
+/* trang chi tiet tin*/
+.panel-primary .panel-heading
+{
+    background-color: #00ada7 !important;
+    border-color: #00ada7 !important;
+      border-radius:0;
+    
+}
+.panel-primary
+{
+    border-color: #00ada7;
+    border-radius:0;
+}
+.panel-danger .panel-heading, .panel-danger
+{
+    border-radius:0;
+}
+
+.timkiem-load
+{
+
+}
+/* lich hop*/
+.lich-tren
+{
+        background-color: white;
+    padding: 20px;
+     margin: 15px 0;
+}
+.hop-ds-phong
+{
+    float: left;
+    padding: 4px;
+    background-color: #f5f5f5;
+    color: black;
+    margin: 0 25px 5px 0;
+    font-size: 12px;
+    position:relative;
+}
+.phong-active:after, .hop-ds-phong:hover:after
+{
+    border-left-color:#26a69a !important;
+}
+.hop-ds-phong:hover,  .phong-active
+{
+    background-color: #26a69a ;
+    color: white;
+    cursor:pointer;
+}
+.hop-ds-phong:after
+{
+    top: 50%;
+    width: 0;
+    left: 100%;
+    height: 0;
+    z-index: 2;
+    content: " ";
+    display: block;
+    margin-top: -13px;
+    position: absolute;
+    border-left: 12px solid #f5f5f5;
+    border-top: 13px solid transparent;
+    border-bottom: 12px solid transparent;
+}
+
+/* lay compass*/
+
+
+#gradRed {  
+    
+    padding: 3px 0 0 5px;
+    font-size: 18px;
+    height: 30px;
+    color: white;
+    background: #DB5461; /* For browsers that do not support gradients */    
+     /*background: linear-gradient(90deg, rgba(255,0,0,1), rgba(255,0,0,0.7) , rgba(255,0,0,1) , rgba(255,0,0,0.7), rgba(255,0,0,1), rgba(255,0,0,.7), rgba(255,0,0,1) );*/
+}
+
+ #gradBlue {  
+    padding: 3px 0 0 5px;
+    font-size: 18px;
+    height: 30px;
+    color: white;
+    background: #578ebe; /* For browsers that do not support gradients */    
+      /*background: linear-gradient(90deg, rgba(0,0,139,1) , rgba(0,0,139,0.7), rgba(0,0,139,1) , rgba(0,0,139,0.7), rgba(0,0,139,1) , rgba(0,0,139,.7), rgba(0,0,139,1) );*/ /* Standard syntax (must be last) */
+}
+
+ #gradGreen {  
+    padding: 3px 0 0 5px;
+    font-size: 18px;
+    height: 30px;
+    color: white;
+    background: #26a69a; /* For browsers that do not support gradients */    
+      /*background: linear-gradient(90deg, rgba(0,128,0,1) , rgba(0,128,0,0.7), rgba(0,128,0,1) , rgba(0,128,0,0.7), rgba(0,128,0,1) , rgba(0,128,0,.7) , rgba(0,128,0,1) );*/ /* Standard syntax (must be last) */
+}
+    #myCarousel .carousel-indicators
+    {
+        top: 3%;
+        left: 3%;
+        height: 15px;
+        width: auto;
+        margin:0;
+    }
+     #myCarousel .carousel-control , #myCarousel .carousel-indicators
+     {
+         display:none;
+     }
+   #myCarousel .carousel-control .glyphicon-chevron-left
+   {
+       left:15%;
+   }
+
+    #myCarousel .carousel-control .glyphicon-chevron-right
+   {
+       left:60%;
+   }
+
+   #myCarousel .carousel-control .glyphicon 
+    {
+        background-color: black;
+    opacity: 1;
+    color: darkorange;
+    height: 27px;
+    width: 27px;
+    border-radius: 15px;
+    font-size: 12pt;
+    padding-top: 4px;
+    }
+
+    #myCarousel .carousel-indicators li.active
+    {
+        background-color:darkorange;
+        border:1px solid darkorange;
+    }
+
+
+    #myCarousel .carousel-inner img
+    {
+        width:100%;
+        height: 350px;
+    }
+
+     #myCarousel .carousel-inner .carousel-caption
+     {
+         display:none;
+        padding: 0;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        right:0;
+        background-color: rgba(0,0,0,0.5);
+        height: 70px;
+     }

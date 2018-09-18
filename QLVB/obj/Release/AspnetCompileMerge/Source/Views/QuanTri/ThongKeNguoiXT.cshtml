@@ -1,0 +1,139 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Thống kê người xem, tải";
+}
+@model PagedList.IPagedList<QLVB.Models.CT_LuotXemTai>
+@using PagedList.Mvc;
+
+
+<h3><i class="fa fa-fw fa-eye"></i> Báo cáo lượt xem tải của người dùng</h3>
+
+<hr />
+<div class="panel panel-primary">
+    <div class="panel-heading PhongThu">
+        <h2 class="panel-title"><i class="fa fa-search"></i> Tìm kiếm <span style="float:right;"><i class="fa fa-chevron-down"></i> <i style="display:none" class="fa fa-chevron-up"></i></span></h2>
+    </div>
+    <br>
+    <form action="/QuanTri/ThongKeNguoiXT" method="post" style="display:none" class="FormTK">
+        <div class="col-md-12">
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Tên đăng nhập
+                </label>
+                <div class="col-md-10">
+                    <input name="TenDangNhap" class="form-control" value="@ViewBag.TenDangNhap" />
+                </div>
+
+            </div>
+            <div class="clearfix"></div><br />
+            @*noi dung tim kiem*@
+            <div class="row">
+                <label class="col-md-2 control-label">
+                    Ngày xem, tải từ
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayXTfrom" class="form-control datepicker" value="@ViewBag.NgayXTfrom" />
+                </div>
+                <label class="col-md-2 control-label ">
+                    đến
+                </label>
+                <div class="col-md-4">
+                    <input name="NgayXTto" class="form-control datepicker" value="@ViewBag.NgayXTto" />
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+            
+            <div class="clearfix"></div><br />
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" value="Tìm kiếm" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+
+    </form>    <br>
+
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <td  valign="middle" align="center" style="vertical-align:middle;">STT </td>
+                <td valign="middle" align="center" style="vertical-align:middle;">Người Xem, tải </td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Tên văn bản</td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Số hiệu</td>
+                <td valign="middle" align="center" style="vertical-align:middle;">Ngày xem, tải</td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Lần xem</td>
+                <td  valign="middle" align="center" style="vertical-align:middle;">Lần tải</td>  
+              
+            </tr>
+           
+        </thead>
+        @{int STT = 1; int iTongLanXem = 0, iTongLanTai = 0;
+            if (Model.PageNumber != 0)
+            {
+                STT = ((Model.PageNumber - 1) * Model.PageSize);
+                STT = STT + 1;
+            }
+         }
+        @foreach (var item in Model)
+        {
+            iTongLanXem += item.Xem.Value;
+            iTongLanTai += item.Tai.Value;
+            <tr>
+                @Html.Hidden("MaLuotXemTai",item.Id)
+                <td valign="top" align="center" style="vertical-align:top;">@STT </td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.NhanVien.HoTen (@item.NhanVien.TenDangNhap) </td>
+                <td >@item.LuotXemTai.TaiLieu.TenTaiLieu</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.LuotXemTai.TaiLieu.SoHieu</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.LuotXemTai.NgayXT.Value.ToString("dd/MM/yyyy")</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.Xem</td>
+                <td valign="top" align="center" style="vertical-align:top;">@item.Tai</td>
+
+            </tr>
+            STT++;
+        }
+        <tr>
+            <td valign="middle" align="center" colspan="5"><b>Tổng</b></td>
+            <td valign="top" align="center" style="vertical-align:top;">@iTongLanXem</td>
+            <td valign="top" align="center" style="vertical-align:top;">@iTongLanTai</td>
+        </tr>
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("ThongKeNguoiXT", new { page = page, TenDangNhap = ViewBag.TenDangNhap, NgayXTfrom = ViewBag.NgayXTfrom, NgayXTto = ViewBag.NgayXTto }))
+</div>
+
+
+
+<style>
+    .PhongThu {
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 20px;
+
+    }
+    #container {
+	min-width: 310px;
+	max-width: 800px;
+	height: 400px;
+	margin: 0 auto
+}
+</style>
+<script>
+  
+
+    $(".PhongThu").click(function () {
+        $(".FormTK").slideToggle();
+        $(".fa-chevron-down").toggle();
+        $(".fa-chevron-up").toggle();
+    });
+</script>
+<div hidden id="loading_gif" style="position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%; background: black; opacity: 0.5;">
+    <div style=" width: 10%; left: 50%; position: absolute; top: 25%; ">
+        <img src="~/Content/loading.gif" width="50">
+    </div>
+</div>

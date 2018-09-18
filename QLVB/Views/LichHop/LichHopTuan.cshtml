@@ -1,0 +1,157 @@
+﻿@model QLVB.Models.TinTuc
+
+@{
+
+    ViewBag.Title = "Lịch họp tuần";
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+
+    IEnumerable<QLVB.Models.DuyetLichHop> lstLichHop = ViewBag.lstLichHop;
+    IEnumerable<QLVB.Models.PhongHop> lstPhong = ViewBag.lstPhong;
+
+
+}
+<div class="page-content-inner" >
+    <div class="row">
+        
+        <div class="col-md-12 ">
+            <div class="index-trai-duoi">
+                <div class="div-title">
+                    <span class="span-title">
+                       Lịch họp
+                    </span>
+                </div>
+                <div style="clear:both"> </div>
+
+                <div class="col-md-12 table-responsive">
+                    <p>
+                        <a href="#" class="btn-a active"> Lịch họp tuần này </a> -
+                        <a href="@Url.Action("DangKy","LichHop")" class="btn-a"> Đăng ký </a>
+                    </p>
+                    <p>
+                        <i class="fa fa-square" style="color: #d32031"></i> Lịch họp định kỳ
+                        <i class="fa fa-square" style="color: #ddd"></i> Lịch họp không định kỳ
+                    </p>
+                    @{ 
+                        DateTime input = DateTime.Now;
+                        int delta = DayOfWeek.Monday - input.DayOfWeek;
+                        DateTime monday = input.AddDays(delta);
+                    }
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th width="158" style="text-align:center">Phòng họp</th>
+                            <th class="Thu_2" width="158" colspan="2" style="text-align:center">Thứ 2 <br />@monday.ToString("dd/MM")
+
+                            <th class="Thu_3" width="158" colspan="2" style="text-align:center">Thứ 3 <br /> @monday.AddDays(1).ToString("dd/MM")</th>
+                            <th class="Thu_4" width="158" colspan="2" style="text-align:center">Thứ 4 <br /> @monday.AddDays(2).ToString("dd/MM")</th>
+                            <th class="Thu_5" width="158" colspan="2" style="text-align:center">Thứ 5 <br /> @monday.AddDays(3).ToString("dd/MM")</th>
+                            <th class="Thu_6" width="158" colspan="2" style="text-align:center">Thứ 6 <br /> @monday.AddDays(4).ToString("dd/MM")</th>
+                            <th class="Thu_7" width="158" colspan="2" style="text-align:center">Thứ 7 <br /> @monday.AddDays(5).ToString("dd/MM")</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+
+                            <th class="Thu_2"><b>Sáng</b></th><th class="Thu_2"><b>Chiều</b></th>
+
+                            <th class="Thu_3"><b>Sáng</b></th><th class="Thu_3"><b>Chiều</b></th>
+
+                            <th class="Thu_4"><b>Sáng</b></th><th class="Thu_4"><b>Chiều</b></th>
+
+                            <th class="Thu_5"><b>Sáng</b></th><th class="Thu_5"><b>Chiều</b></th>
+
+                            <th class="Thu_6"><b>Sáng</b></th><th class="Thu_6"><b>Chiều</b></th>
+
+                            <th class="Thu_7"><b>Sáng</b></th><th class="Thu_7"><b>Chiều</b></th>
+                        </tr>
+                        @foreach (var itemPhong in lstPhong)
+                        {
+
+                            <tr>
+                                <td>@itemPhong.Name</td>
+                                @{ 
+                                    string sDay = "Monday";
+                                    string sClassThu = "";
+                                          }
+                                @for (int i = 2; i < 8; i++)
+                                {
+                                    sClassThu = "class=Thu_" + i;
+                                    switch (i)
+                                    {
+                                        case 2:sDay = "Monday"; break;
+                                        case 3: sDay = "Tuesday"; break;
+                                        case 4: sDay = "Wednesday"; break;
+                                        case 5: sDay = "Thursday"; break;
+                                        case 6: sDay = "Friday"; break;
+                                        case 7: sDay = "Saturday"; break;
+                                        default:break;
+                                    }
+                                <td @sClassThu>
+                                    @foreach (var item in lstLichHop.Where(n => n.BatDau.Hour >= 7 && n.BatDau.Hour < 12 && n.MaPhong == itemPhong.Id && (n.BatDau.DayOfWeek.ToString() == sDay || n.NgayDinhKy.DayOfWeek.ToString() == sDay)).OrderBy(n=>n.BatDau))
+                                    {
+                                        string sStyle = "style=color:#d32031";
+                                        if (!item.DinhKy)
+                                        {
+                                            sStyle = "";
+                                        }
+                                        <span @sStyle>
+                                            @item.BatDau.ToString("HH:mm") - @item.KetThuc.ToString("HH:mm"): @item.TieuDe
+                                        </span> <hr />
+                                    }
+                                </td>
+                                <td @sClassThu>
+                                    @foreach (var item in lstLichHop.Where(n => n.BatDau.Hour >= 12 && n.BatDau.Hour <= 18 && n.MaPhong == itemPhong.Id && (n.BatDau.DayOfWeek.ToString() == sDay || n.NgayDinhKy.DayOfWeek.ToString() == sDay)).OrderBy(n => n.BatDau))
+                                    {
+                                        string sStyle = "style=color:#d32031";
+                                        if (!item.DinhKy)
+                                        {
+                                            sStyle = "";
+                                        }
+                                        <span @sStyle>
+                                            @item.BatDau.ToString("HH:mm") - @item.KetThuc.ToString("HH:mm"): @item.TieuDe
+                                        </span> <hr />
+                                    }
+                                </td>
+
+                                }
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+       
+    </div>
+</div>
+<script>
+    var date = new Date().getDay();
+    switch(date)
+    {
+        case 1:
+            $('.Thu_2').css("background-color", "#fdf3e7");
+            break;
+        case 2:
+            $('.Thu_3').css("background-color", "#fdf3e7");
+            break;
+        case 3:
+            $('.Thu_4').css("background-color", "#fdf3e7");
+            break;
+        case 4:
+            $('.Thu_5').css("background-color", "#fdf3e7");
+            break;
+        case 5:
+            $('.Thu_6').css("background-color", "#fdf3e7");
+            break;
+        case 6:
+            $('.Thu_7').css("background-color", "#fdf3e7");
+            break;
+    }
+</script>
+<style>
+    .active {
+        color: black !important; 
+    }
+    
+</style>

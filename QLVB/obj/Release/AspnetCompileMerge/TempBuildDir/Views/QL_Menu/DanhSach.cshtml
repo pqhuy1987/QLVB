@@ -1,0 +1,151 @@
+﻿@model IEnumerable<QLVB.Models.Menu>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+
+}
+
+<h3><i class="fa fa-bars"></i> Quản lý menu <button data-toggle="modal" data-target="#myTaoMoi" class="btn btn-primary">Thêm mới</button></h3>
+<hr />
+
+<div class="form-group container">
+@foreach (var item in Model.Where(n => n.MaCha == null))
+{
+    <div class="ql-menu-box col-md-3">  
+        <div class="col-md-6" style="padding:0">
+            <i class="fa fa-chevron-down"></i>
+            <i class="fa fa-chevron-up hidden"></i>
+            @item.TenMenu
+        </div>
+        <div class="col-md-6 text-right " style="padding:0">
+            <a href="#" class="ql-menu-them btn-sm btn-success fa fa-plus"></a>
+            <a href="#" class="ql-menu-xoa btn-sm btn-danger fa fa-times"></a>
+         
+        </div>
+    </div>
+}
+</div>
+
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="myTaoMoi" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ThemMoi", "QL_DMPhongBan", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo mới phòng ban</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tên phòng ban</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("TenPhong", "", new { @class = "form-control" })
+
+                            <label id="erTenPhong" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-taomoi" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="myChinhSua" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ChinhSua", "QL_DMPhongBan", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.Hidden("ID")
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chỉnh sửa phòng ban</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tên phòng ban</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("TenPhong", "", new { @class = "TenPhong form-control" })
+
+                            <label id="erTenPhong" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-luu" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $('#btn-taomoi').click(function () {
+        if ($('#TenPhong').val().trim() == "") {
+            $('#erTenPhong').text("Hãy nhập tên phòng ban !");
+            return false;
+        }
+    });
+    $('#btn-luu').click(function () {
+        if ($(this).parents(".modal-dialog").find('#TenPhong').val().trim() == "") {
+            $(this).parents(".modal-dialog").find('#erTenPhong').text("Hãy nhập tên phòng ban !");
+            return false;
+        }
+    });
+
+    $('.btn-sua').click(function () {
+        var maphong = $(this).parents("tr").find("#txtMaPhong").val();
+        var tenphong = $(this).parents("tr").find("#txtTenPhong").val();
+        $('#ID').val(maphong);
+        $('.TenPhong').val(tenphong);
+    });
+
+    $('#btn-dongy').click(function () {
+        location = "Xoa/" + $('#id-xoa').val();
+    });
+    $('.btnxoa').click(function () {
+        $('#btn-dongy').show();
+        $('#btn-thongbao').trigger("click");
+        $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+
+    $('#menul-qldm').addClass("active");
+</script>
+@Html.Raw(TempData["thongbao"])

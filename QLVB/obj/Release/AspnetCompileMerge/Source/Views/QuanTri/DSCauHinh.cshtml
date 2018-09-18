@@ -1,0 +1,151 @@
+﻿@model IEnumerable<QLVB.Models.CauHinh>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+
+}
+
+<h3><i class="fa fa-cogs"></i> Cấu hình hệ thống </h3>
+<hr />
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Nội dung</th>
+                <th>Dữ liệu</th>
+                <th>Mô tả</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{ int iSTT = 0;}
+        @foreach (var item in Model)
+        {
+            iSTT++;
+            <tr>
+                @Html.Hidden("txtMaCauHinh", item.MaCauHinh)
+                @Html.Hidden("txtNoiDung", item.NoiDung)
+                @Html.Hidden("txtDuLieu", item.DuLieu)
+                @Html.Hidden("txtMoTa", item.MoTa)
+                <td>@iSTT</td>
+                <td>@item.NoiDung</td>
+                <td>@item.DuLieu</td>
+                <td>@item.MoTa</td>
+                <td>
+                    <button class="btn-sua btn btn-success fa fa-pencil" data-toggle="modal" data-target="#myChinhSua"></button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="myChinhSua" class="modal fade" role="dialog">
+    @using (Html.BeginForm("SuaCauHinh", "QuanTri", FormMethod.Post, new { @class = "form-horizontal", @enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("MaCauHinh")
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chỉnh sửa</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Nội dung</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("NoiDung", "", new { @class = "form-control" })
+
+                            <label id="erNoiDung" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group" id="txt-dulieu">
+                        <label class="col-md-3 control-label">Dữ liệu</label>
+                        <div class="col-md-8">
+                            @Html.TextArea("DuLieu", "", new { @class = "form-control", @rows = "4" })
+
+                            <label id="erDuLieu" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group" id="img-dulieu">
+                        <label class="col-md-3 control-label">Dữ liệu</label>
+                        <div class="col-md-8">
+                            <input type="file" name="Hinh" accept="image/*" /> 
+                            <br />
+                            <img id="imgCauHinh" width="200"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Mô tả</label>
+                        <div class="col-md-8">
+                            @Html.TextArea("MoTa", "", new { @class = "form-control",@rows="10" })
+
+                            <label id="erMoTa" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-luu" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script>
+ 
+    $('.btn-sua').click(function () {
+        $('#txt-dulieu').show();
+        $('#img-dulieu').hide();
+        var macauhinh = $(this).parents("tr").find("#txtMaCauHinh").val();
+        var noidung = $(this).parents("tr").find("#txtNoiDung").val();
+        var dulieu = $(this).parents("tr").find("#txtDuLieu").val();
+        var mota = $(this).parents("tr").find("#txtMoTa").val();
+        $('#MaCauHinh').val(macauhinh);
+        $('#NoiDung').val(noidung);
+        $('#DuLieu').val(dulieu);
+        $('#MoTa').val(mota);
+        if (macauhinh == "IMG-CHL" || macauhinh == "IMG-HL" || macauhinh == "IMG-HHL")
+        {
+            $('#txt-dulieu').hide();
+            $('#img-dulieu').show();
+            $('#imgCauHinh').attr("src", "/Upload/" + dulieu);
+        }
+    });
+
+    $('#menul-qldm').addClass("active");
+</script>
+@Html.Raw(TempData["thongbao"])

@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="~/favicon.png" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title </title>
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="~/Content/SiteTaiLieu.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,‌​100italic,300,300ita‌​lic,400italic,500,50‌​0italic,700,700itali‌​c,900italic,900' rel='stylesheet' type='text/css'>
+    <!-- Custom Fonts -->
+    <link href="../../Content/ThemeAdmin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="~/Content/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Content/ckeditor/ckeditor.js"></script>
+
+    @*<link href="~/Content/DateTimePicker/jquery-ui.css" rel="stylesheet" />
+        <script src="~/Content/DateTimePicker/jquery-ui.js"></script>*@
+
+    <link rel="stylesheet" href="~/Content/alilas/bower_components/kendo-ui/styles/kendo.common-material.min.css" />
+    <link rel="stylesheet" href="~/Content/alilas/bower_components/kendo-ui/styles/kendo.material.min.css" />
+
+    <script src="~/Content/alilas/assets/js/common.min.js"></script>
+
+    <script src="~/Content/alilas/assets/js/kendoui_custom.min.js"></script>
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+    @Scripts.Render("~/bundles/bootstrap")
+    <!--Start of Zendesk Chat Script-->
+    <script type="text/javascript">
+        window.$zopim || (function (d, s) {
+            var z = $zopim = function (c) { z._.push(c) }, $ = z.s =
+            d.createElement(s), e = d.getElementsByTagName(s)[0]; z.set = function (o) {
+                z.set.
+                _.push(o)
+            }; z._ = []; z.set._ = []; $.async = !0; $.setAttribute("charset", "utf-8");
+            $.src = "https://v2.zopim.com/?4gr6nmqCHhURI5JHNxgKkUhr6OJC1iJM"; z.t = +new Date; $.
+            type = "text/javascript"; e.parentNode.insertBefore($, e)
+        })(document, "script");
+    </script>
+    <!--End of Zendesk Chat Script-->
+</head>
+@using QLVB.Models
+@{
+
+
+}
+<body>
+    <nav class="navbar navbar-default navbar-static-top menu-top">
+        <div class="container">
+            <div class="col-xs-6 col-md-3 col-lg-3 ">
+                <a href="@Url.Action("Index","TrangChinh")">  <img src="~/Upload/logo.png" /></a>
+            </div>
+
+            <div class="col-xs-6 col-md-9 col-lg-9 menu-top-user">
+                @if (Session["DangNhap"] != null)
+                {
+                    <div class="dropdown " style="float:right">
+
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user"></i>
+                            @{ NhanVien nv = (NhanVien)Session["DangNhap"]; }
+                            <span>Hello! @nv.HoTen </span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @if (nv.Ldap.Value == false)
+                            {
+                                <li><a class="changePassword" href="#">Đổi mật khẩu</a></li>
+                            }
+                            <li><a href="@Url.Action("ThongTinTaiKhoan","ND_TaiKhoan")">Thông tin tài khoản</a></li>
+                            <li><a href="@Url.Action("VanBanLuu","ND_TaiKhoan")">Văn bản của tôi</a></li>
+                            @if (HttpContext.Current.User.IsInRole("XEM-QUAN-TRI"))
+                            {
+                                <li><a href="@Url.Action("Index","QuanTri")">Trang quản trị</a></li>
+                            }
+
+                            <li class="divider"></li>
+                            <li><a href="@Url.Action("DangXuat","DangXuat")">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                }
+                @*else
+                    {
+                        <div class="dropdown col-xs-6 col-md-6">
+                            <a class="dropdown-toggle" href="@Url.Action("DangKy","ND_TaiKhoan")"><i class="fa fa-pencil-square-o"></i> Đăng ký</a>
+                        </div>
+
+                        <div class="dropdown col-xs-6 col-md-6">
+                            <a class="dropdown-toggle" href="" data-toggle="modal" data-target="#myDangNhap">
+                                <i class="fa fa-sign-in"></i> Đăng nhập
+                            </a>
+                        </div>
+                    }*@
+            </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-default navbar-static-top menu-top2">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse" style="text-transform:uppercase">
+                <ul class="nav navbar-nav">
+                    <li><a href="@Url.Action("Index","TrangChinh")"><i class="fa fa-home"></i> Trang chủ</a></li>
+                    @Html.Action("_pLoaiVanBan", "TrangChinh")
+
+                    <li><a href="@Url.Action("dsFAQ","TrangChinh")"><i class="fa fa-question"></i> Câu hỏi thường gặp</a></li>
+                </ul>
+
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div class="container bs-docs-container">
+        @RenderBody()
+    </div>
+
+    <footer class="bs-docs-footer">
+        <div class="container">
+            <div class="col-md-4">
+                <img src="~/Upload/logo.png" /> <br />
+                <span>Phần mềm quản lý văn bản</span>
+
+            </div>
+            <div class="col-md-4">
+                <p><a class="fa fa-caret-right" href="@Url.Action("Index","TrangChinh")"> Trang chủ</a></p>
+                <p><a class="fa fa-caret-right" href="@Url.Action("dsFAQ","TrangChinh")"> FAQ</a></p>
+                <p><a class="fa fa-caret-right" href="#"> Hướng dẫn sử dụng</a></p>
+                <p><a class="fa fa-caret-right" href="#"> Giới thiệu</a></p>
+            </div>
+            <div class="col-md-4">
+                @Html.Action("_pThongTinFooter", "TrangChinh")
+            </div>
+        </div>
+    </footer>
+
+    <button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+    <!-- Modal -->
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thay đổi mật khẩu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-md-4 control-label">Mật khẩu hiện tại</label>
+                        <div class="col-md-8">
+                            @Html.Password("MatKhauCu", "", new { @class = "form-control" })
+
+                            <label id="erMatKhau1" class="col-md-12 text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <br />
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-md-4 control-label">Mật khẩu mới</label>
+                        <div class="col-md-8">
+                            @Html.Password("MatKhau", "", new { @class = "form-control" })
+                            <label id="erMatKhau" class="col-md-12 text-danger error">*Mật khẩu có độ dài 6-30 ký tự</label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <br />
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-md-4 control-label">Nhập lại mật khẩu</label>
+                        <div class="col-md-8">
+                            @Html.Password("MatKhauAG", "", new { @class = "form-control" })
+                            <label id="erMatKhauAG" class="col-md-12 text-danger error"></label>
+
+                        </div>
+                    </div>
+                    @*<p id="pthongbao"></p>*@
+                </div>
+                <br />
+                <div class="clearfix"></div>
+                <div class="modal-footer">
+                    <img class="gifloading" src="~/Content/loading.gif" style="display:none" />
+
+                    <button type="button" class="btnChangePassword_ btn-success btn">Đồng ý</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="myDangNhap" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Đăng nhập</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-md-4 control-label">Tên đăng nhập</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("DNTenDangNhap", "", new { @class = "form-control" })
+
+                            <label id="erDNTenDangNhap" class="col-md-12 text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <br />
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-md-4 control-label">Mật khẩu mới</label>
+                        <div class="col-md-8">
+                            @Html.Password("DNMatKhau", "", new { @class = "form-control" })
+                            <label id="erDNMatKhau" class="col-md-12 text-danger error"></label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn-DangNhap btn-success btn">Đồng ý</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        .title_ {
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .form-group .changePassword {
+            cursor: pointer;
+            color: blue;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .error {
+            text-align: left;
+        }
+
+        .gifloading {
+            width: 30px;
+            float: right;
+        }
+    </style>
+    <script>
+        $('.btn-DangNhap').click(function () {
+            $("label.error").text("");
+            var i = 0;
+            if ($('#DNTenDangNhap').val().trim() == "") {
+                i++;
+                $('#erDNTenDangNhap').text("Hãy nhập tên đăng nhập");
+            }
+            if (i == 0) {
+                $("#loading_gif").show();
+                $.ajax({
+                    type: 'POST',
+                    url: '/ND_TaiKhoan/DangNhap',
+                    data: { TenDangNhap: $('#DNTenDangNhap').val(), MatKhau: $('#DNMatKhau').val() },
+
+                    success: function (result) {
+                        if (result == "1") {
+                            $("#loading_gif").hide();
+                            location.reload();
+                        } else if (result == "2") {
+                            $("#loading_gif").hide();
+                            $("#erDNMatKhau").text("Tài khoản chưa được duyệt !");
+                        }
+                        else {
+                            $("#loading_gif").hide();
+                            $("#erDNMatKhau").text("Mật khẩu hoặc tên đăng nhập không đúng !");
+                        }
+                    }
+                });
+            }
+        });
+
+        $('.changePassword').click(function () {
+            $("#btn-thongbao").trigger("click");
+        });
+        $(".btnChangePassword_").click(function () {
+            $("label.error").text("");
+            var i = 0;
+            var MatKhauCu = $("#MatKhauCu").val();
+            var MatKhauMoi = $("#MatKhau").val();
+            if ($('#MatKhau').val() != $('#MatKhauAG').val()) {
+                i++;
+                $('#erMatKhauAG').text("*Mật khẩu không trùng với nhau");
+            }
+            if ($('#MatKhauCu').val() == "") {
+                i++;
+                $('#erMatKhau1').text("*Hãy nhập mật khẩu cũ");
+            }
+            if ($('#MatKhau').val().length < 6 || $('#MatKhau').val().length > 30) {
+                i++;
+                $('#erMatKhau').text("*Mật khẩu có độ dài 6-30 ký tự");
+            }
+            if (i == 0) {
+                $(".gifloading").show();
+                $.ajax({
+                    type: 'GET',
+                    url: '/ND_TaiKhoan/DoiMatKhau',
+                    data: { MatKhauCu: MatKhauCu, MatKhauMoi: MatKhauMoi },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (result) {
+                        if (result == "OK") {
+                            $(".gifloading").hide();
+                            location.reload();
+                        }
+                        else {
+                            $(".gifloading").hide();
+                            $("#erMatKhau1").text("Sai mật khẩu");
+                        }
+                    }
+                });
+            }
+
+
+        });
+    </script>
+    <div hidden id="loading_gif" style="position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%; background: black; opacity: 0.5;">
+        <div style=" width: 10%; left: 50%; position: absolute; top: 25%; ">
+            <img src="~/Content/loading.gif" width="50">
+        </div>
+    </div>
+
+    <script>
+        $('.datepicker').kendoDatePicker({
+            format: "dd/MM/yyyy"
+        });
+    </script>
+
+</body>
+
+</html>

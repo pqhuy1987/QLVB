@@ -1,0 +1,201 @@
+﻿@model QLVB.Models.TaiLieu
+
+@{
+    ViewBag.Title = Session["lbl"] + " văn bản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+
+    <script src="~/Content/chosen_v1.6.2/chosen.jquery.min.js"></script>
+    <link href="~/Content/chosen_v1.6.2/chosen.min.css" rel="stylesheet" />
+}
+
+<style type="text/css">
+    #PhongBan_chosen ul {
+        min-height: 33px!important;
+    }
+</style>
+
+<script>
+    //key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+
+<h3 class="title-link"><i class="fa fa-files-o"></i> @Html.ActionLink("Danh sách", "DanhSach") <i class="fa fa-angle-right"></i> @Session["lbl"] văn bản</h3>
+<hr />
+
+@using (Html.BeginForm("ThemMoi", "QL_TaiLieu", FormMethod.Post, new { @id = "form", @class = "form-horizontal", @enctype = "multipart/form-data" }))
+{
+    <div class="them-tl-duoi">
+        <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+            <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                        <i class="fa fa-bars text-danger"></i> Tóm tắt văn bản
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade container  active in" role="tabpanel" id="home" aria-labelledby="profile-tab">
+                    <div class="form-group">
+                        <div class="col-md-2">Tiêu đề</div>
+                        <div class="col-md-4">
+                            @Html.TextBox("TenTaiLieu", "", new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">Bảo mật</div>
+                        <div class="col-md-4">
+                            <span>
+                                <input name="BaoMat" type="checkbox" value="true" data-toggle="toggle" data-size="small">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2">Số hiệu: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("SoHieu", "", new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">Loại văn bản: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("LoaiVanBan", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2">Mã hiệu: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("MaHieu", "", new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">Lần ban hành: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("LanBanHanh", "1", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @* BEGIN *@
+                        @*<div class="col-md-2">Nơi ban hành: </div>*@
+                        <div class="col-md-2">Đơn vị soạn thảo: </div>
+                        @* END *@
+                        <div class="col-md-4">
+                            @Html.DropDownList("NoiBanHanh", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">Người ký: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("NguoiKy", "", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2">Ngày ban hành: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("NgayBanHanhs", "", new { @class = "form-control datepicker" })
+                        </div>
+                        <div class="col-md-2">Ngày hiệu lực: </div>
+                        <div class="col-md-4">
+                            @Html.TextBox("NgayHieuLucs", "", new { @class = "form-control datepicker" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @* BEGIN *@
+                        @*<div class="col-md-2">Phòng ban: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("PhongBan", null, new { @class = "form-control" })
+                        </div>*@
+                        <div class="col-md-2">Đơn vị áp dụng: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("PhongBan", null, new { @class = "form-control chosen-select", @multiple = "multiple" })
+                            @Html.HiddenFor(x => x.DonViApDung)
+                        </div>
+                        @* END *@
+                        <div class="col-md-2">Tình trạng: </div>
+                        <div class="col-md-4">
+                            @Html.DropDownList("TinhTrang", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @Html.TextArea("NoiDungTomTat", "")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group container">
+        <div class="col-sm-12">
+            <input id="Luu" type="submit" value="Lưu" class="btn btn-success" onclick="return setDonViApDung();" />
+        </div>
+    </div>
+}
+
+<script>
+
+    var editor;
+
+    function createEditor(languageCode, id) {
+        editor = CKEDITOR.replace(id, {
+            height: 200,
+            language: 'vi',
+            toolbar: 'basic',
+            toolbar:
+                [
+	{ name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview', 'Print', '-', 'Templates'] },
+	{ name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+	{ name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt'] },
+	{ name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+	{ name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+	{
+	    name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
+	},
+	{ name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+	{ name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+	'/',
+	{ name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+	{ name: 'colors', items: ['TextColor', 'BGColor'] },
+    { name: 'tools', items: ['Maximize'] }
+                ],
+        });
+
+    }
+
+    $(function () {
+        createEditor('vi', 'NoiDungTomTat');
+
+        // BEGIN
+        $(".chosen-select").chosen({ no_results_text: "Không tìm thấy!", placeholder_text_multiple: "Chọn đơn vị áp dụng" });
+        // END
+    });
+
+    function setDonViApDung() {
+        var selectedValue = $(".chosen-select").chosen().val();
+        $("#DonViApDung").val(selectedValue);
+        return true;
+    }
+
+    $('#menul-qlvb').addClass("active");
+
+    $('#SoHieu').keydown(function () {
+        $('#SoHieu').css("border-color", "#cccccc");
+    });
+
+    $('input#Luu').click(function () {
+        if ($('#SoHieu').val().trim() == "") {
+            $('#SoHieu').css("border-color", "Red");
+            alert('SỐ HIỆU KHÔNG ĐƯỢC TRỐNG !');
+            return false;
+        }
+        if ($('#TenTaiLieu').val().trim() == "") {
+            $('#TenTaiLieu').css("border-color", "Red");
+            alert('TIÊU ĐỀ KHÔNG ĐƯỢC TRỐNG !');
+            return false;
+        }
+    });
+</script>

@@ -1,0 +1,106 @@
+﻿@model IEnumerable<QLVB.Models.FAQ>
+
+@{
+    IEnumerable<QLVB.Models.FAQ> lstFAQ = ViewBag.faq;
+    IEnumerable<QLVB.Models.FAQ_NoiDung> lstFAQ_ND = ViewBag.faq_ND;
+
+    int slFAQ = 0;
+
+    ViewBag.Title = "FAQ";
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+}
+
+<div class="page-content-inner">
+    <div class="row" style="margin-left:-10px">
+        <div class="col-md-12 ">
+            <div class="index-phai-tren text-center" style="margin-bottom:0">
+                <h2> Các câu hỏi thường gặp</h2>
+                <h5> Câu trả lời đơn giản cho những câu hỏi phổ biến nhất</h5>
+            </div>
+        </div>
+        <div class="col-md-3 ">
+            <div class="index-trai-tren" style="margin-left:5px">
+                <ul id="nav-tabs-wrapper" class="nav nav-tabs nav-pills nav-stacked ">
+
+                    @foreach (var item in Model)
+                    {
+                        QLVB.Controllers.TrangChinhController.SL_FAQ = 0;
+                        slFAQ = QLVB.Controllers.TrangChinhController.SL_ND_FAQ(item.Id, lstFAQ, lstFAQ_ND); //lstFAQ.Where(n => n.Parent_Id == item.Id).Count() + lstFAQ_ND.Where(n => n.MaDanhMuc == item.Id).Count();
+                <li>
+                    @Html.Hidden("Parent_Id", item.Id)<a class="btn-FAQ" href="#"><img width="50" src="~/Upload/HinhDMFAQ/@item.HinhAnh" /> @item.CauHoi <span class="text-danger"> (@slFAQ)</span></a>
+                </li>
+
+                }
+                </ul>
+            </div>
+
+        </div>
+        <div class="col-md-9 ">
+            <div class="index-phai-tren result_FAQ">
+
+            </div>
+        </div>
+    </div>
+    </div>
+<script>
+    function DuyetSoNut() {
+        $('.treeFAQ li.li-danhmuc').each(function () {
+            var i = 0;
+            $(this).children(".mn-child:first").children("li").each(function () {
+                i++;
+            });
+                $(this).children(".span-soluong").text(" (" + i + " mục)");
+        });
+    }
+
+    $('body').delegate('.mn-parent', 'click', function () {
+        $(this).parents('li:first').children('.mn-child:first').slideToggle();
+        $(this).children('.fa-folder').toggle();
+        $(this).children('.fa-folder-open').toggle();
+    });
+    $('.btn-FAQ').click(function () {
+        var idCha = $(this).parents("li").find("#Parent_Id").val();
+
+        $('#loading_gif').show();
+        $.ajax({
+            url: '@Url.Action("duyetFAQ_ajax", "TrangChinh")',
+            type: "POST",
+            data: {idCha:idCha},
+            success: function (result) {
+                $('.result_FAQ').html(result);
+                DuyetSoNut();
+                $('#loading_gif').hide();
+            },
+        });
+    });
+</script>
+
+<style>
+    .mn-parent:hover
+    {
+        cursor:pointer;
+    }
+     .mn-child {
+        /*display: none;*/
+    }
+    ul.treeFAQ span
+    {
+        word-wrap:break-word;
+    }
+    ul.treeFAQ
+    {
+        padding-left:0;
+    }
+     .treeFAQ ul, ul.treeFAQ {
+        list-style: none;
+    }
+    ul.treeFAQ li {
+        padding: 5px 0;
+    }
+    ul.treeFAQ li a {
+        text-decoration: none !important;
+    }
+        ul.treeFAQ .span-soluong {
+            color:silver;
+        }
+</style>

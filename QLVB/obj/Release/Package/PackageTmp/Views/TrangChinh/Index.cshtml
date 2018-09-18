@@ -1,0 +1,466 @@
+﻿@model PagedList.IPagedList<QLVB.Models.TaiLieu>
+@using PagedList.Mvc;
+
+@{
+    IEnumerable<QLVB.Models.LoaiTaiLieu> lstLoaiVanBan = ViewBag.LoaiVanBans;
+    IEnumerable<QLVB.Models.TaiLieu> lstTaiLieu = ViewBag.VanBans;
+    IEnumerable<QLVB.Models.DanhMuc> lstDMTinTuc = ViewBag.DMTinTuc;
+    IEnumerable<QLVB.Models.TinTuc> lstTinTuc = ViewBag.TinTuc; // 4 tin dau
+    IEnumerable<QLVB.Models.TinTuc> dsTinTuc = ViewBag.dsTinTuc;
+
+    IEnumerable<QLVB.Models.DuyetLichHop> lstLichHop = ViewBag.lstLichHop;
+    IEnumerable<QLVB.Models.PhongHop> lstPhong = ViewBag.lstPhong;
+
+    IEnumerable<QLVB.Models.Banner> lstBanner = ViewBag.lstBanner;
+
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+
+    string sUrl = "";
+}
+
+<div class="page-content-inner">
+    <div class="row">
+        @{ int iBanner = 0; string sClassAcBanner = "";}
+        <div class="col-md-12" style="padding:0px;">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    @foreach (var item in lstBanner)
+                    {
+                        sClassAcBanner = "";
+                        if (iBanner == 0)
+                        {
+                            sClassAcBanner = "active";
+                        }
+                        <li data-target="#myCarousel" data-slide-to="@iBanner" class="@sClassAcBanner"></li>
+                        iBanner++;
+                    }
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    @{ iBanner = 0;}
+                    @foreach (var item in lstBanner)
+                    {
+                        sClassAcBanner = "";
+                        if (iBanner == 0)
+                        {
+                            sClassAcBanner = "active";
+                        }
+                        <div class="item @sClassAcBanner">
+                            <a href="@item.Url" target="_blank">
+                                <img src="~/Upload/@item.Image" alt="@item.TieuDe">
+                                <div class="carousel-caption">
+                                    <h3>@item.TieuDe</h3>
+                                </div>
+                            </a>
+                        </div>
+                        iBanner++;
+                    }
+                </div>
+
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9 ">
+            <div class="index-trai-tren-tin">
+                @{ int iSTTTin = 0; int iSTT = 0;}
+                @foreach (var itemTin in lstDMTinTuc.Take(3))
+                {
+                    iSTTTin++;
+                    string sClassGrab = "";
+                    if (iSTTTin == 1)
+                    {
+                        sClassGrab = "gradBlue";
+                    }
+                    if (iSTTTin == 2)
+                    {
+                        sClassGrab = "gradRed";
+                    }
+                    if (iSTTTin == 3)
+                    {
+                        sClassGrab = "gradGreen";
+                    }
+
+                    <div class="col-md-12" style="padding:0;margin-bottom:10px;">
+                        <div id="@sClassGrab">@itemTin.TenDanhMuc.ToUpper()</div>
+                    </div>
+                    if (dsTinTuc.Where(n => n.MaDanhMuc == itemTin.MaDanhMuc).FirstOrDefault() != null)
+                    {
+                        <div class="col-md-4" style="padding:0">
+                            @{
+                                QLVB.Models.TinTuc tin1 = dsTinTuc.Where(n => n.MaDanhMuc == itemTin.MaDanhMuc).FirstOrDefault();
+                                sUrl = "xem-tin/" + QLVB.Models.Tools.RemoveDiacritics(tin1.TieuDe) + "-" + tin1.MaTinTuc;
+                            }
+                            <a href="@sUrl">
+                                <img src="~/Upload/@tin1.HinhDaiDien" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="font-16" style="font-weight:bold;padding-top:10px">
+                                <a href="@sUrl">  @tin1.TieuDe</a>
+                            </p>
+                            <p>
+                                <span>
+                                    @if (tin1.NoiDungThuGon != null)
+                                    { // bo het the html
+                                        string sNoiDung = System.Text.RegularExpressions.Regex.Replace(tin1.NoiDungThuGon, @"<[^>]*>", String.Empty);
+                                        if (sNoiDung.Length < 300)
+                                        {
+                                            @Html.Raw(sNoiDung)
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(sNoiDung.Substring(0, 299))
+                                        }
+                                    }
+                                </span>
+                            </p>
+                        </div>
+                    }
+                                <div class="clearfix"></div>
+
+                                iSTT = 0;
+                                foreach (var item in dsTinTuc.Where(n => n.MaDanhMuc == itemTin.MaDanhMuc).Take(4))
+                                {
+                                    iSTT++;
+                                    if (iSTT > 1)
+                                    {
+                                        sUrl = "";
+                                        sUrl = "xem-tin/" + QLVB.Models.Tools.RemoveDiacritics(item.TieuDe) + "-" + item.MaTinTuc;
+                                        <div class="col-md-4 clearfix">
+                                            <div class="col-xs-4 col-md-4" style="padding: 10px 0 ">
+                                                <a href="@sUrl">
+                                                    <img src="~/Upload/@item.HinhDaiDien" class="img-responsive" />
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-8 col-md-8" style="padding:10px; text-align:justify">
+                                                <p>
+                                                    <b>
+                                                        <a href="@sUrl"> @item.TieuDe</a>
+                                                    </b>
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                <div class="clearfix"></div>
+                                }
+            </div>
+
+            <div class="index-trai-duoi">
+                <div class="div-title">
+                    <span class="span-title">
+                        Văn bản mới
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12">
+                    @{ int i = 0; }
+                    @foreach (var item in Model)
+                    {
+                        sUrl = "";
+                        sUrl = "xem-van-ban/" + QLVB.Models.Tools.RemoveDiacritics(item.TenTaiLieu) + "-" + item.MaTaiLieu;
+                        if (item.BaoMat != true)
+                        {
+                            i++;
+                            <div style="margin:5px 0 5px 0">
+                                <div class="col-xs-1 col-md-1">
+                                    <span class="badge">@i</span>
+                                </div>
+                                <div class="col-xs-8 col-md-8">
+                                    <a class="font-16" href="@sUrl">@item.TenTaiLieu</a> <br />
+                                    <a class="font-12" href="@sUrl#noidungTA"><i class="fa fa-font icon-color"></i> Tiếng Anh</a> |
+                                    <a class="font-12" href="@sUrl#vanbangoc"><i class="fa fa-vine icon-color"></i> Văn bản gốc</a> |
+                                    <a class="font-12" href="@sUrl#luocdo"><i class="fa fa-th icon-color"></i> Lược đồ</a> |
+                                    <a class="font-12" href="@sUrl#taive"><i class="fa fa-download icon-color"></i> Tải về</a>
+
+                                    <p>
+                                        @if (item.NoiDungTV != null)
+                                        { // bo het the html
+                                            string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungTV, @"<[^>]*>", String.Empty);
+                                            if (sNoiDung.Length < 500)
+                                            {
+                                                @Html.Raw(sNoiDung)
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(sNoiDung.Substring(0, 499))
+                                            }
+                                        }
+                                    </p>
+                                    <div style="clear:both"></div>
+                                </div>
+                                <div class="col-xs-10 col-md-3">
+                                    <div class="form-group font-12">
+                                        Ban hành:
+                                        @if (item.NgayBanHanh != null)
+                                        { @item.NgayBanHanh.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Hiệu lực:
+                                        @if (item.NgayHieuLuc != null)
+                                        { @item.NgayHieuLuc.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Tình trạng:
+                                        @if (item.TinhTrang == "1")
+                                        {
+                                            // BEGIN
+                                            @*<span>Chưa hiệu lực</span>*@
+                                            <span>Dự thảo</span>
+                                            // END
+                                        }
+                                        @if (item.TinhTrang == "2")
+                                        {
+                                            <span style="color:blue;font-weight:500">Còn hiệu lực</span>
+                                        }
+                                        @if (item.TinhTrang == "3")
+                                        {
+                                            <span style="color: red; font-weight: 500">Hết hiệu lực</span>
+                                        }
+                                        <br />
+                                        Tải lên:
+                                        @item.NgayTaiLen.Value.ToString("dd/MM/yyyy")
+                                    </div>
+                                </div>
+
+                                <div style="clear:both"></div>
+                            </div>
+                        }
+                        else if (HttpContext.Current.User.IsInRole("XEM-VB-MAT"))
+                        {
+                            i++;
+                            <div style="margin:5px 0 5px 0">
+                                <div class="col-xs-1 col-md-1">
+                                    <span class="badge">@i</span>
+                                </div>
+                                <div class="col-xs-8 col-md-8">
+                                    <a class="font-16" href="@sUrl">@item.TenTaiLieu</a> <span class="text-danger">(Văn bản mật)</span>
+                                    <br />
+                                    <a class="font-12" href="@sUrl#noidungTA"><i class="fa fa-font icon-color"></i> Tiếng Anh</a> |
+                                    <a class="font-12" href="@sUrl#vanbangoc"><i class="fa fa-vine  icon-color"></i> Văn bản gốc</a> |
+                                    <a class="font-12" href="@sUrl#luocdo"><i class="fa fa-th icon-color"></i> Lược đồ</a> |
+                                    <a class="font-12" href="@sUrl#taive"><i class="fa fa-download icon-color"></i> Tải về</a>
+                                    <p>
+                                        @if (item.NoiDungTV != null)
+                                        { // bo het the html
+                                            string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungTV, @"<[^>]*>", String.Empty);
+                                            if (sNoiDung.Length < 500)
+                                            {
+                                                @Html.Raw(sNoiDung)
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(sNoiDung.Substring(0, 499))
+                                            }
+                                        }
+                                    </p>
+                                    <div style="clear:both"></div>
+                                </div>
+                                <div class="col-xs-10 col-md-3">
+                                    <div class="form-group font-12">
+                                        Ban hành:
+                                        @if (item.NgayBanHanh != null)
+                                        { @item.NgayBanHanh.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Hiệu lực:
+                                        @if (item.NgayHieuLuc != null)
+                                        { @item.NgayHieuLuc.Value.ToString("dd/MM/yyyy") }
+                                        <br />
+                                        Tình trạng:
+                                        @if (item.TinhTrang == "1")
+                                        {
+                                            // BEGIN
+                                            @*<span>Chưa hiệu lực</span>*@
+                                            <span>Dự thảo</span>
+                                            // END
+                                        }
+                                        @if (item.TinhTrang == "2")
+                                        {
+                                            <span style="color:blue;font-weight:500">Còn hiệu lực</span>
+                                        }
+                                        @if (item.TinhTrang == "3")
+                                        {
+                                            <span style="color: red; font-weight: 500">Hết hiệu lực</span>
+                                        }
+                                        <br />
+                                        Tải lên:
+                                        @item.NgayTaiLen.Value.ToString("dd/MM/yyyy")
+                                    </div>
+                                </div>
+
+                                <div style="clear:both"></div>
+                            </div>
+                        }
+
+                    }
+                    <a href="@Url.Action("IndexVanBan","TrangChinh")"><input type="button" class="btn-sea" value="Xem thêm" /></a>
+                </div>
+
+            </div>
+
+            @* BEGIN - END *@
+            <div class="index-trai-duoi" style="display: none;">
+
+                <div class="div-title">
+                    <span class="span-title">
+                        Lịch họp
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12 table-responsive">
+                    <p>
+                        <a href="#" class="btn-a active"> Lịch họp hôm nay </a>
+                        - <a href="@Url.Action("LichHopTuan","LichHop")" class="btn-a"> Xem lịch họp tuần </a> -
+                        <a href="@Url.Action("DangKy","LichHop")" class="btn-a"> Đăng ký </a>
+                    </p>
+                    <p>
+                        <i class="fa fa-square" style="color: #DB5461"></i> Lịch họp định kỳ
+                        <i class="fa fa-square" style="color: rgb(81, 160, 237)"></i> Lịch họp không định kỳ
+                    </p>
+                    <table class="table table-striped">
+
+                        <tr>
+                            <td>Phòng họp</td>
+                            <td>Buổi sáng</td>
+                            <td>Buổi chiều</td>
+                        </tr>
+                        @foreach (var itemPhong in lstPhong)
+                        {
+
+                            <tr>
+                                <td>@itemPhong.Name</td>
+                                <td>
+                                    @foreach (var item in lstLichHop.Where(n => n.BatDau.Hour >= 7 && n.BatDau.Hour < 12 && n.MaPhong == itemPhong.Id))
+                                    {
+                                        string sStyle = "style=color:#d32031";
+                                        if (!item.DinhKy)
+                                        {
+                                            sStyle = "";
+                                        }
+                                        <span @sStyle>
+                                            @item.BatDau.ToString("HH:mm") - @item.KetThuc.ToString("HH:mm"): @item.TieuDe
+                                        </span> <hr />
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var item in lstLichHop.Where(n => n.BatDau.Hour >= 12 && n.BatDau.Hour <= 18 && n.MaPhong == itemPhong.Id))
+                                    {
+                                        string sStyle = "style=color:#d32031";
+                                        if (!item.DinhKy)
+                                        {
+                                            sStyle = "";
+                                        }
+                                        <span @sStyle>
+                                            @item.BatDau.ToString("HH:mm") - @item.KetThuc.ToString("HH:mm"): @item.TieuDe
+                                        </span> <hr />
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 ">
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        Tìm kiếm
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12" style="padding:0">
+                    @using (Html.BeginForm("dsTinTuc", "TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        <input name="txtTimKiem" class="text-sea" placeholder="Nội dung tìm kiếm" />
+                        <p></p>
+                        <input class="btn-sea" style="width:100%" type="submit" value="Tìm kiếm" />
+                    }
+                </div>
+
+            </div>
+            @* BEGIN - END *@
+            <div class="index-phai-tren" style="display: none;">
+                <div class="div-title">
+                    <span class="span-title">
+                        Tin tức
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                @{ iSTTTin = 0; }
+                @foreach (var item in lstDMTinTuc)
+                {
+                    iSTTTin++;
+                    string sClassGrab = "";
+                    if (iSTTTin == 1)
+                    {
+                        sClassGrab = "gradBlue";
+                    }
+                    if (iSTTTin == 2)
+                    {
+                        sClassGrab = "gradRed";
+                    }
+                    if (iSTTTin == 3)
+                    {
+                        sClassGrab = "gradGreen";
+                    }
+                    <div class="col-md-12" style="padding:0 0 2px 0">
+                        <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })"> <div id="@sClassGrab">@item.TenDanhMuc.ToUpper()</div></a>
+                    </div>
+                }
+            </div>
+
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        Văn bản nội bộ
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <ul class="ul-content">
+                    @foreach (var item in lstLoaiVanBan)
+                    {
+                        <li>
+                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan=item.MaLoaiTL })">@item.TenLoaiTL <span style="color:#ccc">(@lstTaiLieu.Where(n => n.LoaiVanBan == item.MaLoaiTL).Count())</span></a>
+                            <i class="fa fa-angle-double-right"></i>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .active {
+        color: black !important;
+    }
+
+    #myCarousel .carousel-inner img {
+        height: 450px;
+    }
+</style>
+
+<script>
+    $('.timkiem-btn').click(function () {
+        $('.timkiem-load').slideToggle();
+        $('.ic-ud').toggle();
+        $('.div-timkiem-input').slideToggle();
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+
+</script>

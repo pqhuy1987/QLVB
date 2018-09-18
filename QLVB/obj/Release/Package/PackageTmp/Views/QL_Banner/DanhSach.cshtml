@@ -1,0 +1,257 @@
+﻿@model PagedList.IPagedList<QLVB.Models.Banner>
+@using PagedList.Mvc;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách";
+
+        <link href="~/Content/bootstrap-toggle-master/css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Content/bootstrap-toggle-master/js/bootstrap-toggle.min.js"></script>
+}
+<script>
+    //key number onkeypress = "return ValidateKeypress(/[0-9]/,event);"
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+</script>
+<h3><i class="fa fa-hospital-o"></i> Danh sách banner <button data-toggle="modal" data-target="#myTaoMoi" class="btn btn-primary">Thêm banner</button></h3>
+<hr />
+<div class="table-responsive">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tiêu đề</th>
+                <th width="500">Hình ảnh</th>
+                <th>Đường dẫn</th>
+                <th>Thứ tự</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{ int iSTT = 0;}
+        @foreach (var item in Model)
+        {
+            iSTT++;
+            <tr>
+                @Html.Hidden("txtMaBanner", item.Id)
+                @Html.Hidden("txtTieuDe", item.TieuDe)
+                @Html.Hidden("txtHinhAnh", item.Image)
+                @Html.Hidden("txtDuongDan", item.Url)
+                @Html.Hidden("txtThuTu", item.Order)
+                <td>@iSTT</td>
+                <td>@item.TieuDe</td>
+                <td><img src="~/Upload/@item.Image" class="img-responsive" /></td>
+                <td>@item.Url</td>
+                <td>@item.Order</td>
+                <td>
+                    <button class="btn-sua btn btn-success fa fa-pencil" data-toggle="modal" data-target="#myChinhSua"></button>
+                    @Html.ActionLink(" ", "Xoa", "QL_Banner", new { @id = item.Id }, new { @id = item.Id, @class = "btnxoa btn btn-danger fa fa-times" })
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="dlink">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("DanhSach", new { page = page }))
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao" data-toggle="modal" data-target="#myModal" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="myTaoMoi" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ThemMoi", "QL_Banner", FormMethod.Post, new { @class = "form-horizontal", @enctype = "multipart/form-data" }))
+    {
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo mới banner</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tiêu đề</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("TieuDe", "", new { @class = "form-control" })
+
+                            <label id="erTieuDe" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Hình banner</label>
+                        <div class="col-md-6">
+                            <input type="file" name="ImageBanner" accept="image/*" />
+
+                            <label id="erTenPhong" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Đường dẫn</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Url", "", new { @class = "form-control" })
+
+                            <label id="erUrl" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Thứ tự</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Order", "", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                            <label id="erThuTu" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-taomoi" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="myChinhSua" class="modal fade" role="dialog">
+    @using (Html.BeginForm("ChinhSua", "QL_Banner", FormMethod.Post, new { @class = "form-horizontal", @enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("ID")
+        @Html.Hidden("Image")
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chỉnh sửa banner</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tiêu đề</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("TieuDe", "", new { @class = "TieuDe form-control" })
+
+                            <label id="erTieuDe" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Hình banner</label>
+                        <div class="col-md-6">
+                            <p>
+                                <input type="file" name="ImageBanner" accept="image/*" />
+                            </p>
+                            <img id="HinhBanner" class="img-responsive" />
+                            <label id="erTenPhong" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Đường dẫn</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Url", "", new { @class = "Url form-control" })
+
+                            <label id="erUrl" class="text-danger error"></label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Thứ tự</label>
+                        <div class="col-md-6">
+                            @Html.TextBox("Order", "", new { @class = "ThuTu form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+
+                            <label id="erThuTu" class=" text-danger error"></label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" id="btn-luu" class="btn btn-success" value="Lưu" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<style>
+    .toggle
+    {
+        width:68px !important;
+    }
+</style>
+<script>
+    $('#btn-taomoi').click(function () {
+        if ($('#TieuDe').val().trim() == "") {
+            $('#erTieuDe').text("Hãy nhập tiêu đề !");
+            return false;
+        }
+    });
+    $('#btn-luu').click(function () {
+        if ($(this).parents(".modal-dialog").find('#TieuDe').val().trim() == "") {
+            $(this).parents(".modal-dialog").find('#erTieuDe').text("Hãy nhập tiêu đề !");
+            return false;
+        }
+    });
+    $('.btn-sua').click(function () {
+        var mabanner = $(this).parents("tr").find("#txtMaBanner").val();
+        var tieude = $(this).parents("tr").find("#txtTieuDe").val();
+        var image = $(this).parents("tr").find("#txtHinhAnh").val();
+        var url = $(this).parents("tr").find("#txtDuongDan").val();
+        var thutu = $(this).parents("tr").find("#txtThuTu").val();
+        $('#ID').val(mabanner);
+        $('.TieuDe').val(tieude);
+        $('.Url').val(url);
+        $('.ThuTu').val(thutu);
+        $('#HinhBanner').attr('src', '/Upload/' + image);
+        $('#Image').val(image);
+    });
+
+    $('#btn-dongy').click(function () {
+        location = "Xoa/" + $('#id-xoa').val();
+    });
+    $('.btnxoa').click(function () {
+        $('#btn-dongy').show();
+        $('#btn-thongbao').trigger("click");
+        $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+
+    $('#menul-qlbn').addClass("active");
+</script>
+@Html.Raw(TempData["thongbao"])

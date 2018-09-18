@@ -1,0 +1,196 @@
+﻿@model PagedList.IPagedList<QLVB.Models.VBLuuTru>
+@using PagedList.Mvc;
+
+@{
+    IEnumerable<QLVB.Models.LoaiTaiLieu> LVB = ViewBag.LVB;
+    IEnumerable<QLVB.Models.VBLuuTru> lstVanBanLuu = ViewBag.lstVanBanLuu;
+
+    ViewBag.Title = "Văn bản cá nhân";
+    Layout = "~/Views/Shared/_NguoiDung.cshtml";
+}
+<div class="page-content-inner">
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="index-trai-tren">
+                @using (Html.BeginForm("VanBanLuu", "ND_TaiKhoan", FormMethod.Post))
+                {
+                    <div class="panel panel-primary ">
+                        <div class="panel-heading">
+
+                            <h3 class="panel-title"><i class="fa fa-file-text-o"></i> Văn bản của tôi</h3>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <label class="col-md-2 control-label">
+                                    Ngày ban hành
+                                </label>
+                                <div class="col-md-4">
+                                    <input name="NgayBanHanhfrom" class="form-control datepicker" value="@ViewBag.NgayBanHanhfrom" />
+                                </div>
+                                <label class="col-md-2 control-label ">
+                                    đến
+                                </label>
+                                <div class="col-md-4">
+                                    <input name="NgayBanHanhto" class="form-control datepicker" value="@ViewBag.NgayBanHanhto" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <label class="col-md-2 control-label ">
+                                    Ngày hiệu lực
+                                </label>
+                                <div class="col-md-4">
+                                    <input name="NgayHieuLucfrom" class="form-control datepicker" value="@ViewBag.NgayHieuLucfrom" />
+                                </div>
+                                <label class="col-md-2 control-label ">
+                                    đến
+                                </label>
+                                <div class="col-md-4">
+                                    <input name="NgayHieuLucto" class="form-control datepicker" value="@ViewBag.NgayHieuLucto" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <label class="col-md-2 control-label ">
+                                    Loại văn bản
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.DropDownList("LoaiVanBan", null, "Tất cả", new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="submit" class="btn btn-success col-md-12" value="Tìm kiếm" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="form-group container">
+                    <h4><i class="fa fa-bookmark"></i> Thống kê theo loại văn bản: </h4>
+                    @foreach (var item in LVB)
+                    {
+                        int iSL = lstVanBanLuu.Where(n => n.TaiLieu.LoaiTaiLieu.MaLoaiTL == item.MaLoaiTL).Count();
+                        if (iSL > 0)
+                        {
+                            <div class="col-md-3" id="myTabContent">
+                                <i class="fa fa-caret-right"></i>  <a href="@Url.Action("VanBanLuu", "ND_TaiKhoan", new { @LoaiVanBan=item.MaLoaiTL })">@item.TenLoaiTL (@iSL)</a>
+                                @Html.ActionLink(" ", "XoaVBLTtheoLoai", "TrangChinh", new { @id = item.MaLoaiTL }, new { @id = item.MaLoaiTL, @class = "btnxoa3 btn btn-danger fa fa-times" })
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="index-trai-duoi" id="myTabContent">
+
+                @{ int i = 0; }
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <div style="margin:5px 0 5px 0">
+                        <div class="col-xs-1 col-md-1">
+                            <span class="badge">@i</span>
+                        </div>
+                        <div class="col-xs-9 col-md-9">
+                            <p><a href="@Url.Action("XemVanBan", "TrangChinh", new { @id = item.TaiLieu.MaTaiLieu })">@item.TaiLieu.TenTaiLieu</a> </p>
+                            <a href="@Url.Action("XemVanBan", "TrangChinh", new { @id = item.TaiLieu.MaTaiLieu })#noidungTA"><i class="fa fa-font text-danger"></i> Tiếng Anh</a> |
+                            <a href="@Url.Action("XemVanBan", "TrangChinh", new { @id = item.TaiLieu.MaTaiLieu })#vanbangoc"><i class="fa fa-vine text-danger "></i> Văn bản gốc</a> |
+                            <a href="@Url.Action("XemVanBan", "TrangChinh", new { @id = item.TaiLieu.MaTaiLieu })#luocdo"><i class="fa fa-th text-danger "></i> Lược đồ</a> |
+                            <a href="@Url.Action("XemVanBan", "TrangChinh", new { @id = item.TaiLieu.MaTaiLieu })#taive"><i class="fa fa-download text-danger"></i> Tải về</a> |
+                            @Html.ActionLink(" ", "XoaVBLTtheoID", "TrangChinh", new { @id = item.Id }, new { @id = item.Id, @class = "btnxoa btn btn-danger fa fa-times" })
+                        </div>
+
+                    </div>
+                    <div style="clear:both"></div><br />   <hr />
+
+                }
+
+                <div class="dlink">
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/@Model.PageCount
+                    @Html.PagedListPager(Model, page => Url.Action("VanBanLuu", new { page = page, NgayBanHanhfrom = ViewBag.NgayBanHanhfrom, NgayBanHanhto = ViewBag.NgayBanHanhto, NgayHieuLucfrom = ViewBag.NgayHieuLucfrom, NgayHieuLucto = ViewBag.NgayHieuLucto, LoaiVanBan = ViewBag.LoaiVanBani }))
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao2" data-toggle="modal" data-target="#myThongBao" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myThongBao" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Trigger the modal with a button -->
+<button id="btn-thongbao3" data-toggle="modal" data-target="#myThongBao3" style="display:none"></button>
+
+<!-- Modal -->
+<div id="myThongBao3" class="modal fade" role="dialog">
+    <input hidden id="id-xoa" />
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pthongbao3"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-dongy3" class="btn btn-success" data-dismiss="modal">Đồng ý</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('#btn-dongy').click(function () {
+        location = "XoaVBLTtheoID/" + $('#id-xoa').val();
+    });
+
+    $('.btnxoa').click(function () {
+        $('#btn-dongy').show();
+        $('#btn-thongbao2').trigger("click");
+        $('#pthongbao').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+
+    $('#btn-dongy3').click(function () {
+        location = "XoaVBLTtheoLoai/" + $('#id-xoa').val();
+    });
+    $('.btnxoa3').click(function () {
+        $('#btn-thongbao3').trigger("click");
+        $('#pthongbao3').text("Bạn có chắc muốn xóa dữ liệu này ?");
+        $('#id-xoa').val($(this).attr('id'));
+        return false;
+    });
+</script>
+@Html.Raw(TempData["thongbao"])
