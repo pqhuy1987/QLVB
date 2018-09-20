@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Cyotek.GhostScript;
 using Cyotek.GhostScript.PdfConversion;
 using QLVB.Models;
+using Ghostscript.NET;
 
 namespace QLVB.Controllers
 {

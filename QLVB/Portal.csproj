@@ -69,6 +69,9 @@
       <HintPath>..\packages\GemBox.Spreadsheet.41.3.30.1111\lib\net30\GemBox.Spreadsheet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ghostscript.NET">
+      <HintPath>..\packages\Ghostscript.NET.1.2.1\lib\net40\Ghostscript.NET.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -239,6 +242,9 @@
     <Compile Include="Models\GhiChu.cs">
       <DependentUpon>QLVB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ID.cs">
+      <DependentUpon>QLVB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LichHop.cs">
       <DependentUpon>QLVB.tt</DependentUpon>
     </Compile>
@@ -298,6 +304,15 @@
     </Compile>
     <Compile Include="Models\Scheduler_BLDTaskService.cs" />
     <Compile Include="Models\SchedulerTaskService.cs" />
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>QLVB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>QLVB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>QLVB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TaiLieu.cs">
       <DependentUpon>QLVB.tt</DependentUpon>
     </Compile>

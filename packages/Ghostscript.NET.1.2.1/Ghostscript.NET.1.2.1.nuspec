@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Ghostscript.NET</id>
+    <version>1.2.1</version>
+    <title>Ghostscript.NET</title>
+    <authors>Josip Habjan</authors>
+    <owners>Josip Habjan</owners>
+    <licenseUrl>https://github.com/jhabjan/Ghostscript.NET/blob/master/COPYING</licenseUrl>
+    <projectUrl>https://ghostscriptnet.codeplex.com</projectUrl>
+    <iconUrl>http://c.fsdn.com/allura/p/ghostscriptnet/icon</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Ghostscript.NET (written in C#) is the most completed managed wrapper library around the Ghostscript library (32-bit &amp; 64-bit), an interpreter for the PostScript language, PDF, related software and documentation.</description>
+    <summary />
+    <releaseNotes>Fixed offset error in StdIn buffering.
+Fixed problem with keeping whitespace return from the StdIn callbacks.
+Fixed problem with GhostscriptProcessor and current page handling event.
+Fixed problem with PDF signature/marker not beeing within first 32 bytes.
+Fixed problem with System.ArgumentOutOfRangeException when StdOut message does not occur at beginning of the line.
+Fixed problem with Amazon.Runtime.Internal.Util.HashStream.Position throw NotSupportedException.
+Added ability to allow keeping native ghostscript instance within GhostscriptProcessor instance and reuse it avoiding multiple library load/free especially when loaded from memory.
+GhostscriptRasterizer - added a constructor to allow capture of IO using GhostscriptStdIO (Rasterizer samples updated with example of using GhostscriptStdIO)
+GhostscriptViewer - added GridFitTT=0 to improve text quality.
+GhostscriptViewer - added public setter for DPI settings in viewer.
+GhostscriptViewre - change zoom method to public.
+GhostscriptViewer - set test to false by default in Zoom method.
+GhostscriptViewer - changed ShowAfterOpen to public to set parameters without having to generate a pdf</releaseNotes>
+    <copyright>Copyright (c) 2013-2016 by Josip Habjan</copyright>
+    <tags>.NET ghostscript pdf converson image</tags>
+  </metadata>
+</package>

@@ -15,10 +15,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/22/2013 08:43:40</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>09/18/2018 14:55:23</publishTime>
+      <publishTime>09/20/2018 10:58:27</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>09/18/2018 14:55:23</publishTime>
+      <publishTime>09/20/2018 10:58:27</publishTime>
     </File>
     <File Include="bin/CKFinder.dll">
       <publishTime>06/14/2018 13:23:11</publishTime>
@@ -37,6 +37,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="bin/GemBox.Spreadsheet.dll">
       <publishTime>09/12/2017 10:31:04</publishTime>
+    </File>
+    <File Include="bin/Ghostscript.NET.dll">
+      <publishTime>09/19/2018 10:00:58</publishTime>
     </File>
     <File Include="bin/itextsharp.dll">
       <publishTime>08/22/2017 17:39:42</publishTime>
@@ -57,7 +60,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/30/2013 18:15:20</publishTime>
     </File>
     <File Include="bin/QLVB.dll">
-      <publishTime>09/18/2018 14:55:14</publishTime>
+      <publishTime>09/20/2018 10:58:03</publishTime>
     </File>
     <File Include="bin/System.DirectoryServices.dll">
       <publishTime>08/04/2016 20:18:36</publishTime>
@@ -3489,13 +3492,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/22/2018 14:11:24</publishTime>
     </File>
     <File Include="Models/QLVB.edmx.diagram">
-      <publishTime>05/22/2018 14:17:43</publishTime>
+      <publishTime>09/20/2018 10:43:01</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>01/26/2018 08:56:35</publishTime>
+      <publishTime>09/19/2018 10:00:59</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>09/18/2018 14:55:17</publishTime>
+      <publishTime>09/20/2018 10:58:16</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>04/07/2017 12:21:42</publishTime>
@@ -3550,6 +3553,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Upload/a87c512448bab25b44f4c9e1edd8cfd4.jpg">
       <publishTime>05/18/2017 17:11:15</publishTime>
+    </File>
+    <File Include="Upload/Avatar/icon-user.png">
+      <publishTime>11/13/2015 08:30:30</publishTime>
     </File>
     <File Include="Upload/banner.png">
       <publishTime>05/15/2017 00:07:07</publishTime>
@@ -3672,13 +3678,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/22/2018 14:09:30</publishTime>
     </File>
     <File Include="Views/QL_Banner/DanhSach.cshtml">
-      <publishTime>05/29/2017 13:12:50</publishTime>
+      <publishTime>09/19/2018 09:41:06</publishTime>
     </File>
     <File Include="Views/QL_DMLoaiTaiLieu/DanhSach.cshtml">
-      <publishTime>04/26/2017 17:10:50</publishTime>
+      <publishTime>09/20/2018 08:03:41</publishTime>
     </File>
     <File Include="Views/QL_DMPhongBan/DanhSach.cshtml">
-      <publishTime>04/26/2017 17:08:26</publishTime>
+      <publishTime>09/19/2018 15:22:59</publishTime>
     </File>
     <File Include="Views/QL_DMPhongHop/DanhSach.cshtml">
       <publishTime>05/29/2017 13:12:50</publishTime>
@@ -3687,7 +3693,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/22/2017 09:21:27</publishTime>
     </File>
     <File Include="Views/QL_FAQ/dsFAQ.cshtml">
-      <publishTime>06/07/2017 07:33:53</publishTime>
+      <publishTime>09/19/2018 13:49:14</publishTime>
     </File>
     <File Include="Views/QL_FAQ/dsYKien.cshtml">
       <publishTime>04/10/2017 11:35:10</publishTime>
@@ -3732,7 +3738,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/13/2017 16:36:22</publishTime>
     </File>
     <File Include="Views/QuanTri/DangNhap.cshtml">
-      <publishTime>09/18/2018 14:13:19</publishTime>
+      <publishTime>09/20/2018 08:07:04</publishTime>
     </File>
     <File Include="Views/QuanTri/DangNhap_old.cshtml">
       <publishTime>05/29/2017 13:12:50</publishTime>
@@ -3765,10 +3771,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/11/2017 08:52:53</publishTime>
     </File>
     <File Include="Views/Shared/_NguoiDung.cshtml">
-      <publishTime>09/18/2018 14:13:25</publishTime>
+      <publishTime>09/19/2018 13:23:58</publishTime>
     </File>
     <File Include="Views/Shared/_NguoiDungTaiLieu.cshtml">
-      <publishTime>09/18/2018 14:55:06</publishTime>
+      <publishTime>09/18/2018 15:00:33</publishTime>
     </File>
     <File Include="Views/TinTuc/ChiTietTin.cshtml">
       <publishTime>07/13/2017 16:36:23</publishTime>
@@ -3807,7 +3813,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/14/2017 11:25:36</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/18/2018 14:53:06</publishTime>
+      <publishTime>09/20/2018 10:58:08</publishTime>
     </File>
   </ItemGroup>
 </Project>
