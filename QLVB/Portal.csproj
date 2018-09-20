@@ -1529,8 +1529,11 @@
     <Content Include="Upload\global.png" />
     <Content Include="Upload\globe-512.png" />
     <Content Include="Upload\HHL.png" />
+    <Content Include="Upload\HinhDMFAQ\learn.png" />
     <Content Include="Upload\HinhDMFAQ\logo.jpg" />
     <Content Include="Upload\HinhDMFAQ\logo_main_small%402x.png" />
+    <Content Include="Upload\HinhDMFAQ\MyPC-website-icon-2-books.png" />
+    <Content Include="Upload\HinhDMFAQ\ticket.png" />
     <Content Include="Upload\HL.png" />
     <Content Include="Upload\hrm.png" />
     <Content Include="Upload\icon-user.png" />
