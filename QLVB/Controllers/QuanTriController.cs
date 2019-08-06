@@ -178,9 +178,10 @@ namespace QLVB.Controllers
 
 
             if (TempData["url"] != null)
-                return Redirect(TempData["url"].ToString());
+                return RedirectToAction("IndexVanBan", "TrangChinh");          
+                //return Redirect(TempData["url"].ToString());
             else
-                return RedirectToAction("Index", "TrangChinh");          
+                return RedirectToAction("IndexVanBan", "TrangChinh");          
             
         }
 
