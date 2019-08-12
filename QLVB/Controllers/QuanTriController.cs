@@ -91,7 +91,7 @@ namespace QLVB.Controllers
                 if (ReturnUrl != null)
                     return Redirect(TempData["url"].ToString());
                 else
-                    return RedirectToAction("Index", "TrangChinh");
+                    return RedirectToAction("dsTinTuc", "TinTuc");
             }
             return View();
         }
@@ -178,10 +178,10 @@ namespace QLVB.Controllers
 
 
             if (TempData["url"] != null)
-                return RedirectToAction("IndexVanBan", "TrangChinh");          
+                return RedirectToAction("dsTinTuc", "TinTuc");          
                 //return Redirect(TempData["url"].ToString());
             else
-                return RedirectToAction("IndexVanBan", "TrangChinh");          
+                return RedirectToAction("dsTinTuc", "TinTuc");          
             
         }
 
