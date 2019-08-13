@@ -127,10 +127,10 @@
                       
                     @if (Model.ChoPhepBinhLuan == true)
                     {
-                        <img  width="40" src="~/Upload/Avatar/@nv.HinhDaiDien" />     
+                        <img width="40" src="~/Upload/Avatar/images.png" />
 
-                        
                         <textarea type="text" class="txt-binhluan" placeholder="Viết bình luận của bạn..." ></textarea>
+                        <p style="font-size:12px; margin-left: 45px; margin-top: 10px; "> <a class="txt-luu">Gửi Bình Luận</a></p>
 
                     }
                 <div class="hienthi-binhluan">
@@ -148,10 +148,10 @@
                         <div @clsAn class="hienthi-binhluan-item">
                             <textarea hidden id="txt-noidung" >@item.NoiDung</textarea>
                             <div class="hienthi-binhluan-img">
-                                <img width="40" src="~/Upload/Avatar/@item.NhanVien.HinhDaiDien" />
+                                <img width="40" src="~/Upload/Avatar/images.png" />
                             </div>
                             <div class="hienthi-binhluan-noidung">
-                                <b>@item.NhanVien.HoTen</b> <span class="noidung-chinhsua" data-MaCha="@item.Id">  @item.NoiDung</span>
+                                <b>@item.NhanVien.TenDangNhap</b> <span class="noidung-chinhsua" data-MaCha="@item.Id">  @item.NoiDung</span>
                                 <p style="font-size:12px"> <a class="txt-traloi">Trả lời</a> - <span style="color:silver">
                                     @QLVB.Models.Tools.ThoiGianBinhLuan(item.NgayBinhLuan.Value)
                                     </span></p>
@@ -178,10 +178,10 @@
                                         <div hidden class="hienthi-binhluan-item">
                                             <textarea hidden id="txt-noidung" >@itemcon.NoiDung</textarea>
                                             <div class="hienthi-binhluan-img">
-                                                <img width="40" src="~/Upload/Avatar/@itemcon.NhanVien.HinhDaiDien" />
+                                                <img width="40" src="~/Upload/Avatar/images.png" />
                                             </div>
                                             <div class="hienthi-binhluan-noidung">
-                                                <b>@itemcon.NhanVien.HoTen</b> <span class="noidung-chinhsua" data-MaCha="@itemcon.Id">@itemcon.NoiDung</span>
+                                                <b>@itemcon.NhanVien.TenDangNhap</b> <span class="noidung-chinhsua" data-MaCha="@itemcon.Id">@itemcon.NoiDung</span>
                                                 <p style="font-size:12px"> <a class="txt-traloi">Trả lời</a> - <span style="color:silver">@QLVB.Models.Tools.ThoiGianBinhLuan(itemcon.NgayBinhLuan.Value)</span></p>
                                             </div>
                                             @if (itemcon.IdNhanVien == nv.Id)
@@ -206,7 +206,7 @@
 
                                 <div class="div-traloi-binhluan" style="margin-bottom:10px;display:none;">
 
-                                    <img width="40" src="~/Upload/Avatar/@nv.HinhDaiDien" />
+                                    <img width="40" src="~/Upload/Avatar/images.png" />
                                     <textarea type="text" data-MaCha="@item.Id" class="txt-traloi-binhluan" placeholder="Viết bình luận của bạn..." ></textarea>
                                 </div>
                             </div>
@@ -416,7 +416,7 @@
     });
 
 
-    //them binh luan
+    @*//them binh luan
     $('body').delegate('.txt-binhluan', 'keypress', function (e) {
 
         if (e.which == 13 && $(this).val().trim() != "") {
@@ -425,6 +425,24 @@
                 url: '@Url.Action("luuBinhLuan_ajax", "TinTuc")',
                 type: "POST",
                 data: { matin: $('#MaTin').val(), noidung: $(this).val() },
+                success: function (result) {
+                    $('.hienthi-binhluan').prepend(result);
+                    $('.txt-binhluan').val("");
+                    $('#loading_gif').hide();
+                },
+            });
+        }
+    });*@
+
+    //them binh luan
+    $('body').delegate('.txt-luu', 'click', function (e) {
+
+        if ($('.txt-binhluan').val().trim() != "") {
+            $('#loading_gif').show();
+            $.ajax({
+                url: '@Url.Action("luuBinhLuan_ajax", "TinTuc")',
+                type: "POST",
+                data: { matin: $('#MaTin').val(), noidung: $('.txt-binhluan').val() },
                 success: function (result) {
                     $('.hienthi-binhluan').prepend(result);
                     $('.txt-binhluan').val("");
@@ -512,7 +530,7 @@
     }
 
 
-    .txt-traloi, .txt-huy-sua , #hien-binhluan{
+    .txt-traloi, .txt-huy-sua , .txt-luu , #hien-binhluan{
         cursor: pointer;
         color: blue;
     }
@@ -537,7 +555,7 @@
     }
 
     .txt-binhluan, .txt-traloi-binhluan {
-        height: 35px;
+        height: 75px;
         padding-left: 10px;
         width: 90%;
     }
