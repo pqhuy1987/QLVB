@@ -74,151 +74,246 @@
         </div>
 
         <div class="col-md-9 ">
-            <div class="index-trai-duoi">
-                @{  
-                    string sClassGrab2 = "";
-                    if (Model.MaDanhMuc == 5)
-                    {
-                        sClassGrab2 = "gradBlue";
-                    }
-                    if (Model.MaDanhMuc == 6)
-                    {
-                        sClassGrab2 = "gradRed";
-                    }
-                    if (Model.MaDanhMuc == 7)
-                    {
-                        sClassGrab2 = "gradGreen";
-                    }
-                 }
-                @*<div class="col-md-12" style="padding:0;">
-                   <div id="@sClassGrab2">@lstDMTinTuc.SingleOrDefault(n => n.MaDanhMuc == Model.MaDanhMuc).TenDanhMuc.ToUpper()</div>
-                </div>*@
-
-                <h3><b>@Model.TieuDe</b></h3>
-                <span class="body-content"><i class="fa fa-clock-o color-sea"></i> @Model.NgayDang.Value.ToString("HH:mm dd/MM/yyyy")</span>
-                <span class="body-content"><i class="fa fa-eye color-sea"></i> @Model.LuotXem</span>
-                <span class="body-content"><i class="fa fa-comment color-sea"></i> @Model.LuotBinhLuan</span>
-                <span class="body-content"><i class="fa fa-thumbs-up color-sea"></i> @Model.LuotThich</span>
-                <hr style="margin:20px 0" />
-
-                <div class="col-md-12 chitiettin-noidung" style="padding:0">
-                    @Html.Raw(Model.NoiDung)
-                </div>
-
-                <hr />
-                @{ 
-                    QLVB.Models.NhanVien nv = (QLVB.Models.NhanVien)Session["DangNhap"];
-
-                    string sClsDanhGia = "";
-
-                    if (lstDanhGia.Where(n => n.MaTin == Model.MaTinTuc && n.IdNhanVien == nv.Id).Count() > 0)
-                    {
-                        sClsDanhGia = "a-liked";
-                    }
-                }
-                <div class="a-like @sClsDanhGia" > Like</div>
-                <div class="a-binhluan " ><i style="position: relative;top: 3px;" class="glyphicon glyphicon-comment"></i> Bình luận tin tức</div>
-               
-                <div class="clearfix"></div>
-
-                <div class="col-md-12" style="padding:0">
-
-                    @Html.Hidden("MaTin", Model.MaTinTuc) 
-                      
-                    @if (Model.ChoPhepBinhLuan == true)
-                    {
-                        <img width="40" src="~/Upload/Avatar/images.png" />
-
-                        <textarea type="text" class="txt-binhluan" placeholder="Viết bình luận của bạn..." ></textarea>
-                        <p style="font-size:12px; margin-left: 45px; margin-top: 10px; "> <a class="txt-luu">Gửi Bình Luận</a></p>
-
-                    }
-                <div class="hienthi-binhluan">
-                    @{ int iAnDiv = 0; string clsAn = ""; string sTheA = "";}
-
-                    @foreach (var item in lstBinhLuan.Where(n => n.MaBinhLuanCha == 0).OrderByDescending(n=>n.NgayBinhLuan))
-                    {
-                        iAnDiv++;
-                        if(iAnDiv>3)
+            <div class="index-phai-tren">
+                <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+                    <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                <i class="fa fa-bars text-danger"></i> Tóm tắt vấn đề
+                            </a>
+                        </li>
+                        @if (HttpContext.Current.User.IsInRole("TAI-VB"))
                         {
-                            clsAn = "hidden";
-                            sTheA = "<a id='hien-binhluan'>Hiển thị tất cả bình luận</a>";
+                            <li role="presentation" class="">
+                                <a href="#taive" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                    <i class="fa fa-download text-danger"></i> Tải về
+                                </a>
+                            </li>
                         }
+                        @if (HttpContext.Current.User.IsInRole("XEM-REVISION"))
+                        {
+                            <li role="presentation" class="">
+                                <a href="#revision" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                    <i class="fa fa-pencil-square text-danger"></i> revision
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active in" role="tabpanel" id="home" aria-labelledby="profile-tab">
+                            <div class="container table-responsive">
+                                    @{
+                                        string sClassGrab2 = "";
+                                        if (Model.MaDanhMuc == 5)
+                                        {
+                                            sClassGrab2 = "gradBlue";
+                                        }
+                                        if (Model.MaDanhMuc == 6)
+                                        {
+                                            sClassGrab2 = "gradRed";
+                                        }
+                                        if (Model.MaDanhMuc == 7)
+                                        {
+                                            sClassGrab2 = "gradGreen";
+                                        }
+                                    }
+                                    @*<div class="col-md-12" style="padding:0;">
+               <div id="@sClassGrab2">@lstDMTinTuc.SingleOrDefault(n => n.MaDanhMuc == Model.MaDanhMuc).TenDanhMuc.ToUpper()</div>
+            </div>*@
 
-                        <div @clsAn class="hienthi-binhluan-item">
-                            <textarea hidden id="txt-noidung" >@item.NoiDung</textarea>
-                            <div class="hienthi-binhluan-img">
-                                <img width="40" src="~/Upload/Avatar/images.png" />
-                            </div>
-                            <div class="hienthi-binhluan-noidung">
-                                <b>@item.NhanVien.TenDangNhap</b> <span class="noidung-chinhsua" data-MaCha="@item.Id">  @item.NoiDung</span>
-                                <p style="font-size:12px"> <a class="txt-traloi">Trả lời</a> - <span style="color:silver">
-                                    @QLVB.Models.Tools.ThoiGianBinhLuan(item.NgayBinhLuan.Value)
-                                    </span></p>
-                            </div>
+                                    <h3><b>@Model.TieuDe</b></h3>
+                                    <span class="body-content"><i class="fa fa-clock-o color-sea"></i> @Model.NgayDang.Value.ToString("HH:mm dd/MM/yyyy")</span>
+                                    <span class="body-content"><i class="fa fa-eye color-sea"></i> @Model.LuotXem</span>
+                                    <span class="body-content"><i class="fa fa-comment color-sea"></i> @Model.LuotBinhLuan</span>
+                                    <span class="body-content"><i class="fa fa-thumbs-up color-sea"></i> @Model.LuotThich</span>
+                                    <hr style="margin:20px 0" />
 
-                            @if (item.IdNhanVien == nv.Id)
-                            {
-                                <i class="fa fa-pencil btn-suaBL" data-MaCha="@item.Id"></i> 
-                            }
-                            @if (item.IdNhanVien == nv.Id || HttpContext.Current.User.IsInRole("XOA-CM"))
-                            {
-                                <i data-MaCha="@item.Id" class="fa fa-times btn-xoaBL"></i>
-                            }
+                                    <div class="col-md-12 chitiettin-noidung" style="padding:0">
+                                        @Html.Raw(Model.NoiDung)
+                                    </div>
 
-                            <div class="clearfix" style="margin-bottom:10px"></div>
+                                    <hr />
+                                    @{
+                                        QLVB.Models.NhanVien nv = (QLVB.Models.NhanVien)Session["DangNhap"];
 
-                            <div class="hienthi-binhluan-con">
+                                        string sClsDanhGia = "";
 
-                                <div class="div-traloi-binhluan-con">
+                                        if (lstDanhGia.Where(n => n.MaTin == Model.MaTinTuc && n.IdNhanVien == nv.Id).Count() > 0)
+                                        {
+                                            sClsDanhGia = "a-liked";
+                                        }
+                                    }
+                                    <div class="a-like @sClsDanhGia"> Like</div>
+                                    <div class="a-binhluan "><i style="position: relative;top: 3px;" class="glyphicon glyphicon-comment"></i> Bình luận </div>
 
-                                    @foreach (var itemcon in lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).OrderBy(n => n.NgayBinhLuan))
-                                    {
+                                    <div class="clearfix"></div>
 
-                                        <div hidden class="hienthi-binhluan-item">
-                                            <textarea hidden id="txt-noidung" >@itemcon.NoiDung</textarea>
-                                            <div class="hienthi-binhluan-img">
-                                                <img width="40" src="~/Upload/Avatar/images.png" />
-                                            </div>
-                                            <div class="hienthi-binhluan-noidung">
-                                                <b>@itemcon.NhanVien.TenDangNhap</b> <span class="noidung-chinhsua" data-MaCha="@itemcon.Id">@itemcon.NoiDung</span>
-                                                <p style="font-size:12px"> <a class="txt-traloi">Trả lời</a> - <span style="color:silver">@QLVB.Models.Tools.ThoiGianBinhLuan(itemcon.NgayBinhLuan.Value)</span></p>
-                                            </div>
-                                            @if (itemcon.IdNhanVien == nv.Id)
+                                    <div class="col-md-12" style="padding:0">
+
+                                        @Html.Hidden("MaTin", Model.MaTinTuc)
+
+                                        @if (Model.ChoPhepBinhLuan == true)
+                                        {
+                                            <img width="40" src="~/Upload/Avatar/images.png" />
+
+                                            <textarea type="text" class="txt-binhluan" placeholder="Viết bình luận của bạn..."></textarea>
+                                            <p style="font-size:12px; margin-left: 45px; margin-top: 10px; "> <a class="txt-luu">Gửi Bình Luận</a></p>
+
+                                        }
+                                        <div class="hienthi-binhluan">
+                                            @{ int iAnDiv = 0; string clsAn = ""; string sTheA = "";}
+
+                                            @foreach (var item in lstBinhLuan.Where(n => n.MaBinhLuanCha == 0).OrderByDescending(n => n.NgayBinhLuan))
                                             {
-                                                <i class="fa fa-pencil btn-suaBL" data-MaCha="@itemcon.Id"></i> 
-                                            }
-                                            @if (itemcon.IdNhanVien == nv.Id || HttpContext.Current.User.IsInRole("XOA-CM"))
-                                            {
-                                                <i data-MaCha="@itemcon.Id" class="fa fa-times btn-xoaBL"></i>
-                                            }
+                                                iAnDiv++;
+                                                if (iAnDiv > 3)
+                                                {
+                                                    clsAn = "hidden";
+                                                    sTheA = "<a id='hien-binhluan'>Hiển thị tất cả bình luận</a>";
+                                                }
 
-                                            <div class="clearfix" style="margin-bottom:10px"></div>
+                                                <div @clsAn class="hienthi-binhluan-item">
+                                                    <textarea hidden id="txt-noidung">@item.NoiDung</textarea>
+                                                    <div class="hienthi-binhluan-img">
+                                                        <img width="40" src="~/Upload/Avatar/images.png" />
+                                                    </div>
+                                                    <div class="hienthi-binhluan-noidung">
+                                                        <b>@item.NhanVien.TenDangNhap</b> <span class="noidung-chinhsua" data-macha="@item.Id">  @item.NoiDung</span>
+                                                        <p style="font-size:12px">
+                                                            <a class="txt-traloi">Trả lời</a> - <span style="color:silver">
+                                                                @QLVB.Models.Tools.ThoiGianBinhLuan(item.NgayBinhLuan.Value)
+                                                            </span>
+                                                        </p>
+                                                    </div>
+
+                                                    @if (item.IdNhanVien == nv.Id)
+                                                    {
+                                                        <i class="fa fa-pencil btn-suaBL" data-macha="@item.Id"></i>
+                                                    }
+                                                    @if (item.IdNhanVien == nv.Id || HttpContext.Current.User.IsInRole("XOA-CM"))
+                                                    {
+                                                        <i data-macha="@item.Id" class="fa fa-times btn-xoaBL"></i>
+                                                    }
+
+                                                    <div class="clearfix" style="margin-bottom:10px"></div>
+
+                                                    <div class="hienthi-binhluan-con">
+
+                                                        <div class="div-traloi-binhluan-con">
+
+                                                            @foreach (var itemcon in lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).OrderBy(n => n.NgayBinhLuan))
+                                                            {
+
+                                                                <div hidden class="hienthi-binhluan-item">
+                                                                    <textarea hidden id="txt-noidung">@itemcon.NoiDung</textarea>
+                                                                    <div class="hienthi-binhluan-img">
+                                                                        <img width="40" src="~/Upload/Avatar/images.png" />
+                                                                    </div>
+                                                                    <div class="hienthi-binhluan-noidung">
+                                                                        <b>@itemcon.NhanVien.TenDangNhap</b> <span class="noidung-chinhsua" data-macha="@itemcon.Id">@itemcon.NoiDung</span>
+                                                                        <p style="font-size:12px"> <a class="txt-traloi">Trả lời</a> - <span style="color:silver">@QLVB.Models.Tools.ThoiGianBinhLuan(itemcon.NgayBinhLuan.Value)</span></p>
+                                                                    </div>
+                                                                    @if (itemcon.IdNhanVien == nv.Id)
+                                                                    {
+                                                                        <i class="fa fa-pencil btn-suaBL" data-macha="@itemcon.Id"></i>
+                                                                    }
+                                                                    @if (itemcon.IdNhanVien == nv.Id || HttpContext.Current.User.IsInRole("XOA-CM"))
+                                                                    {
+                                                                        <i data-macha="@itemcon.Id" class="fa fa-times btn-xoaBL"></i>
+                                                                    }
+
+                                                                    <div class="clearfix" style="margin-bottom:10px"></div>
+                                                                </div>
+                                                            }
+
+                                                            @if (lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).Count() > 0)
+                                                            {
+                                                                <a id='hien-binhluan'>Hiển thị @lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).Count() trả lời</a>;
+                                                            }
+                                                            <div style="margin-bottom:10px"></div>
+                                                        </div>
+
+                                                        <div class="div-traloi-binhluan" style="margin-bottom:10px;display:none;">
+
+                                                            <img width="40" src="~/Upload/Avatar/images.png" />
+                                                            <textarea type="text" data-macha="@item.Id" class="txt-traloi-binhluan" placeholder="Viết bình luận của bạn..."></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            }
+                                            @Html.Raw(sTheA)
                                         </div>
-                                    }
 
-                                    @if (lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).Count() > 0)
-                                    {
-                                        <a id='hien-binhluan'>Hiển thị @lstBinhLuan.Where(n => n.MaBinhLuanCha == item.Id).Count() trả lời</a>;
-                                    }
-                                    <div style="margin-bottom:10px"></div>
-                                </div>
-
-                                <div class="div-traloi-binhluan" style="margin-bottom:10px;display:none;">
-
-                                    <img width="40" src="~/Upload/Avatar/images.png" />
-                                    <textarea type="text" data-MaCha="@item.Id" class="txt-traloi-binhluan" placeholder="Viết bình luận của bạn..." ></textarea>
-                                </div>
+                                    </div>
                             </div>
-
                         </div>
-                    }
-                  @Html.Raw(sTheA)
-                </div>
+                        <div class="tab-pane fade" role="tabpanel" id="taive" aria-labelledby="profile-tab">
+                            <div class="container table-responsive">
+                                <table class="table table-bordered table-striped ">
+                                    <tr>
+                                        <th colspan="3">
+                                            @Model.LoaiTinTuc
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">
+                                            @if (Model.LoaiTinTuc != null)
+                                            {
+                                                <i class="text-danger fa fa-file-pdf-o"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id = Model.LoaiTinTuc, @ng = "/Upload/filePDF/" + Model.LoaiTinTuc })"> TẢI BẢN PDF</a>
+                                            }
+                                        </th>
+                                        <th class="text-center">
+                                            @if (Model.LoaiTinTuc != null)
+                                            {
+                                                <i class="text-danger fa fa-vine"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id = Model.LoaiTinTuc, @ng = "/Upload/fileDOCTV/" + Model.LoaiTinTuc })"> TẢI BẢN TIẾNG VIỆT</a>
+                                            }
+                                        </th>
+                                        <th class="text-center">
+                                            @if (Model.LoaiTinTuc != null)
+                                            {
+                                                <i class="text-danger fa fa-font"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id = Model.LoaiTinTuc, @ng = "/Upload/fileDOCTA/" + Model.LoaiTinTuc })">TẢI BẢN TIẾNG ANH</a>
+                                            }
+                                        </th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="revision" aria-labelledby="profile-tab">
+                            <div class="container table-responsive">
+                                <table id="tbRevision" class="table table-bordered table-striped text-center">
+                                    <tr>
+                                        <td><i class="fa fa-list text-danger"></i> Phiên bản </td>
+                                        <td><i class="fa fa-vine text-danger"></i> Tiếng Việt</td>
+                                        <td><i class="fa fa-font text-danger"></i> Tiếng Anh</td>
+                                    </tr>
 
+                                    @foreach (var itemTem in lstBinhLuan.Where(n => n.MaBinhLuanCha == 11).OrderBy(n => n.NgayBinhLuan))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <b>@itemTem.IdNhanVien</b>
+                                            </td>
+                                            <td id="tdReTV">
+                                                @if (true)
+                                                {
+                                                    <a href="/Upload/revision/@itemTem.IdNhanVien"><i class="fa fa-download"></i> DOWNLOAD  </a>
+                                                }
+                                            </td>
+                                            <td id="tdReTA">
+                                                @if (true)
+                                                {
+                                                    <a href="/Upload/revision/@itemTem.IdNhanVien"><i class="fa fa-download"></i> DOWNLOAD  </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
         <div class="col-md-3 ">
             <div class="index-phai-tren">
