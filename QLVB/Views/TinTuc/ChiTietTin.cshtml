@@ -236,8 +236,8 @@
                                                         <div class="div-traloi-binhluan" style="margin-bottom:10px;display:none;">
 
                                                             <img width="40" src="~/Upload/Avatar/images.png" />
-                                                            <textarea type="text" id="@item.Id" data-macha="@item.Id" class="txt-traloi-binhluan" placeholder="Viết bình luận của bạn..."></textarea>
-                                                            <p style="font-size:12px; margin-left: 45px; margin-top: 10px; "> <a id="@item.Id" class="txt-luu-traloi"> Gửi Bình Luận </a> </p>
+                                                            <textarea type="text" class="txt-traloi-binhluan" data-macha="@item.Id" placeholder="Viết bình luận của bạn..."></textarea>
+                                                            <p style="font-size:12px; margin-left: 45px; margin-top: 10px; "> <a class="txt-luu-traloi" data-macha="@item.Id"> Gửi Bình Luận </a> </p>
                                                             
                                                         </div>
                                                     </div>
@@ -550,7 +550,7 @@
     });
 
     //tra loi binh luan
-    $('body').delegate('.txt-traloi-binhluan', 'keypress', function (e) {
+    @*$('body').delegate('.txt-traloi-binhluan', 'keypress', function (e) {
         var element = $(this)
         if (e.which == 13 && $(this).val() != "") {
             $('#loading_gif').show();
@@ -566,37 +566,30 @@
                 },
             });
         }
-    });
+    });*@
 
-    @*//tra loi binh luan
+    //tra loi binh luan
     $('body').delegate('.txt-luu-traloi', 'click', function (e) {
-        console.log('tesdsađaa');
 
-        var hasID = $(this).attr('id');
+        var hasID = $(this).attr("data-macha");
+        //$(".txt-luu-traloi[data-macha='" + hasID + "']").hide();
         //alert(hasID);
-        var IDvalue = $("#" + hasID).val();
-        //alert(IDvalue);
-        var element = $("#" + hasID).val();
-        if ($("#" + hasID).val().trim() != "") {
+        var IDvalue = $(".txt-traloi-binhluan[data-macha='" + hasID + "']").val();
+        var element = $(".txt-traloi-binhluan[data-macha='" + hasID + "']");
+        if ($(".txt-traloi-binhluan[data-macha='" + hasID + "']").val().trim() != "") {
             $('#loading_gif').show();
             $.ajax({
                 url: '@Url.Action("TraLoiBinhLuan_ajax", "TinTuc")',
                 type: "POST",
-                data: { matin: $('#MaTin').val(), noidung: $("#" + hasID).val(), macha: $("#" + hasID).attr('data-MaCha') },
+                data: { matin: $('#MaTin').val(), noidung: $(".txt-traloi-binhluan[data-macha='" + hasID + "']").val(), macha: $(".txt-traloi-binhluan[data-macha='" + hasID + "']").attr('data-MaCha') },
                 success: function (result) {
-                    //alert("test");
-                    //$('#loading_gif').hide();
-                    //alert("test 2");
-                    console.log(result);
                     element.parents(".hienthi-binhluan-con:first").find('.div-traloi-binhluan-con').append(result);
-                    alert("test 3");
-                    $("#" + hasID).val("");
-                    alert("test 4");
-                    //$('#loading_gif').hide();
+                    $(".txt-traloi-binhluan[data-macha='" + hasID + "']").val("");
+                    $('#loading_gif').hide();
                 },
             });
         }
-    });*@
+    });
 
     //hien thi binh luan
     $('body').delegate('#hien-binhluan', 'click', function (e) {

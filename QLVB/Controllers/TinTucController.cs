@@ -136,7 +136,7 @@ namespace QLVB.Controllers
                 sNoiDung += "<div class='div-traloi-binhluan' style='margin-bottom:10px;display:none;'>";
                 sNoiDung += "<img width='40' src='/Upload/Avatar/images.png' /> ";
                 sNoiDung += "<textarea type='text' data-MaCha='" + themBL.Id+ "' class='txt-traloi-binhluan' placeholder='Viết bình luận của bạn...' ></textarea>";
-                //sNoiDung += "<p style='font-size:12px; margin-left: 45px; margin-top: 10px; '> <a class='txt-luu-traloi'>Gửi Bình Luận</a></p>";
+                sNoiDung += "<p style='font-size:12px; margin-left: 45px; margin-top: 10px; '> <a class='txt-luu-traloi' data-MaCha='" + themBL.Id + "'>Gửi Bình Luận</a></p>";
                 sNoiDung += " </div></div></div>";
 
 
@@ -175,9 +175,9 @@ namespace QLVB.Controllers
                 sNoiDung += "<img width = '40' src='/Upload/Avatar/images.png' /></div>";
                 sNoiDung += "<div class='hienthi-binhluan-noidung'><b>" + nv.TenDangNhap + " </b> <span class='noidung-chinhsua' data-MaCha='" + themBL.Id + "'>" + noidung + "</span>";
                 sNoiDung += "<p style='font-size:12px'><a class='txt-traloi'>Trả lời</a> - <span style='color: silver'> Vừa xong </span></p> </div> ";
-                sNoiDung += "<i class='fa fa-pencil btn-suaBL' id="+ themBL.Id +"  data-MaCha='" + themBL.Id + "'></i> <i class='fa fa-times btn-xoaBL'  data-MaCha='" + themBL.Id + "'></i>";
+                sNoiDung += "<i class='fa fa-pencil btn-suaBL' data-MaCha='" + themBL.Id + "'></i> <i class='fa fa-times btn-xoaBL'  data-MaCha='" + themBL.Id + "'></i>";
                 sNoiDung += "<div class='clearfix' style='margin-bottom:10px'></div> </div>";
-                sNoiDung += "<p style='font-size:12px; margin-left: 45px; margin-top: 10px; '> <a id="+ themBL.Id +"class='txt-luu-traloi'> Gửi Bình Luận </a> </p>";
+                //sNoiDung += "<p style='font-size:12px; margin-left: 45px; margin-top: 10px; '> <a class='txt-luu-traloi' data-MaCha='" + themBL.Id + "'> Gửi Bình Luận </a> </p>";
 
                 return Content(sNoiDung);
             }
