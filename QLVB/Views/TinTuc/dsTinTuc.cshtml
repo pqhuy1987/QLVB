@@ -12,6 +12,59 @@
 }
 <div class="page-content-inner">
     <div class="row">
+        <div class="col-md-3 ">
+            <div class="index-phai-tren">
+                <div class="div-title">
+                    <span class="span-title">
+                        Tìm kiếm
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12" style="padding:0">
+                    @using (Html.BeginForm("dsTinTuc", "TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        <input name="txtTimKiem" class="text-sea" placeholder="Nội dung tìm kiếm" />
+                        <p></p>
+                        <input class="btn-sea" style="width:100%" type="submit" value="Tìm kiếm" />
+                    }
+                </div>
+
+            </div>
+            <div class="index-phai-tren">
+
+                <div class="div-title">
+                    <span class="span-title">
+                        Danh mục dự án
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                @{ int iSTTTin = 0; }
+                @foreach (var item in lstDMTinTuc)
+                {
+                    iSTTTin++;
+                    string sClassGrab = "";
+                    if (iSTTTin == 1)
+                    {
+                        sClassGrab = "gradBlue";
+                    }
+                    if (iSTTTin == 2)
+                    {
+                        sClassGrab = "gradRed";
+                    }
+                    if (iSTTTin == 3)
+                    {
+                        sClassGrab = "gradGreen";
+                    }
+
+                    <div class="col-md-12" style="padding: 0 0 2px 0;">
+
+                        <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })"> <div id="@sClassGrab">@item.TenDanhMuc.ToUpper()</div></a>
+                    </div>
+
+                }
+
+            </div>
+        </div>
         <div class="col-md-9 ">
             <div class="index-trai-tren">
                 @{int i = 0; string sClass = "";}
@@ -58,60 +111,6 @@
                 </div>
             </div>
 
-
-        </div>
-        <div class="col-md-3 ">
-            <div class="index-phai-tren">
-                <div class="div-title">
-                    <span class="span-title">
-                        Tìm kiếm
-                    </span>
-                </div>
-                <div style="clear:both"></div>
-                <div class="col-md-12" style="padding:0">
-                    @using (Html.BeginForm("dsTinTuc", "TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
-                    {
-                        <input name="txtTimKiem" class="text-sea" placeholder="Nội dung tìm kiếm" />
-                        <p></p>
-                        <input class="btn-sea" style="width:100%" type="submit" value="Tìm kiếm" />
-                    }
-                </div>
-
-            </div>
-            <div class="index-phai-tren">
-
-                <div class="div-title">
-                    <span class="span-title">
-                        Danh Mục Dự Án
-                    </span>
-                </div>
-                <div style="clear:both"></div>
-                @{ int iSTTTin = 0; }
-                @foreach (var item in lstDMTinTuc)
-                {
-                    iSTTTin++;
-                    string sClassGrab = "";
-                    if (iSTTTin == 1)
-                    {
-                        sClassGrab = "gradBlue";
-                    }
-                    if (iSTTTin == 2)
-                    {
-                        sClassGrab = "gradRed";
-                    }
-                    if (iSTTTin == 3)
-                    {
-                        sClassGrab = "gradGreen";
-                    }
-
-                    <div class="col-md-12" style="padding: 0 0 2px 0;">
-
-                        <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })"> <div id="@sClassGrab">@item.TenDanhMuc.ToUpper()</div></a>
-                    </div>
-
-                }
-
-            </div>
 
         </div>
     </div>

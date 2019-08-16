@@ -191,6 +191,6 @@ D:\QLVB\QLVB\bin\System.Web.WebPages.Razor.xml
 D:\QLVB\QLVB\bin\System.Web.Optimization.xml
 D:\QLVB\QLVB\bin\Newtonsoft.Json.xml
 D:\QLVB\QLVB\bin\Antlr3.Runtime.pdb
+D:\QLVB\QLVB\obj\Debug\Portal.csprojResolveAssemblyReference.cache
 D:\QLVB\QLVB\obj\Debug\QLVB.dll
 D:\QLVB\QLVB\obj\Debug\QLVB.pdb
-D:\QLVB\QLVB\obj\Debug\Portal.csprojResolveAssemblyReference.cache

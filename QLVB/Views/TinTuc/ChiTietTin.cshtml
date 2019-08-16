@@ -72,6 +72,68 @@
                 </a>
             </div>
         </div>
+        <div class="col-md-3 ">
+            <div class="index-trai-duoi">
+                <div class="div-title">
+                    <span class="span-title">
+                        Tìm kiếm
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12" style="padding:0">
+                    @using (Html.BeginForm("dsTinTuc", "TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        <input name="txtTimKiem" class="text-sea" placeholder="Nội dung tìm kiếm" />
+                        <p></p>
+                        <input class="btn-sea" style="width:100%" type="submit" value="Tìm kiếm" />
+                    }
+                </div>
+
+            </div>
+            <div class="index-trai-duoi">
+
+                <div class="div-title">
+                    <span class="span-title">
+                        Danh mục dự án
+                    </span>
+                </div>
+                <div style="clear:both"></div>
+                <ul class="ul-content">
+                    
+                    @foreach (var item in lstDMTinTuc)
+                    {   @item.DanhMucCha; 
+                        <li>
+                            <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })">@item.TenDanhMuc <span style="color:#ccc">(@dsTinTuc.Where(n => n.MaDanhMuc == item.MaDanhMuc).Count())</span></a>
+                            <i class="fa fa-angle-double-right"></i>
+                        </li>
+                    }
+                </ul>
+                @*@{ int iSTTTin = 0; }
+                @foreach (var item in lstDMTinTuc)
+                {
+                    iSTTTin++;
+                    string sClassGrab = "";
+                    if (iSTTTin == 1)
+                    {
+                        sClassGrab = "gradBlue";
+                    }
+                    if (iSTTTin == 2)
+                    {
+                        sClassGrab = "gradRed";
+                    }
+                    if (iSTTTin == 3)
+                    {
+                        sClassGrab = "gradGreen";
+                    }
+
+                    <div class="col-md-12" style="padding: 0 0 2px 0;">
+
+                        <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })"> <div id="@sClassGrab">@item.TenDanhMuc.ToUpper()</div></a>
+                    </div>
+
+                }*@
+            </div>
+        </div>
 
         <div class="col-md-9 ">
             <div class="index-phai-tren">
@@ -317,88 +379,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 ">
-            <div class="index-phai-tren">
-                <div class="div-title">
-                    <span class="span-title">
-                        Tìm kiếm
-                    </span>
-                </div>
-                <div style="clear:both"></div>
-                <div class="col-md-12" style="padding:0">
-                    @using (Html.BeginForm("dsTinTuc", "TinTuc", FormMethod.Post, new { @class = "form-horizontal" }))
-                    {
-                        <input name="txtTimKiem" class="text-sea" placeholder="Nội dung tìm kiếm" />
-                        <p></p>
-                        <input class="btn-sea" style="width:100%" type="submit" value="Tìm kiếm" />
-                    }
-                </div>
-
-            </div>
-            <div class="index-phai-tren">
-
-                <div class="div-title">
-                    <span class="span-title">
-                        Tin tức
-                    </span>
-                </div>
-                <div style="clear:both"></div>
-                @*<ul class="ul-content">
-                    @foreach (var item in lstDMTinTuc)
-                    {
-                        <li>
-                            <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })">@item.TenDanhMuc <span style="color:#ccc">(@dsTinTuc.Where(n => n.MaDanhMuc == item.MaDanhMuc).Count())</span></a>
-                            <i class="fa fa-angle-double-right"></i>
-                        </li>
-                    }
-                </ul>*@
-                @{ int iSTTTin = 0; }
-                @foreach (var item in lstDMTinTuc)
-                {
-                    iSTTTin++;
-                    string sClassGrab = "";
-                    if (iSTTTin == 1)
-
-                    {
-                        sClassGrab = "gradBlue";
-                    }
-                    if (iSTTTin == 2)
-                    {
-                        sClassGrab = "gradRed";
-                    }
-                    if (iSTTTin == 3)
-                    {
-                        sClassGrab = "gradGreen";
-                    }
-
-                    <div class="col-md-12" style="padding: 0 0 2px 0;">
-
-                        <a href="@Url.Action("dsTinTuc", "TinTuc", new { @m=item.MaDanhMuc })"> <div id="@sClassGrab">@item.TenDanhMuc.ToUpper()</div></a>
-                    </div>
-
-                }
-            </div>
-
-            <div class="index-phai-tren">
-                <div class="div-title">
-                    <span class="span-title">
-                        Văn bản nội bộ
-                    </span>
-                </div>
-                <div style="clear:both"></div>
-                <ul class="ul-content">
-                    @foreach (var item in lstLoaiVanBan)
-                    {
-                        <li>
-                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan=item.MaLoaiTL })">@item.TenLoaiTL <span style="color:#ccc">(@lstTaiLieu.Where(n => n.LoaiVanBan == item.MaLoaiTL).Count())</span></a>
-                        <i class="fa fa-angle-double-right" ></i>
-                    </li>
-                    }
-                </ul>
-
-            </div>
-
-        </div>
     </div>
 </div>
 <style>
@@ -572,8 +552,6 @@
     $('body').delegate('.txt-luu-traloi', 'click', function (e) {
 
         var hasID = $(this).attr("data-macha");
-        //$(".txt-luu-traloi[data-macha='" + hasID + "']").hide();
-        //alert(hasID);
         var IDvalue = $(".txt-traloi-binhluan[data-macha='" + hasID + "']").val();
         var element = $(".txt-traloi-binhluan[data-macha='" + hasID + "']");
         if ($(".txt-traloi-binhluan[data-macha='" + hasID + "']").val().trim() != "") {
