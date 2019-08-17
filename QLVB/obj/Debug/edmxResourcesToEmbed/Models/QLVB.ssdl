@@ -178,6 +178,15 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
     <Property Name="RecurrenceRule" Type="nvarchar" MaxLength="1000" />
     <Property Name="RecurrenceParentId" Type="nvarchar" MaxLength="10" />
   </EntityType>
+  <EntityType Name="LoaiCongTruong">
+    <Key>
+      <PropertyRef Name="MaLoaiCT" />
+    </Key>
+    <Property Name="MaLoaiCT" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenLoaiCT" Type="nvarchar(max)" />
+    <Property Name="CapCongTruong" Type="int" />
+    <Property Name="ThuTu" Type="int" />
+  </EntityType>
   <EntityType Name="LoaiTaiLieu">
     <Key>
       <PropertyRef Name="MaLoaiTL" />
@@ -364,6 +373,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
     <Property Name="TrangThai" Type="bit" />
     <Property Name="NgayDang" Type="datetime" />
     <Property Name="NgayTao" Type="datetime" />
+    <Property Name="MaLoaiCT" Type="int" />
   </EntityType>
   <EntityType Name="VB_BMLQ">
     <Key>
@@ -817,6 +827,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
     <EntitySet Name="ID" EntityType="Self.ID" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LichHop" EntityType="Self.LichHop" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LichHop_BLD" EntityType="Self.LichHop_BLD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoaiCongTruong" EntityType="Self.LoaiCongTruong" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LoaiTaiLieu" EntityType="Self.LoaiTaiLieu" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LuotXemTai" EntityType="Self.LuotXemTai" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NhanVien" EntityType="Self.NhanVien" Schema="dbo" store:Type="Tables" />

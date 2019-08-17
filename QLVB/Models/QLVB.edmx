@@ -183,6 +183,15 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
           <Property Name="RecurrenceRule" Type="nvarchar" MaxLength="1000" />
           <Property Name="RecurrenceParentId" Type="nvarchar" MaxLength="10" />
         </EntityType>
+        <EntityType Name="LoaiCongTruong">
+          <Key>
+            <PropertyRef Name="MaLoaiCT" />
+          </Key>
+          <Property Name="MaLoaiCT" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenLoaiCT" Type="nvarchar(max)" />
+          <Property Name="CapCongTruong" Type="int" />
+          <Property Name="ThuTu" Type="int" />
+        </EntityType>
         <EntityType Name="LoaiTaiLieu">
           <Key>
             <PropertyRef Name="MaLoaiTL" />
@@ -369,6 +378,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
           <Property Name="TrangThai" Type="bit" />
           <Property Name="NgayDang" Type="datetime" />
           <Property Name="NgayTao" Type="datetime" />
+          <Property Name="MaLoaiCT" Type="int" />
         </EntityType>
         <EntityType Name="VB_BMLQ">
           <Key>
@@ -822,6 +832,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
           <EntitySet Name="ID" EntityType="Self.ID" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LichHop" EntityType="Self.LichHop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LichHop_BLD" EntityType="Self.LichHop_BLD" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoaiCongTruong" EntityType="Self.LoaiCongTruong" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoaiTaiLieu" EntityType="Self.LoaiTaiLieu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LuotXemTai" EntityType="Self.LuotXemTai" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NhanVien" EntityType="Self.NhanVien" Schema="dbo" store:Type="Tables" />
@@ -1133,6 +1144,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="LoaiCongTruongs" EntityType="QLVBModel.LoaiCongTruong" />
         </EntityContainer>
         <EntityType Name="Banner">
           <Key>
@@ -1486,6 +1498,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
           <Property Name="NgayDang" Type="DateTime" Precision="3" />
           <Property Name="NgayTao" Type="DateTime" Precision="3" />
           <NavigationProperty Name="BinhLuans" Relationship="QLVBModel.FK_BinhLuan_TinTuc" FromRole="TinTuc" ToRole="BinhLuan" />
+          <Property Name="MaLoaiCT" Type="Int32" />
         </EntityType>
         <EntityType Name="VB_VBCC">
           <Key>
@@ -1953,6 +1966,15 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="LoaiCongTruong">
+          <Key>
+            <PropertyRef Name="MaLoaiCT" />
+          </Key>
+          <Property Name="MaLoaiCT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenLoaiCT" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CapCongTruong" Type="Int32" />
+          <Property Name="ThuTu" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2277,6 +2299,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
           <EntitySetMapping Name="TinTucs">
             <EntityTypeMapping TypeName="QLVBModel.TinTuc">
               <MappingFragment StoreEntitySet="TinTuc">
+                <ScalarProperty Name="MaLoaiCT" ColumnName="MaLoaiCT" />
                 <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
                 <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
                 <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
@@ -2418,6 +2441,16 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="QLVBModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="QLVBModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="LoaiCongTruongs">
+            <EntityTypeMapping TypeName="QLVBModel.LoaiCongTruong">
+              <MappingFragment StoreEntitySet="LoaiCongTruong">
+                <ScalarProperty Name="ThuTu" ColumnName="ThuTu" />
+                <ScalarProperty Name="CapCongTruong" ColumnName="CapCongTruong" />
+                <ScalarProperty Name="TenLoaiCT" ColumnName="TenLoaiCT" />
+                <ScalarProperty Name="MaLoaiCT" ColumnName="MaLoaiCT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

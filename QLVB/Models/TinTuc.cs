@@ -36,6 +36,7 @@ namespace QLVB.Models
         public Nullable<bool> TrangThai { get; set; }
         public Nullable<System.DateTime> NgayDang { get; set; }
         public Nullable<System.DateTime> NgayTao { get; set; }
+        public Nullable<int> MaLoaiCT { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BinhLuan> BinhLuans { get; set; }

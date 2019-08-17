@@ -190,6 +190,7 @@
     <Compile Include="Controllers\ND_TaiKhoanController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QL_BannerController.cs" />
+    <Compile Include="Controllers\QL_DMCongTruongController.cs" />
     <Compile Include="Controllers\QL_DMPhongHopController.cs" />
     <Compile Include="Controllers\QL_MenuController.cs" />
     <Compile Include="Controllers\QL_FAQController.cs" />
@@ -249,6 +250,9 @@
       <DependentUpon>QLVB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LichHop_BLD.cs">
+      <DependentUpon>QLVB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoaiCongTruong.cs">
       <DependentUpon>QLVB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoaiTaiLieu.cs">
@@ -1619,6 +1623,7 @@
     <Content Include="Views\LichHop_BLD\DangKy.cshtml" />
     <Content Include="Views\QuanTri\NhatKy.cshtml" />
     <Content Include="Views\Pdf\Preview.cshtml" />
+    <Content Include="Views\QL_DMCongTruong\DanhSach.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

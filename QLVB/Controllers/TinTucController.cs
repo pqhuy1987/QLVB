@@ -48,6 +48,7 @@ namespace QLVB.Controllers
             ViewBag.LoaiVanBans = db.LoaiTaiLieux.OrderBy(n => n.ThuTu);
             ViewBag.VanBans = db.TaiLieux;
             ViewBag.DMTinTuc = db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin).OrderBy(n => n.ThuTu);
+            //ViewBag.LoaiVanBan = new SelectList(db.LoaiTaiLieux.OrderBy(n => n.CapTaiLieu), "MaLoaiTL", "TenLoaiTL", LoaiVanBan);
             ViewBag.dsTinTuc = db.TinTucs.Where(n => n.TrangThai == true && n.NgayDang <= dtNow).OrderByDescending(n => n.NgayDang);
 
             ViewBag.lstBanner = db.Banners.OrderBy(n => n.Order);

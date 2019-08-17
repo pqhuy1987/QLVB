@@ -64,6 +64,7 @@ namespace QLVB.Models
         public virtual DbSet<PdfPage> PdfPages { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ID> IDs { get; set; }
+        public virtual DbSet<LoaiCongTruong> LoaiCongTruongs { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
