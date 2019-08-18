@@ -24,7 +24,7 @@ namespace QLVB.Controllers
             return false;
         }
 
-        public ActionResult DanhSach(int? page, string TieuDe, string NoiDung, string NgayDang,string MaDanhMuc,string LoaiTinTuc)
+        public ActionResult DanhSach(int? page, string TieuDe, string NoiDung, string NgayDang, string MaDanhMuc, string LoaiTinTuc, string MaLoaiCT)
         {
             if (KiemTraSession() == true)
                 return RedirectToAction("DangNhap", "QuanTri");
@@ -38,7 +38,7 @@ namespace QLVB.Controllers
             ViewBag.NgayDang = NgayDang;
             ViewBag.MucTin = MaDanhMuc;
             ViewBag.LoaiTin = LoaiTinTuc;
-
+            ViewBag.MaLoaiCT = new SelectList(db.LoaiCongTruongs, "MaLoaiCT", "TenLoaiCT", MaLoaiCT);
             ViewBag.LoaiTinTuc = new SelectList(tool.DMTinTuc(0), "Value", "Text",LoaiTinTuc);
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin), "MaDanhMuc", "TenDanhMuc", MaDanhMuc);
 
@@ -97,7 +97,11 @@ namespace QLVB.Controllers
                 int iMaDanhMuc = int.Parse(MaDanhMuc);
                 lstTinTuc = lstTinTuc.Where(n => n.MaDanhMuc != null && n.MaDanhMuc.Value == iMaDanhMuc);
             }
-
+            if (!string.IsNullOrEmpty(MaLoaiCT))
+            {
+                int iLoaiVanBan = int.Parse(MaLoaiCT);
+                lstTinTuc = lstTinTuc.Where(n => (n.MaLoaiCT != null && n.MaLoaiCT.Value == iLoaiVanBan));
+            }
             if (!string.IsNullOrEmpty(LoaiTinTuc))
             {
                 int iLoaiTinTuc = int.Parse(LoaiTinTuc);
@@ -116,8 +120,9 @@ namespace QLVB.Controllers
             string sNgayDang = c["NgayDang"];
             string sMaDanhMuc = c["MaDanhMuc"];
             string sLoaiTinTuc = c["LoaiTinTuc"];
+            string sLoaiCongTruong = c["LoaiCongTruong"];
 
-            return RedirectToAction("DanhSach", "QL_TinTuc", new { @TieuDe = sTieuDe, @NoiDung = sNoiDung, @NgayDang = sNgayDang, @MaDanhMuc= sMaDanhMuc, @LoaiTinTuc= sLoaiTinTuc });
+            return RedirectToAction("DanhSach", "QL_TinTuc", new { @TieuDe = sTieuDe, @NoiDung = sNoiDung, @NgayDang = sNgayDang, @MaDanhMuc = sMaDanhMuc, @LoaiTinTuc = sLoaiTinTuc, @LoaiTCongTruong = sLoaiCongTruong });
         }
 
         [HttpGet]
@@ -198,6 +203,7 @@ namespace QLVB.Controllers
             TinTuc tin = db.TinTucs.SingleOrDefault(n => n.MaTinTuc == id);
 
             ViewBag.LoaiTinTuc = new SelectList(tool.DMTinTuc(0), "Value", "Text",tin.LoaiTinTuc);
+            ViewBag.MaLoaiCT = new SelectList(db.LoaiCongTruongs, "MaLoaiCT", "TenLoaiCT", tin.MaLoaiCT);
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.Where(n=>n.DanhMucCha==Tools.MaDanhMucTin), "MaDanhMuc", "TenDanhMuc", tin.MaDanhMuc);
 
             return View(tin);
@@ -212,6 +218,7 @@ namespace QLVB.Controllers
 
             Tools tool = new Tools();
             ViewBag.LoaiTinTuc = new SelectList(tool.DMTinTuc(0), "Value", "Text", tin.LoaiTinTuc);
+            ViewBag.MaLoaiCT = new SelectList(db.LoaiCongTruongs, "MaLoaiCT", "TenLoaiCT", tin.MaLoaiCT);
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin), "MaDanhMuc", "TenDanhMuc", tin.MaDanhMuc);
 
             if (tin.ChoPhepBinhLuan==null)

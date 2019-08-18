@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<QLVB.Models.LoaiTaiLieu>
+﻿@model PagedList.IPagedList<QLVB.Models.LoaiCongTruong>
 @using PagedList.Mvc;
 
 @{
@@ -37,17 +37,17 @@
         {
             iSTT++;
             <tr>
-                @Html.Hidden("txtMaLoaiTL", item.MaLoaiTL)
-                @Html.Hidden("txtTenLoaiTL", item.TenLoaiTL)
-                @Html.Hidden("txtCapTaiLieu", item.CapTaiLieu)
+                @Html.Hidden("txtMaLoaiCT", item.MaLoaiCT)
+                @Html.Hidden("txtTenLoaiCT", item.TenLoaiCT)
+                @Html.Hidden("txtCapCongTruong", item.CapCongTruong)
                 @Html.Hidden("txtThuTu", item.ThuTu)
                 <td>@iSTT</td>
-                <td>@item.TenLoaiTL</td>
-                <td>@item.CapTaiLieu</td>
+                <td>@item.TenLoaiCT</td>
+                <td>@item.CapCongTruong</td>
                 <td>@item.ThuTu</td>
                 <td>
                     <button class="btn-sua btn btn-success fa fa-pencil" data-toggle="modal" data-target="#myChinhSua"></button>
-                    @Html.ActionLink(" ", "Xoa", "QL_DMLoaiTaiLieu", new { @id = item.MaLoaiTL }, new { @id = item.MaLoaiTL, @class = "btnxoa btn btn-danger fa fa-times" })
+                    @Html.ActionLink(" ", "Xoa", "QL_DMCongTruong", new { @id = item.MaLoaiCT }, new { @id = item.MaLoaiCT, @class = "btnxoa btn btn-danger fa fa-times" })
 
                 </td>
             </tr>
@@ -87,7 +87,7 @@
 </div>
 
 <div id="myTaoMoi" class="modal fade" role="dialog">
-    @using (Html.BeginForm("ThemMoi", "QL_DMLoaiTaiLieu", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("ThemMoi", "QL_DMCongTruong", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -98,18 +98,18 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Tên loại văn bản</label>
+                        <label class="col-md-4 control-label">Tên công trường</label>
                         <div class="col-md-6">
-                            @Html.TextBox("TenLoaiTL", "", new { @class = "form-control" })
+                            @Html.TextBox("TenLoaiCT", "", new { @class = "form-control" })
 
                             <label id="erTenLoaiTL" class=" text-danger error"></label>
                         </div>
 
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Cấp văn bản</label>
+                        <label class="col-md-4 control-label">Cấp công trường</label>
                         <div class="col-md-6">
-                            @Html.TextBox("CapTaiLieu", "1", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                            @Html.TextBox("CapCongTruong", "1", new { @class = "form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
                         </div>
                         <label id="erTenDangNhap" class="col-sm-5 text-danger error"></label>
                     </div>
@@ -131,9 +131,9 @@
 </div>
 
 <div id="myChinhSua" class="modal fade" role="dialog">
-    @using (Html.BeginForm("ChinhSua", "QL_DMLoaiTaiLieu", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("ChinhSua", "QL_DMCongTruong", FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        @Html.Hidden("MaLoaiTL")
+        @Html.Hidden("MaLoaiCT")
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -143,17 +143,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Tên loại văn bản</label>
+                        <label class="col-md-4 control-label">Tên loại công trường</label>
                         <div class="col-md-6">
-                            @Html.TextBox("TenLoaiTL", "", new { @class = "TenLoaiTL form-control" })
+                            @Html.TextBox("TenLoaiCT", "", new { @class = "TenLoaiCT form-control" })
 
                             <label id="erTenLoaiTL" class=" text-danger error"></label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Cấp văn bản</label>
+                        <label class="col-md-4 control-label">Cấp công trường</label>
                         <div class="col-md-6">
-                            @Html.TextBox("CapTaiLieu", "", new { @class = "CapTaiLieu form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
+                            @Html.TextBox("CapCongTruong", "", new { @class = "CapCongTruong form-control", @onkeypress = "return ValidateKeypress(/[0-9]/,event);" })
                         </div>
                         <label id="erTenDangNhap" class="col-sm-5 text-danger error"></label>
                     </div>
@@ -190,13 +190,13 @@
     });
 
     $('.btn-sua').click(function () {
-        var maloai = $(this).parents("tr").find("#txtMaLoaiTL").val();
-        var tenloai = $(this).parents("tr").find("#txtTenLoaiTL").val();
-        var caploai = $(this).parents("tr").find("#txtCapTaiLieu").val();
+        var maloai = $(this).parents("tr").find("#txtMaLoaiCT").val();
+        var tenloai = $(this).parents("tr").find("#txtTenLoaiCT").val();
+        var caploai = $(this).parents("tr").find("#txtCapCongTruong").val();
         var ThuTu = $(this).parents("tr").find("#txtThuTu").val();
-        $('#MaLoaiTL').val(maloai);
-        $('.TenLoaiTL').val(tenloai);
-        $('.CapTaiLieu').val(caploai);
+        $('#MaLoaiCT').val(maloai);
+        $('.TenLoaiCT').val(tenloai);
+        $('.CapCongTruong').val(caploai);
         $('.ThuTu').val(ThuTu);
     });
 

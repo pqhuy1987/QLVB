@@ -46,6 +46,7 @@ namespace QLVB.Controllers
             TinTuc layTin = db.TinTucs.SingleOrDefault(n => n.MaTinTuc == id);
          
             ViewBag.LoaiVanBans = db.LoaiTaiLieux.OrderBy(n => n.ThuTu);
+            ViewBag.LoaiCongTruongs = db.LoaiCongTruongs.OrderBy(n => n.ThuTu);
             ViewBag.VanBans = db.TaiLieux;
             ViewBag.DMTinTuc = db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin).OrderBy(n => n.ThuTu);
             //ViewBag.LoaiVanBan = new SelectList(db.LoaiTaiLieux.OrderBy(n => n.CapTaiLieu), "MaLoaiTL", "TenLoaiTL", LoaiVanBan);
@@ -70,6 +71,7 @@ namespace QLVB.Controllers
             DateTime dtNow = DateTime.Now;
             
             ViewBag.LoaiVanBans = db.LoaiTaiLieux.OrderBy(n => n.CapTaiLieu);
+            ViewBag.LoaiCongTruongs = db.LoaiCongTruongs.OrderBy(n => n.ThuTu);
             ViewBag.VanBans = db.TaiLieux;
             ViewBag.DMTinTuc = db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin).OrderBy(n => n.ThuTu);
             ViewBag.dsTinTuc = db.TinTucs.Where(n => n.TrangThai == true && n.NgayDang <= dtNow).OrderByDescending(n => n.NgayDang);

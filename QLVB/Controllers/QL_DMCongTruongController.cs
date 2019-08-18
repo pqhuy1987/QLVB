@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data.Entity.Core;
+using System.Data.Objects;
+using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -29,19 +32,19 @@ namespace QLVB.Controllers
 
             int pageSize = 20;
             int pageNumber = (page ?? 1);
-            return View(db.LoaiTaiLieux.ToList().ToPagedList(pageNumber, pageSize));
+            return View(db.LoaiCongTruongs.ToList().ToPagedList(pageNumber, pageSize));
         }
 
 
         [HttpPost]
-        public ActionResult ThemMoi(LoaiTaiLieu loaitl)
+        public ActionResult ThemMoi(LoaiCongTruong loaitl)
         {
             if (KiemTraSession() == true)
                 return RedirectToAction("DangNhap", "QuanTri");
 
             if (ModelState.IsValid)
             {
-                db.LoaiTaiLieux.Add(loaitl);
+                db.LoaiCongTruongs.Add(loaitl);
                 db.SaveChanges();
                 TempData["thongbao"] = "<script> $('#div-pthongbao').text('Tạo loại văn bản thành công !'); $('#div-thongbao').show(); $('#div-thongbao').fadeOut(5000);</script>";
             }
@@ -49,7 +52,7 @@ namespace QLVB.Controllers
         }
 
         [HttpPost]
-        public ActionResult ChinhSua(LoaiTaiLieu loaitl)
+        public ActionResult ChinhSua(LoaiCongTruong loaitl)
         {
             if (KiemTraSession() == true)
                 return RedirectToAction("DangNhap", "QuanTri");
@@ -65,8 +68,8 @@ namespace QLVB.Controllers
 
         public ActionResult Xoa(int id)
         {
-            LoaiTaiLieu xoaLoaiTL = db.LoaiTaiLieux.SingleOrDefault(n => n.MaLoaiTL == id);
-            db.LoaiTaiLieux.Remove(xoaLoaiTL);
+            LoaiCongTruong xoaLoaiTL = db.LoaiCongTruongs.SingleOrDefault(n => n.MaLoaiCT == id);
+            db.LoaiCongTruongs.Remove(xoaLoaiTL);
             db.SaveChanges();
             TempData["thongbao"] = "<script> $('#div-pthongbao').text('Xóa thành công !'); $('#div-thongbao').show(); $('#div-thongbao').fadeOut(5000);</script>";
             return RedirectToAction("DanhSach");

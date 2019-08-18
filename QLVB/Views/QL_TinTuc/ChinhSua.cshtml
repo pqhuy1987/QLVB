@@ -45,30 +45,15 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">Mục tin</label>
+        <label class="col-sm-2 control-label">Chọn Công Trường</label>
         <div class="col-sm-6">
-            @Html.DropDownList("MaDanhMuc", null, new { @class = "form-control" })
+            @Html.DropDownList("MaLoaiCT", null, new { @class = "form-control" })
             <label id="erMucTin" class="text-danger error"></label>
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="col-sm-2 control-label">Loại tin</label>
-        <div class="col-sm-6">
-            @Html.DropDownList("LoaiTinTuc", null, new { @class = "form-control" })
-            <label id="erLoaiTin" class="text-danger error"></label>
-        </div>
-    </div>
     
     <div class="form-group">
-        <label class="col-sm-2 control-label">Hình đại diện</label>
-        <div class="col-sm-6">
-            <div id="img-dai-dien" style="margin-bottom:5px">
-                @Html.Hidden("HinhDaiDien", Model.HinhDaiDien)
-                <img src="~/Upload/@Model.HinhDaiDien" width="100%" />
-            </div>
-            <input id="btn-luu-hinh" type="file"/>
-        </div>
         <script>
             $('#btn-luu-hinh').change(function () {
 
