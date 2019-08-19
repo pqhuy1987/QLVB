@@ -134,6 +134,7 @@ namespace QLVB.Controllers
             Tools tool = new Tools();
 
             ViewBag.LoaiTinTuc = new SelectList(tool.DMTinTuc(0), "Value", "Text");
+            ViewBag.MaLoaiCT = new SelectList(db.LoaiCongTruongs, "MaLoaiCT", "TenLoaiCT");
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin), "MaDanhMuc", "TenDanhMuc");
             Session["lbl"] = "Tạo mới";
 
@@ -150,6 +151,7 @@ namespace QLVB.Controllers
             Tools tool = new Tools();
 
             ViewBag.LoaiTinTuc = new SelectList(tool.DMTinTuc(0), "Value", "Text");
+            ViewBag.MaLoaiCT = new SelectList(db.LoaiCongTruongs, "MaLoaiCT", "TenLoaiCT", tin.MaLoaiCT);
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin), "MaDanhMuc", "TenDanhMuc");
             Session["lbl"] = "Tạo mới";
 
@@ -161,6 +163,8 @@ namespace QLVB.Controllers
                     tin.TinHot = false;
                 if (tin.TrangThai == null)
                     tin.TrangThai = false;
+                if (tin.BaoMat == null)
+                    tin.BaoMat = true;
 
                 tin.LuotBinhLuan = 0;
                 tin.LuotThich = 0;
@@ -227,6 +231,8 @@ namespace QLVB.Controllers
                 tin.TinHot = false;
             if (tin.TrangThai == null)
                 tin.TrangThai = false;
+            if (tin.BaoMat == null)
+                tin.BaoMat = false;
 
             
             if (ModelState.IsValid)
@@ -316,6 +322,190 @@ namespace QLVB.Controllers
                 return Json("0");
             }
         }
+
+        [HttpPost]
+        public ActionResult LuuFilePDF()  // luu file ajax
+        {
+
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    //  Get all files from Request object  
+                    HttpFileCollectionBase files = Request.Files;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+
+                        HttpPostedFileBase file = files[i];
+                        string fname;
+
+                        // Checking for Internet Explorer  
+                        if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                        {
+                            string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                            fname = testfiles[testfiles.Length - 1];
+                        }
+                        else
+                        {
+                            fname = file.FileName;
+                        }
+
+                        // Get the complete folder path and store the file inside it.  
+                        fname = Path.Combine(Server.MapPath("~/Upload/filePDF/"), fname);
+                        file.SaveAs(fname);
+
+
+                    }
+
+                    // luu ten vao csdl
+                    int iMaTaiLieu = Convert.ToInt32(Request.Form["MaTaiLieu"]);
+                    string sNamef = files[0].FileName;
+
+                    TaiLieu luuTL = db.TaiLieux.SingleOrDefault(n => n.MaTaiLieu == iMaTaiLieu);
+                    luuTL.filePDF = sNamef;
+                    db.SaveChanges();
+
+                    // BEGIN
+                    TaiLieu tl = luuTL;
+                    Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file pdf của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
+                    // END
+
+                    // Returns message that successfully uploaded  
+                    return Json(" <a href='/Upload/filePDF/" + sNamef + "'>" + sNamef + "</a>");
+                }
+                catch (Exception ex)
+                {
+                    return Json("0");
+                }
+            }
+            else
+            {
+                return Json("0");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult LuuFileDOCV()  // luu file ajax
+        {
+
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    //  Get all files from Request object  
+                    HttpFileCollectionBase files = Request.Files;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+
+                        HttpPostedFileBase file = files[i];
+                        string fname;
+
+                        // Checking for Internet Explorer  
+                        if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                        {
+                            string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                            fname = testfiles[testfiles.Length - 1];
+                        }
+                        else
+                        {
+                            fname = file.FileName;
+                        }
+
+                        // Get the complete folder path and store the file inside it.  
+                        fname = Path.Combine(Server.MapPath("~/Upload/fileDOCTV/"), fname);
+                        file.SaveAs(fname);
+
+
+                    }
+
+                    // luu ten vao csdl
+                    int iMaTaiLieu = Convert.ToInt32(Request.Form["MaTaiLieu"]);
+                    string sNamef = files[0].FileName;
+
+                    TaiLieu luuTL = db.TaiLieux.SingleOrDefault(n => n.MaTaiLieu == iMaTaiLieu);
+                    luuTL.fileDOCV = sNamef;
+                    db.SaveChanges();
+
+                    // BEGIN
+                    TaiLieu tl = luuTL;
+                    Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file .doc tiếng Việt của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
+                    // END
+
+                    // Returns message that successfully uploaded  
+                    return Json(" <a href='/Upload/fileDOCTV/" + sNamef + "'>" + sNamef + "</a>");
+                }
+                catch (Exception ex)
+                {
+                    return Json("0");
+                }
+            }
+            else
+            {
+                return Json("0");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult LuuFileDOCA()  // luu file ajax
+        {
+
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    //  Get all files from Request object  
+                    HttpFileCollectionBase files = Request.Files;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+
+                        HttpPostedFileBase file = files[i];
+                        string fname;
+
+                        // Checking for Internet Explorer  
+                        if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                        {
+                            string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                            fname = testfiles[testfiles.Length - 1];
+                        }
+                        else
+                        {
+                            fname = file.FileName;
+                        }
+
+                        // Get the complete folder path and store the file inside it.  
+                        fname = Path.Combine(Server.MapPath("~/Upload/fileDOCTA/"), fname);
+                        file.SaveAs(fname);
+
+
+                    }
+
+                    // luu ten vao csdl
+                    int iMaTaiLieu = Convert.ToInt32(Request.Form["MaTaiLieu"]);
+                    string sNamef = files[0].FileName;
+
+                    TaiLieu luuTL = db.TaiLieux.SingleOrDefault(n => n.MaTaiLieu == iMaTaiLieu);
+                    luuTL.fileDOCA = sNamef;
+                    db.SaveChanges();
+
+                    // BEGIN
+                    TaiLieu tl = luuTL;
+                    Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file .doc tiếng Anh của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
+                    // END
+
+                    // Returns message that successfully uploaded  
+                    return Json(" <a href='/Upload/fileDOCTA/" + sNamef + "'>" + sNamef + "</a>");
+                }
+                catch (Exception ex)
+                {
+                    return Json("0");
+                }
+            }
+            else
+            {
+                return Json("0");
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {

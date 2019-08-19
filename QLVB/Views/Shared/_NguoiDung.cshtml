@@ -92,7 +92,7 @@
                     <div class="dropdown " style="float: right; ">
 
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span>Hello! @nv.HoTen </span>
+                            <span>Hello! @nv.TenDangNhap </span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
@@ -101,10 +101,9 @@
                                 <li><a class="changePassword" href="#">Đổi mật khẩu</a></li>
                             }
                             <li><a href="@Url.Action("ThongTinTaiKhoan","ND_TaiKhoan")">Thông tin tài khoản</a></li>
-                            <li><a href="@Url.Action("VanBanLuu","ND_TaiKhoan")">Văn bản của tôi</a></li>
                             @if (HttpContext.Current.User.IsInRole("XEM-QUAN-TRI"))
                             {
-                                <li><a href="@Url.Action("Index","QuanTri")">Trang quản trị</a></li>
+                                <li><a href="@Url.Action("DanhSach", "QL_TaiKhoan")">Trang quản trị</a></li>
                             }
 
                             <li class="divider"></li>
@@ -146,21 +145,24 @@
                 <div id="navbar" class="navbar-collapse collapse" style="text-transform:uppercase">
                     <ul class="nav navbar-nav navbar-1">
                         <li class="div-logo-2 ">
-                            <a href="@Url.Action("IndexVanBan","TrangChinh")">  <img src="~/Upload/logo.png" width="125" /></a>
-                        </li>
+                            <a href="@Url.Action("dsTinTuc","TinTuc")">  <img src="~/Upload/logo.png" width="125" /></a>
+                        </li>                                         
                     </ul>
-                    @Html.Action("_pDanhMuc", "TrangChinh")
+                    <div class="nav navbar-nav navbar-3" style="margin-top: 15px; margin-left: 15px;">
+                        <span style="color:RED;font-weight:500; font-size:24px;">QUẢN LÝ VẤN ĐỀ KỸ THUẬT NỘI BỘ</span>
+                    </div>
+                        @Html.Action("_pDanhMuc", "TrangChinh")
 
-                    @*<ul class="nav navbar-nav navbar-2">
+                        <ul class="nav navbar-nav navbar-2">
 
-                        <li><a href="@Url.Action("Index","TrangChinh")"><i class="fa fa-home"></i> Trang chủ</a></li>
-                        @Html.Action("_pLoaiVanBan", "TrangChinh")
-                        <li><a href="@Url.Action("dsTinTuc","TinTuc")"><i class="fa fa-newspaper-o"></i> Tin tức</a></li>
-                        <li><a href="@Url.Action("IndexVanBan","TrangChinh")"><i class="fa fa-book"></i> Văn bản nội bộ</a></li>
-                        <li><a href="@Url.Action("dsFAQ","TrangChinh")"><i class="fa fa-question"></i> Câu hỏi thường gặp (FAQ)</a></li>
-                    </ul>*@
-                   
-                </div><!--/.nav-collapse -->
+                            <li><a href="@Url.Action("Index","TrangChinh")"><i class="fa fa-home"></i> Trang chủ</a></li>
+                            @Html.Action("_pLoaiVanBan", "TrangChinh")
+                            @*<li><a href="@Url.Action("dsTinTuc","TinTuc")"><i class="fa fa-newspaper-o"></i> Tin tức</a></li>*@
+                            @*<li><a href="@Url.Action("IndexVanBan","TrangChinh")"><i class="fa fa-book"></i> Văn bản nội bộ</a></li>
+                <li><a href="@Url.Action("dsFAQ","TrangChinh")"><i class="fa fa-question"></i> Câu hỏi thường gặp (FAQ)</a></li>*@
+                        </ul>
+
+</div><!--/.nav-collapse -->
             </div>
         </nav>
     <div class="container bs-docs-container">
@@ -175,8 +177,8 @@
 
                 <p>Địa chỉ: Tầng 1, 236/6 Điện Biên Phủ, Phường 17, Quận Bình Thạnh, Tp Hồ Chí Minh</p>
                 <p>Điện thoại: (84) (28) 35146699</p>
-                <p>Email: mai.tran@fdcc.vn | Hotline: 0399 695 055 </p>
-                <p>Chịu trách nhiệm nội dung: Trần Nguyễn Ngọc Mai - Phòng Tổng hợp</p>
+                <p>Email: kythuat@newtecons.vn | Hotline: 0399 695 055 </p>
+                <p>Chịu trách nhiệm nội dung: Phòng Kỹ Thuật</p>
             </div>
           
         </div>

@@ -62,7 +62,7 @@ namespace QLVB.Controllers
                 return RedirectToAction("Index", "TrangChinh");
         }
 
-        public ActionResult dsTinTuc(int? page, string t,string m)
+        public ActionResult dsTinTuc(int? page, string t, string m, string LoaiCongTruong)
         {
             if (KiemTraSession() == true)
                 return RedirectToAction("DangNhap", "QuanTri");
@@ -94,6 +94,11 @@ namespace QLVB.Controllers
             {
                 int imuctin = int.Parse(m);
                 lstTinTuc = lstTinTuc.Where(n=>n.MaDanhMuc== imuctin);
+            }
+            if (!string.IsNullOrEmpty(LoaiCongTruong))
+            {
+                int iLoaiCongTruong = int.Parse(LoaiCongTruong);
+                lstTinTuc = lstTinTuc.Where(n => n.MaLoaiCT == iLoaiCongTruong);
             }
             return View(lstTinTuc.OrderByDescending(n => n.NgayDang).ToList().ToPagedList(pageNumber, pageSize));
         }

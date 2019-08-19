@@ -64,10 +64,11 @@ namespace QLVB.Controllers
 
             ViewBag.lstLichHop = lstDuyetLich;
 
-            return View(lstTaiLieu.OrderByDescending(n=>n.NgayHieuLuc).ToList().ToPagedList(pageNumber, pageSize));
+            //return View(lstTaiLieu.OrderByDescending(n=>n.NgayHieuLuc).ToList().ToPagedList(pageNumber, pageSize));
+            return RedirectToAction("dsTinTuc", "TinTuc");
         }
 
-        public ActionResult IndexVanBan(int? page, string TenVanBan, string SoHieu, string LoaiVanBan, string NoiBanHanh, string NguoiKy, string NgayBanHanhfrom, string NgayBanHanhto, string NgayHieuLucfrom, string NgayHieuLucto, string TinhTrang, string PhongBan, string MaHieu, string LanBanHanh)
+        public ActionResult IndexVanBan(int? page, string TenVanBan, string SoHieu, string LoaiVanBan1, string NoiBanHanh, string NguoiKy, string NgayBanHanhfrom, string NgayBanHanhto, string NgayHieuLucfrom, string NgayHieuLucto, string TinhTrang, string PhongBan, string MaHieu, string LanBanHanh)
         {
             if (KiemTraSession() == true)
                 return RedirectToAction("DangNhap", "QuanTri");
@@ -76,7 +77,7 @@ namespace QLVB.Controllers
            Tools tool = new Tools();
 
             ViewBag.TinhTrang = tool.DMTinhTrang(!string.IsNullOrEmpty(TinhTrang) ? Convert.ToInt32(TinhTrang) : 0);
-            ViewBag.LoaiVanBan = new SelectList(db.LoaiTaiLieux.OrderBy(n => n.CapTaiLieu), "MaLoaiTL", "TenLoaiTL", LoaiVanBan);
+            ViewBag.LoaiVanBan = new SelectList(db.LoaiTaiLieux.OrderBy(n => n.CapTaiLieu), "MaLoaiTL", "TenLoaiTL", LoaiVanBan1);
             ViewBag.PhongBan = new SelectList(db.DMPhongBans.Where(n => n.KichHoat == true), "Id", "TenPhong", PhongBan);
             ViewBag.NoiBanHanh = new SelectList(db.DMPhongBans.Where(n => n.KichHoat == true), "Id", "TenPhong", NoiBanHanh);
 
@@ -96,7 +97,7 @@ namespace QLVB.Controllers
             ViewBag.NgayBanHanhto = NgayBanHanhto;
             ViewBag.NgayHieuLucfrom = NgayHieuLucfrom;
             ViewBag.NgayHieuLucto = NgayHieuLucto;
-            ViewBag.LoaiVanBani = LoaiVanBan;
+            ViewBag.LoaiVanBani = LoaiVanBan1;
             ViewBag.TinhTrangi = TinhTrang;
             ViewBag.PhongBani = PhongBan;
             ViewBag.MaHieu = MaHieu;
@@ -171,9 +172,9 @@ namespace QLVB.Controllers
 
 
             ViewBag.titLoaiVB = "Văn bản mới";
-            if (!string.IsNullOrEmpty(LoaiVanBan))
+            if (!string.IsNullOrEmpty(LoaiVanBan1))
             {
-                int iLoaiVanBan = int.Parse(LoaiVanBan);
+                int iLoaiVanBan = int.Parse(LoaiVanBan1);
                 lstTaiLieu = lstTaiLieu.Where(n => (n.LoaiVanBan != null && n.LoaiVanBan.Value == iLoaiVanBan));
 
                 ViewBag.titLoaiVB = db.LoaiTaiLieux.SingleOrDefault(n => n.MaLoaiTL == iLoaiVanBan).TenLoaiTL;
@@ -198,6 +199,7 @@ namespace QLVB.Controllers
             }
 
             return View(lstTaiLieu.ToList().ToPagedList(pageNumber, pageSize));
+            //return RedirectToAction("dsTinTuc", "TinTuc");
         }
 
         [HttpPost]

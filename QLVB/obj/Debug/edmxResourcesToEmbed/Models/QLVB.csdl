@@ -531,6 +531,7 @@
     <Property Name="NgayTao" Type="DateTime" Precision="3" />
     <NavigationProperty Name="BinhLuans" Relationship="QLVBModel.FK_BinhLuan_TinTuc" FromRole="TinTuc" ToRole="BinhLuan" />
     <Property Name="MaLoaiCT" Type="Int32" />
+    <Property Name="BaoMat" Type="Boolean" />
   </EntityType>
   <EntityType Name="VB_VBCC">
     <Key>

@@ -1392,13 +1392,14 @@
     <Content Include="Content\ThemeAdmin\js\plugins\morris\morris.min.js" />
     <Content Include="Content\ThemeAdmin\js\plugins\morris\raphael.min.js" />
     <Content Include="favicon.ico" />
-    <Content Include="favicon.png" />
+    <Content Include="favicon__.png" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Libs\Cyotek.GhostScript.dll" />
     <Content Include="Libs\Cyotek.GhostScript.PdfConversion.dll" />
     <Content Include="Libs\gsdll32.dll" />
+    <Content Include="favicon.png" />
     <Content Include="Models\QLVB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>QLVB.edmx</DependentUpon>
@@ -1517,6 +1518,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Upload\0a890d88eacbef8cf7842a5adad99ed2.jpg" />
     <Content Include="Upload\25c24515ef42623df917bb1e859f03bf.jpg" />
+    <Content Include="Upload\img-login.jpg" />
     <Content Include="Upload\6acac358c4179f2995a4fbe73309b36b.png" />
     <Content Include="Upload\9266244f686cfb965ea6aafb2793608e.jpg" />
     <Content Include="Upload\a7b436edfec52fcf172fbf407f65df44.jpg" />
@@ -1545,10 +1547,12 @@
     <Content Include="Upload\iconfacebook.png" />
     <Content Include="Upload\icon_earthwork.png" />
     <Content Include="Upload\ie.png" />
-    <Content Include="Upload\img-login.jpg" />
+    <Content Include="Upload\img-login-.jpg" />
     <Content Include="Upload\learn.png" />
     <Content Include="Upload\logo.jpg" />
     <Content Include="Upload\logo.png" />
+    <Content Include="Upload\logo__.jpg" />
+    <Content Include="Upload\logo__.png" />
     <Content Include="Upload\MyPC-website-icon-2-books.png" />
     <Content Include="Upload\note.png" />
     <Content Include="Upload\sidebar_head_bg.png" />

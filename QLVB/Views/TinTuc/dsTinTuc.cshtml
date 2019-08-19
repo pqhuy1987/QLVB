@@ -43,7 +43,7 @@
                     @foreach (var item in lstCongTruong)
                     {
                         <li>
-                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan=item.MaLoaiCT })">@item.TenLoaiCT <span style="color:#ccc">(@dsTinTuc.Where(n => n.MaLoaiCT == item.MaLoaiCT).Count())</span></a>
+                            <a href="@Url.Action("dsTinTuc", "TinTuc", new {LoaiCongTruong=item.MaLoaiCT })">@item.TenLoaiCT <span style="color:#ccc">(@dsTinTuc.Where(n => n.MaLoaiCT == item.MaLoaiCT).Count())</span></a>
                             <i class="fa fa-angle-double-right"></i>
                         </li>
                     }
@@ -62,55 +62,111 @@
                 @{int i = 0; string sClass = "";}
                 @foreach (var item in Model)
                 {
-                    i++;
-                    <div class=col-md-1>
-                        <span class="badge">@i</span>
-                    </div>
-
-                    if (i == 1)
+                    if (item.BaoMat != true)
                     {
-                        sClass = "class=col-md-9";
-                    }
-                    else
-                    {
-                        sClass = "class=col-md-9";
-                    }
-
-                    <div @sClass>
-                        <h4><a href="@Url.Action("XemTin", "TinTuc", new {@id=item.MaTinTuc })">@item.TieuDe</a></h4>
-                        <span>
-                            @if (item.NoiDungThuGon != null)
-                            { // bo het the html
-                                string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungThuGon, @"<[^>]*>", String.Empty);
-                                if (sNoiDung.Length < 200)
-                                {
-                                    @Html.Raw(sNoiDung)
-                                }
-                                else
-                                {
-                                    @Html.Raw(sNoiDung.Substring(0, 199))
-                                }
-                            }
-                        </span>
-                        <br />
-                        <a href="@Url.Action("XemTin", "TinTuc", new { @id = item.MaTinTuc })"><input type="button" class="btn-sea" value="Xem thêm" /></a>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group font-10">
-                            Ngày Đăng:
-                            @if (item.NgayDang != null)
-                            { @item.NgayDang.Value.ToString("dd/MM/yyyy") }
-                            <br />
-                            Ngày tạo:
-                            @if (item.NgayTao != null)
-                            { @item.NgayTao.Value.ToString("dd/MM/yyyy") }
-                            <br />
-                            Công Trường:
-                            @item.NgayDang.Value.ToString("dd/MM/yyyy")
+                        i++;
+                        <div class=col-md-1>
+                            <span class="badge">@i</span>
                         </div>
-                    </div>
-                    <div style="clear:both"></div>
-                    <hr style="margin:20px 0" />
+
+                        if (i == 1)
+                        {
+                            sClass = "class=col-md-9";
+                        }
+                        else
+                        {
+                            sClass = "class=col-md-9";
+                        }
+
+                        <div @sClass>
+                            <h4><a href="@Url.Action("XemTin", "TinTuc", new {@id=item.MaTinTuc })">@item.TieuDe</a></h4>
+                            <span>
+                                @if (item.NoiDungThuGon != null)
+                                { // bo het the html
+                                    string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungThuGon, @"<[^>]*>", String.Empty);
+                                    if (sNoiDung.Length < 200)
+                                    {
+                                        @Html.Raw(sNoiDung)
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(sNoiDung.Substring(0, 199))
+                                    }
+                                }
+                            </span>
+                            <br />
+                            <a href="@Url.Action("XemTin", "TinTuc", new { @id = item.MaTinTuc })"><input type="button" class="btn-sea" value="Xem thêm" /></a>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group font-10">
+                                Ngày Đăng:
+                                @if (item.NgayDang != null)
+                                { @item.NgayDang.Value.ToString("dd/MM/yyyy") }
+                                <br />
+                                Ngày tạo:
+                                @if (item.NgayTao != null)
+                                { @item.NgayTao.Value.ToString("dd/MM/yyyy") }
+                                <br />
+                                Công Trường:
+                                @item.NgayDang.Value.ToString("dd/MM/yyyy")
+                            </div>
+                        </div>
+                        <div style="clear:both"></div>
+                        <hr style="margin:20px 0" />
+                    }
+                    else if (HttpContext.Current.User.IsInRole("XEM-VB-MAT"))
+                    {
+                        i++;
+                        <div class=col-md-1>
+                            <span class="badge">@i</span>
+                        </div>
+
+                        if (i == 1)
+                        {
+                            sClass = "class=col-md-9";
+                        }
+                        else
+                        {
+                            sClass = "class=col-md-9";
+                        }
+
+                        <div @sClass>
+                            <h4><a href="@Url.Action("XemTin", "TinTuc", new {@id=item.MaTinTuc })">@item.TieuDe</a><span class="text-danger"> (Văn bản mật)</span></h4>
+                            <span>
+                                @if (item.NoiDungThuGon != null)
+                                { // bo het the html
+                                    string sNoiDung = System.Text.RegularExpressions.Regex.Replace(item.NoiDungThuGon, @"<[^>]*>", String.Empty);
+                                    if (sNoiDung.Length < 200)
+                                    {
+                                        @Html.Raw(sNoiDung)
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(sNoiDung.Substring(0, 199))
+                                    }
+                                }
+                            </span>
+                            <br />
+                            <a href="@Url.Action("XemTin", "TinTuc", new { @id = item.MaTinTuc })"><input type="button" class="btn-sea" value="Xem thêm" /></a>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group font-10">
+                                Ngày Đăng:
+                                @if (item.NgayDang != null)
+                                { @item.NgayDang.Value.ToString("dd/MM/yyyy") }
+                                <br />
+                                Ngày tạo:
+                                @if (item.NgayTao != null)
+                                { @item.NgayTao.Value.ToString("dd/MM/yyyy") }
+                                <br />
+                                Công Trường:
+                                @item.NgayDang.Value.ToString("dd/MM/yyyy")
+                            </div>
+                        </div>
+                        <div style="clear:both"></div>
+                        <hr style="margin:20px 0" />
+
+                    }
                 }
 
                 <div class="dlink">

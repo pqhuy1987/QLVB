@@ -178,6 +178,8 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
     <Property Name="RecurrenceRule" Type="nvarchar" MaxLength="1000" />
     <Property Name="RecurrenceParentId" Type="nvarchar" MaxLength="10" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'QLVB.dbo.LoaiCongTruong' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="LoaiCongTruong">
     <Key>
       <PropertyRef Name="MaLoaiCT" />
@@ -374,6 +376,7 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
     <Property Name="NgayDang" Type="datetime" />
     <Property Name="NgayTao" Type="datetime" />
     <Property Name="MaLoaiCT" Type="int" />
+    <Property Name="BaoMat" Type="bit" />
   </EntityType>
   <EntityType Name="VB_BMLQ">
     <Key>
@@ -827,7 +830,6 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
     <EntitySet Name="ID" EntityType="Self.ID" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LichHop" EntityType="Self.LichHop" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LichHop_BLD" EntityType="Self.LichHop_BLD" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="LoaiCongTruong" EntityType="Self.LoaiCongTruong" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LoaiTaiLieu" EntityType="Self.LoaiTaiLieu" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LuotXemTai" EntityType="Self.LuotXemTai" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NhanVien" EntityType="Self.NhanVien" Schema="dbo" store:Type="Tables" />
@@ -850,6 +852,14 @@ warning 6013: The table/view 'QLVB.dbo.dungct_temp1' does not have a primary key
     <EntitySet Name="VB_VBLQ" EntityType="Self.VB_VBLQ" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VB_VBSD" EntityType="Self.VB_VBSD" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VBLuuTru" EntityType="Self.VBLuuTru" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoaiCongTruong" EntityType="Self.LoaiCongTruong" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [LoaiCongTruong].[MaLoaiCT] AS [MaLoaiCT], 
+    [LoaiCongTruong].[TenLoaiCT] AS [TenLoaiCT], 
+    [LoaiCongTruong].[CapCongTruong] AS [CapCongTruong], 
+    [LoaiCongTruong].[ThuTu] AS [ThuTu]
+    FROM [dbo].[LoaiCongTruong] AS [LoaiCongTruong]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_BinhLuan_NhanVien" Association="Self.FK_BinhLuan_NhanVien">
       <End Role="NhanVien" EntitySet="NhanVien" />
       <End Role="BinhLuan" EntitySet="BinhLuan" />
