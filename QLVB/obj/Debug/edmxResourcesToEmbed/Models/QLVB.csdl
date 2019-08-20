@@ -532,6 +532,9 @@
     <NavigationProperty Name="BinhLuans" Relationship="QLVBModel.FK_BinhLuan_TinTuc" FromRole="TinTuc" ToRole="BinhLuan" />
     <Property Name="MaLoaiCT" Type="Int32" />
     <Property Name="BaoMat" Type="Boolean" />
+    <Property Name="filePDF" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="fileDOCV" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="fileDOCA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="VB_VBCC">
     <Key>

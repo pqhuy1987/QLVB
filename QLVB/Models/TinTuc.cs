@@ -38,6 +38,9 @@ namespace QLVB.Models
         public Nullable<System.DateTime> NgayTao { get; set; }
         public Nullable<int> MaLoaiCT { get; set; }
         public Nullable<bool> BaoMat { get; set; }
+        public string filePDF { get; set; }
+        public string fileDOCV { get; set; }
+        public string fileDOCA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BinhLuan> BinhLuans { get; set; }

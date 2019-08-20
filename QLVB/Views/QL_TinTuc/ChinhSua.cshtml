@@ -232,7 +232,7 @@
                             <div class="col-md-2"><i class="fa fa-file-pdf-o"></i> File đính kèm 1: </div>
                             <div class="col-md-10">
                                 <div id="loadfilePDF">
-                                    <a href="~/Upload/filePDF/@Model.BaoMat">@Model.BaoMat</a>
+                                    <a href="~/Upload/filePDF/@Model.filePDF">@Model.filePDF</a>
                                 </div>
                                 <input type="file" id="filePDF" class="form-control" accept="application/.doc,.docx,.pdf" />
                             </div>
@@ -241,7 +241,7 @@
                             <div class="col-md-2"><i class="fa fa-vine"></i> File đính kèm 2: </div>
                             <div class="col-md-10">
                                 <div id="loadfileDOCV">
-                                    <a href="~/Upload/fileDOCTV/@Model.BaoMat">@Model.BaoMat</a>
+                                    <a href="~/Upload/fileDOCTV/@Model.fileDOCV">@Model.fileDOCV</a>
                                 </div>
                                 <input type="file" id="fileDOCV" class="form-control" accept="application/.doc,.docx,.pdf" />
                             </div>
@@ -250,7 +250,7 @@
                             <div class="col-md-2"><i class="fa fa-font"></i> File đính kèm 3: </div>
                             <div class="col-md-10">
                                 <div id="loadfileDOCA">
-                                    <a href="~/Upload/fileDOCTA/@Model.BaoMat">@Model.BaoMat</a>
+                                    <a href="~/Upload/fileDOCTA/@Model.fileDOCA">@Model.fileDOCA</a>
                                 </div>
                                 <input type="file" id="fileDOCA" class="form-control" accept="application/.doc,.docx,.pdf" />
                             </div>
@@ -341,8 +341,7 @@
             });
             // ==== luu PDF ====
             $('#filePDF').on('change', function (e) {
-
-                alert("hello 1");
+                
                 $('#loading_gif').show();
 
                 // Checking whether FormData is available in browser
@@ -351,7 +350,6 @@
                     var fileUpload = $("#filePDF").get(0);
                     var files = fileUpload.files;
 
-                    alert("hello 2");
                     // Create FormData object
                     var fileData = new FormData();
 
@@ -360,12 +358,9 @@
                         fileData.append(files[i].name, files[i]);
                     }
 
-                    alert("hello 3");
                     // Adding one more key to FormData object
                     fileData.append('username', 'username');
-                    fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
-
-                    alert("hello 4");
+                    fileData.append('MaTinTuc', $('#MaTinTuc').val());
 
                     $.ajax({
                         url: '@Url.Action("LuuFilePDF", "QL_TinTuc")',
@@ -406,10 +401,10 @@
 
                     // Adding one more key to FormData object
                     fileData.append('username', 'username');
-                    fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+                    fileData.append('MaTinTuc', $('#MaTinTuc').val());
 
                     $.ajax({
-                        url: '@Url.Action("LuuFileDOCV", "QL_TaiLieu")',
+                        url: '@Url.Action("LuuFileDOCV", "QL_TinTuc")',
                         type: "POST",
                         contentType: false, // Not to set any content header
                         processData: false, // Not to process data
@@ -447,10 +442,10 @@
 
                     // Adding one more key to FormData object
                     fileData.append('username', 'username');
-                    fileData.append('MaTaiLieu', $('#MaTaiLieu').val());
+                    fileData.append('MaTinTuc', $('#MaTinTuc').val());
 
                     $.ajax({
-                        url: '@Url.Action("LuuFileDOCA", "QL_TaiLieu")',
+                        url: '@Url.Action("LuuFileDOCA", "QL_TinTuc")',
                         type: "POST",
                         contentType: false, // Not to set any content header
                         processData: false, // Not to process data

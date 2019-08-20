@@ -305,34 +305,33 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" role="tabpanel" id="taive" aria-labelledby="profile-tab">
-                            <div class="container table-responsive">
-                                <table class="table table-bordered table-striped ">
-                                    <tr>
-                                        <th colspan="3">
-                                            @Model.LoaiTinTuc
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center">
-                                            @if (Model.LoaiTinTuc != null)
-                                            {
-                                                <i class="text-danger fa fa-file-pdf-o"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id = Model.LoaiTinTuc, @ng = "/Upload/filePDF/" + Model.LoaiTinTuc })"> TẢI BẢN PDF</a>
-                                            }
-                                        </th>
-                                        <th class="text-center">
-                                            @if (Model.LoaiTinTuc != null)
-                                            {
-                                                <i class="text-danger fa fa-vine"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id = Model.LoaiTinTuc, @ng = "/Upload/fileDOCTV/" + Model.LoaiTinTuc })"> TẢI BẢN TIẾNG VIỆT</a>
-                                            }
-                                        </th>
-                                        <th class="text-center">
-                                            @if (Model.LoaiTinTuc != null)
-                                            {
-                                                <i class="text-danger fa fa-font"></i><a href="@Url.Action("TaiVanBan", "TrangChinh", new { @id = Model.LoaiTinTuc, @ng = "/Upload/fileDOCTA/" + Model.LoaiTinTuc })">TẢI BẢN TIẾNG ANH</a>
-                                            }
-                                        </th>
-                                    </tr>
-                                </table>
+                            <div class="container">
+                                <div class="form-group">
+                                    <div class="col-md-3"><i class="fa fa-file-pdf-o"></i> File đính kèm 1: </div>
+                                    <div class="col-md-6">
+                                        <div id="loadfilePDF">
+                                            <a href="~/Upload/filePDF/@Model.filePDF">@Model.filePDF</a>
+                                        </div>
+                                    </div>  </br>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-3"><i class="fa fa-vine"></i> File đính kèm 2: </div>
+                                    <div class="col-md-6">
+                                        <div id="loadfileDOCV">
+                                            <a href="~/Upload/fileDOCTV/@Model.fileDOCV">@Model.fileDOCV</a>
+                                        </div>
+
+                                    </div>  </br>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-3"><i class="fa fa-font"></i> File đính kèm 3: </div>
+                                    <div class="col-md-6">
+                                        <div id="loadfileDOCA">
+                                            <a href="~/Upload/fileDOCTA/@Model.fileDOCA">@Model.fileDOCA</a>
+                                        </div>
+
+                                    </div> </br>
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" role="tabpanel" id="revision" aria-labelledby="profile-tab">

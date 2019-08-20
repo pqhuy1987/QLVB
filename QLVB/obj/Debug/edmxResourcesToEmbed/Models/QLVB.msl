@@ -319,6 +319,9 @@
     <EntitySetMapping Name="TinTucs">
       <EntityTypeMapping TypeName="QLVBModel.TinTuc">
         <MappingFragment StoreEntitySet="TinTuc">
+          <ScalarProperty Name="fileDOCA" ColumnName="fileDOCA" />
+          <ScalarProperty Name="fileDOCV" ColumnName="fileDOCV" />
+          <ScalarProperty Name="filePDF" ColumnName="filePDF" />
           <ScalarProperty Name="BaoMat" ColumnName="BaoMat" />
           <ScalarProperty Name="MaLoaiCT" ColumnName="MaLoaiCT" />
           <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />

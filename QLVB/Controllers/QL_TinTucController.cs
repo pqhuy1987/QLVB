@@ -164,7 +164,7 @@ namespace QLVB.Controllers
                 if (tin.TrangThai == null)
                     tin.TrangThai = false;
                 if (tin.BaoMat == null)
-                    tin.BaoMat = true;
+                    tin.BaoMat = false;
 
                 tin.LuotBinhLuan = 0;
                 tin.LuotThich = 0;
@@ -358,16 +358,16 @@ namespace QLVB.Controllers
                     }
 
                     // luu ten vao csdl
-                    int iMaTaiLieu = Convert.ToInt32(Request.Form["MaTaiLieu"]);
+                    int iMaTinTuc = Convert.ToInt32(Request.Form["MaTinTuc"]);
                     string sNamef = files[0].FileName;
 
-                    TaiLieu luuTL = db.TaiLieux.SingleOrDefault(n => n.MaTaiLieu == iMaTaiLieu);
+                    TinTuc luuTL = db.TinTucs.SingleOrDefault(n => n.MaTinTuc == iMaTinTuc);
                     luuTL.filePDF = sNamef;
                     db.SaveChanges();
 
                     // BEGIN
-                    TaiLieu tl = luuTL;
-                    Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file pdf của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
+                    TinTuc tl = luuTL;
+                    //Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file pdf của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
                     // END
 
                     // Returns message that successfully uploaded  
@@ -419,16 +419,16 @@ namespace QLVB.Controllers
                     }
 
                     // luu ten vao csdl
-                    int iMaTaiLieu = Convert.ToInt32(Request.Form["MaTaiLieu"]);
+                    int iMaTinTuc = Convert.ToInt32(Request.Form["MaTinTuc"]);
                     string sNamef = files[0].FileName;
 
-                    TaiLieu luuTL = db.TaiLieux.SingleOrDefault(n => n.MaTaiLieu == iMaTaiLieu);
+                    TinTuc luuTL = db.TinTucs.SingleOrDefault(n => n.MaTinTuc == iMaTinTuc);
                     luuTL.fileDOCV = sNamef;
                     db.SaveChanges();
 
                     // BEGIN
-                    TaiLieu tl = luuTL;
-                    Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file .doc tiếng Việt của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
+                    TinTuc tl = luuTL;
+                    //Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file .doc tiếng Việt của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
                     // END
 
                     // Returns message that successfully uploaded  
@@ -480,16 +480,16 @@ namespace QLVB.Controllers
                     }
 
                     // luu ten vao csdl
-                    int iMaTaiLieu = Convert.ToInt32(Request.Form["MaTaiLieu"]);
+                    int iMaTinTuc = Convert.ToInt32(Request.Form["MaTinTuc"]);
                     string sNamef = files[0].FileName;
 
-                    TaiLieu luuTL = db.TaiLieux.SingleOrDefault(n => n.MaTaiLieu == iMaTaiLieu);
+                    TinTuc luuTL = db.TinTucs.SingleOrDefault(n => n.MaTinTuc == iMaTinTuc);
                     luuTL.fileDOCA = sNamef;
                     db.SaveChanges();
 
                     // BEGIN
-                    TaiLieu tl = luuTL;
-                    Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file .doc tiếng Anh của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
+                    TinTuc tl = luuTL;
+                    //Tools.WriteLog("Quản lý tài liệu", "Chỉnh sửa", string.Format("Lưu file .doc tiếng Anh của tài liệu [Id: {0}; Số hiệu: {1}; Mã hiệu: {2}; Trích yếu: {3}]", tl.MaTaiLieu, tl.SoHieu, tl.MaHieu, tl.TenTaiLieu));
                     // END
 
                     // Returns message that successfully uploaded  

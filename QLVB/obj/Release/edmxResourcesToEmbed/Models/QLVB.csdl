@@ -176,6 +176,7 @@
       <Parameter Name="new_diagramname" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="LoaiCongTruongs" EntityType="QLVBModel.LoaiCongTruong" />
   </EntityContainer>
   <EntityType Name="Banner">
     <Key>
@@ -529,6 +530,11 @@
     <Property Name="NgayDang" Type="DateTime" Precision="3" />
     <Property Name="NgayTao" Type="DateTime" Precision="3" />
     <NavigationProperty Name="BinhLuans" Relationship="QLVBModel.FK_BinhLuan_TinTuc" FromRole="TinTuc" ToRole="BinhLuan" />
+    <Property Name="MaLoaiCT" Type="Int32" />
+    <Property Name="BaoMat" Type="Boolean" />
+    <Property Name="filePDF" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="fileDOCV" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="fileDOCA" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="VB_VBCC">
     <Key>
@@ -996,4 +1002,13 @@
     <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
     <Property Type="Int32" Name="OwnerID" Nullable="false" />
   </ComplexType>
+  <EntityType Name="LoaiCongTruong">
+    <Key>
+      <PropertyRef Name="MaLoaiCT" />
+    </Key>
+    <Property Name="MaLoaiCT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLoaiCT" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CapCongTruong" Type="Int32" />
+    <Property Name="ThuTu" Type="Int32" />
+  </EntityType>
 </Schema>

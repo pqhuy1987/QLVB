@@ -7,7 +7,7 @@
 
 }
 
-<h3><i class="fa fa-user"></i> Danh sách tin tức @Html.ActionLink("Tạo mới", "ThemMoi", "QL_TinTuc", null, new { @class = "btn btn-primary" })</h3>
+<h3><i class="fa fa-user"></i> Danh sách vấn đề @Html.ActionLink("Tạo mới", "ThemMoi", "QL_TinTuc", null, new { @class = "btn btn-primary" })</h3>
 <hr />
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -45,7 +45,7 @@
 
                     </div>
                     <br />
-                    <div class="row">
+                    @*<div class="row">
                         <label class="col-md-2 control-label ">
                            Mục tin
                         </label>
@@ -59,7 +59,7 @@
                             @Html.DropDownList("LoaiTinTuc", null, "Chọn loại tin", new { @class = "form-control" })
                         </div>
 
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -78,6 +78,7 @@
                 <th>Lượt xem</th>
                 <th>Bình luận</th>
                 <th>Lượt thích</th>
+                <th>Bảo mật</th>
                 <th>Ngày đăng</th>
                 <th>Ngày tạo</th>
                 <th width="100"></th>
@@ -107,6 +108,7 @@
                 <td>@item.LuotXem</td>
                 <td>@item.LuotBinhLuan</td>
                 <td>@item.LuotThich</td>
+                <td>@item.BaoMat</td>
                 <td>
                     @if (item.NgayDang != null)
                     {

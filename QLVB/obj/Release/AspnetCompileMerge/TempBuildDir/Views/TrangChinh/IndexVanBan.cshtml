@@ -40,7 +40,7 @@
                     @foreach (var item in lstLoaiVanBan)
                     {
                         <li>
-                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan=item.MaLoaiTL })">@item.TenLoaiTL <span style="color:#ccc">(@lstTaiLieu.Where(n => n.LoaiVanBan == item.MaLoaiTL).Count())</span></a>
+                            <a href="@Url.Action("IndexVanBan", "TrangChinh", new {LoaiVanBan1=item.MaLoaiTL })">@item.TenLoaiTL <span style="color:#ccc">(@lstTaiLieu.Where(n => n.LoaiVanBan == item.MaLoaiTL).Count())</span></a>
                             <i class="fa fa-angle-double-right"></i>
                         </li>
                     }

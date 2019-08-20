@@ -377,6 +377,9 @@ warning 6002: The table/view 'QLVB.dbo.LoaiCongTruong' does not have a primary k
     <Property Name="NgayTao" Type="datetime" />
     <Property Name="MaLoaiCT" Type="int" />
     <Property Name="BaoMat" Type="bit" />
+    <Property Name="filePDF" Type="nvarchar" MaxLength="255" />
+    <Property Name="fileDOCV" Type="nvarchar" MaxLength="255" />
+    <Property Name="fileDOCA" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="VB_BMLQ">
     <Key>

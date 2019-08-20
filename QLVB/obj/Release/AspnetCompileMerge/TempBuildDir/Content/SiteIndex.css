@@ -120,7 +120,7 @@ input[type="checkbox"].input-validation-error {
     font-size:12px;
 }
 .menu-top {
-    background-color: white;
+    background-color: #b0f1ff;
     margin-bottom: 0;
     border-bottom: none;
     z-index: 1001;
@@ -143,9 +143,9 @@ input[type="checkbox"].input-validation-error {
             }
 
 .menu-top2 {
-    background-color: #fff;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
+    background-color: #eaefe3;
+    border-bottom: 1px solid #c13333;
+    border-top: 1px solid #927f7f;
     margin-bottom: 0px;
 }
 .menu-top2 .navbar-2
@@ -273,8 +273,8 @@ hr {
 
 .bs-docs-footer {
     padding: 20px 0;
-    color: #ccc;
-    background-color: #313030;
+    color: #f2f4f5;
+    background-color: #3a7572;
 }
 
 

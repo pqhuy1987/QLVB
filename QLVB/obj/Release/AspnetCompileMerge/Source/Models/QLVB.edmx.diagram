@@ -69,6 +69,7 @@
         <EntityTypeShape EntityType="QLVBModel.PdfPage" Width="1.5" PointX="16.375" PointY="8.75" />
         <EntityTypeShape EntityType="QLVBModel.sysdiagram" Width="1.5" PointX="17.375" PointY="0.75" />
         <EntityTypeShape EntityType="QLVBModel.ID" Width="1.5" PointX="17.375" PointY="3.75" />
+        <EntityTypeShape EntityType="QLVBModel.LoaiCongTruong" Width="1.5" PointX="17.375" PointY="11.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

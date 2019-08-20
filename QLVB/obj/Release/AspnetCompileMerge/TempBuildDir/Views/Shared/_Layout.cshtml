@@ -57,7 +57,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="img-responsive" href="@Url.Action("IndexVanBan", "TrangChinh")"><img src="~/Upload/logo.png" width="150" height="50" /></a>
+                <a class="img-responsive" href="@Url.Action("dsTinTuc", "TinTuc")"></a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -180,12 +180,12 @@
                     <li class="menul-logo">
                         <a href="@Url.Action("Index","TrangChinh")"><img src="~/Upload/logo.png" width="100" height="40" /></a>
                     </li>
-                    @if (HttpContext.Current.User.IsInRole("XEM-QUAN-TRI"))
+                    @*@if (HttpContext.Current.User.IsInRole("XEM-QUAN-TRI"))
                     {
                         <li id="menul-home">
                             <a href="@Url.Action("Index","QuanTri")"><i class="fa fa-fw fa-home"></i> Dash Board</a>
                         </li>
-                    }
+                    }*@
                     @if (HttpContext.Current.User.IsInRole("QL-TAI-KHOAN"))
                     {
                         <li id="menul-qltk">
@@ -198,70 +198,73 @@
                             <a href="@Url.Action("DanhSach","QL_Nhom")"><i class="fa fa-fw fa-users"></i> Quản lý nhóm</a>
                         </li>
                     }
-                    @if (HttpContext.Current.User.IsInRole("QL-VAN-BAN"))
+                    @*@if (HttpContext.Current.User.IsInRole("QL-VAN-BAN"))
                     {
                         <li id="menul-qlvb">
                             <a href="@Url.Action("DanhSach","QL_TaiLieu")"><i class="fa fa-fw fa-files-o"></i> Quản lý văn bản</a>
                         </li>
-                    }
-                    @if (HttpContext.Current.User.IsInRole("QL-FAQ"))
+                    }*@
+                    @*@if (HttpContext.Current.User.IsInRole("QL-FAQ"))
                     {
                         <li id="menul-qlfaq">
                             <a href="@Url.Action("dsFAQ","QL_FAQ")"><i class="fa fa-fw fa-question"></i> Quản lý nội dung FAQ</a>
                         </li>
-                    }
+                    }*@
                     @if (HttpContext.Current.User.IsInRole("QL-TIN-TUC"))
                     {
                         <li id="menul-qltt">
-                            <a href="@Url.Action("DanhSach", "QL_TinTuc")"><i class="fa fa-fw fa-newspaper-o"></i> Quản lý tin tức</a>
+                            <a href="@Url.Action("DanhSach", "QL_TinTuc")"><i class="fa fa-fw fa-newspaper-o"></i> Quản lý vấn đề</a>
+                        </li>
+                        <li id="menul-qltt">
+                            <a href="@Url.Action("DanhSach", "QL_DMCongTruong")"><i class="fa fa-fw fa-behance-square"></i> Quản lý công trường</a>
                         </li>
                     }
-                    @if (HttpContext.Current.User.IsInRole("QL-BANNER"))
+                    @*@if (HttpContext.Current.User.IsInRole("QL-BANNER"))
                     {
                         <li id="menul-qlbn">
                             <a href="@Url.Action("DanhSach", "QL_Banner")"><i class="fa fa-fw fa-picture-o"></i> Quản lý banner</a>
                         </li>
-                    }
+                    }*@
                     @if (HttpContext.Current.User.IsInRole("QL-PHONG") || HttpContext.Current.User.IsInRole("QL-LOAIVB") || HttpContext.Current.User.IsInRole("QL-FAQ") || HttpContext.Current.User.IsInRole("SUA-CAU-HINH") || HttpContext.Current.User.IsInRole("QL-PHONG-HOP"))
                     {
                         <li id="menul-qldm">
                             <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Quản lý danh mục <i class="fa fa-fw fa-caret-down"></i></a>
                             <ul id="demo" class="collapse">
-                                @if (HttpContext.Current.User.IsInRole("QL-PHONG"))
+                                @*@if (HttpContext.Current.User.IsInRole("QL-PHONG"))
                                 {
                                     <li>
                                         <a href="@Url.Action("DanhSach","QL_DMPhongBan")"><i class="fa fa-fw fa-hospital-o"></i> Phòng ban</a>
                                     </li>
-                                }
-                                @if (HttpContext.Current.User.IsInRole("QL-LOAIVB"))
+                                }*@
+                                @*@if (HttpContext.Current.User.IsInRole("QL-LOAIVB"))
                                 {
                                     <li>
                                         <a href="@Url.Action("DanhSach","QL_DMLoaiTaiLieu")"><i class="fa fa-fw fa-file-text"></i> Loại văn bản</a>
                                     </li>
-                                }
-                                @if (HttpContext.Current.User.IsInRole("QL-FAQ"))
+                                }*@
+                                @*@if (HttpContext.Current.User.IsInRole("QL-FAQ"))
                                 {
                                     <li>
                                         <a href="@Url.Action("DanhSach","QL_FAQ")"><i class="fa fa-fw fa-question-circle"></i> FAQ</a>
                                     </li>
-                                }
+                                }*@
                                 @if (HttpContext.Current.User.IsInRole("SUA-CAU-HINH"))
                                 {
                                     <li>
                                         <a href="@Url.Action("DSCauHinh","QuanTri")"><i class="fa fa-fw fa-cogs"></i> Cấu hình</a>
                                     </li>
                                 }
-                                @if (HttpContext.Current.User.IsInRole("QL-PHONG-HOP"))
+                                @*@if (HttpContext.Current.User.IsInRole("QL-PHONG-HOP"))
                                 {
                                     <li>
                                         <a href="@Url.Action("DanhSach","QL_DMPhongHop")"><i class="fa fa-fw fa-building"></i> Phòng họp</a>
                                     </li>
-                                }
+                                }*@
                             </ul>
                         </li>
                     }
 
-                    @if (HttpContext.Current.User.IsInRole("XEM-THONG-KE"))
+                    @*@if (HttpContext.Current.User.IsInRole("XEM-THONG-KE"))
                     {
                         <li id="menul-tk">
                             <a href="javascript:;" data-toggle="collapse" data-target="#thongke"><i class="fa fa-fw fa-bar-chart"></i> Thống kê <i class="fa fa-fw fa-caret-down"></i></a>
@@ -280,7 +283,7 @@
                                 </li>
                             </ul>
                         </li>
-                    }
+                    }*@
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
