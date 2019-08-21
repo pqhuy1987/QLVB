@@ -285,29 +285,31 @@ namespace QLVB.Controllers
         public void MailLich(string NoiDung)
         {
             string sMailGui = System.Configuration.ConfigurationManager.AppSettings["MailSend"];
-            //string sPass = System.Configuration.ConfigurationManager.AppSettings["MailPass"];
-            //string sHost = System.Configuration.ConfigurationManager.AppSettings["MailHost"];
-            //string sPort = System.Configuration.ConfigurationManager.AppSettings["MailPort"];
+            string sPass = System.Configuration.ConfigurationManager.AppSettings["MailPass"];
+            string sHost = System.Configuration.ConfigurationManager.AppSettings["MailHost"];
+            string sPort = System.Configuration.ConfigurationManager.AppSettings["MailPort"];
             string sTieuDe = System.Configuration.ConfigurationManager.AppSettings["ScheduleSubject"];
             string sMailTo = System.Configuration.ConfigurationManager.AppSettings["schedulerman"];
             
             // gui mail
+            sMailTo = "quanghuy.pham@newtecons.vn";
             var fromAddress = new MailAddress(sMailGui);
             var toAddress = new MailAddress(sMailTo);
-            //string fromPassword = sPass;
+            string fromPassword = sPass;
             string subject = sTieuDe;
             string body = NoiDung;
 
-            //var smtp = new SmtpClient
-            //{
-            //    Host = sHost,
-            //    Port = int.Parse(sPort),
-            //    EnableSsl = true,
-            //    DeliveryMethod = SmtpDeliveryMethod.Network,
-            //    UseDefaultCredentials = false,
-            //    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-            //};
-            var smtp = new SmtpClient();
+            var smtp = new SmtpClient
+            {
+                Host = sHost,
+                Port = int.Parse(sPort),
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+            //var smtp = new SmtpClient();
+
             using (var message = new MailMessage(fromAddress, toAddress)
             {
                 IsBodyHtml = true,
@@ -315,8 +317,40 @@ namespace QLVB.Controllers
                 Body = body
             })
             {
-                smtp.Send(message);
+                    try
+                    {
+                         smtp.Send(message);
+                         smtp.Dispose();
+                    }
+                    catch (SmtpFailedRecipientsException ex)
+                    {
+                        for (int i = 0; i < ex.InnerExceptions.Length; i++)
+                        {
+                            SmtpStatusCode status = ex.InnerExceptions[i].StatusCode;
+                            if (status == SmtpStatusCode.MailboxBusy || status == SmtpStatusCode.MailboxUnavailable)
+                            {
+                                // Console.WriteLine("Delivery failed - retrying in 5 seconds.");
+                                System.Threading.Thread.Sleep(5000);
+                                smtp.Send(message);
+                            }
+                            else
+                            {
+                                //  Console.WriteLine("Failed to deliver message to {0}", ex.InnerExceptions[i].FailedRecipient);
+                                throw ex;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //  Console.WriteLine("Exception caught in RetryIfBusy(): {0}",ex.ToString());
+                        throw ex;
+                    }
+                    finally
+                    {
+                        smtp.Dispose();
+                    }
             }
+
         }
         public string LayNoiDungLich(LichHop lh)
         {
