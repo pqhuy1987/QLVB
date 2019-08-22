@@ -15,10 +15,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/22/2013 08:43:40</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>08/20/2019 10:34:58</publishTime>
+      <publishTime>08/22/2019 17:02:20</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>08/20/2019 10:34:58</publishTime>
+      <publishTime>08/22/2019 17:02:20</publishTime>
     </File>
     <File Include="bin/CKFinder.dll">
       <publishTime>06/14/2018 13:23:11</publishTime>
@@ -60,7 +60,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/30/2013 18:15:20</publishTime>
     </File>
     <File Include="bin/QLVB.dll">
-      <publishTime>08/20/2019 10:33:04</publishTime>
+      <publishTime>08/22/2019 17:01:56</publishTime>
     </File>
     <File Include="bin/System.DirectoryServices.dll">
       <publishTime>08/04/2016 20:18:36</publishTime>
@@ -3501,7 +3501,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/19/2018 10:00:59</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>08/20/2019 10:34:50</publishTime>
+      <publishTime>08/22/2019 17:02:03</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>04/07/2017 12:21:42</publishTime>
@@ -3729,13 +3729,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/10/2019 10:34:43</publishTime>
     </File>
     <File Include="Views/QL_Nhom/ChinhSua.cshtml">
-      <publishTime>05/05/2017 17:01:48</publishTime>
+      <publishTime>08/22/2019 11:00:31</publishTime>
     </File>
     <File Include="Views/QL_Nhom/DanhSach.cshtml">
-      <publishTime>05/05/2017 15:30:33</publishTime>
+      <publishTime>08/22/2019 11:02:13</publishTime>
     </File>
     <File Include="Views/QL_Nhom/ThemMoi.cshtml">
-      <publishTime>05/05/2017 17:00:46</publishTime>
+      <publishTime>08/22/2019 13:09:18</publishTime>
     </File>
     <File Include="Views/QL_TaiKhoan/ChinhSua.cshtml">
       <publishTime>04/26/2017 17:08:34</publishTime>
@@ -3762,7 +3762,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/20/2019 10:12:31</publishTime>
     </File>
     <File Include="Views/QL_TinTuc/ThemMoi.cshtml">
-      <publishTime>08/20/2019 10:15:09</publishTime>
+      <publishTime>08/22/2019 13:30:05</publishTime>
     </File>
     <File Include="Views/QuanTri/DangNhap.cshtml">
       <publishTime>08/12/2019 08:26:06</publishTime>
@@ -3807,7 +3807,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/20/2019 10:30:01</publishTime>
     </File>
     <File Include="Views/TinTuc/dsTinTuc.cshtml">
-      <publishTime>08/20/2019 10:34:19</publishTime>
+      <publishTime>08/22/2019 16:01:54</publishTime>
     </File>
     <File Include="Views/TrangChinh/ChiTietFAQ.cshtml">
       <publishTime>06/08/2017 16:19:10</publishTime>
@@ -3840,7 +3840,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/14/2017 11:25:36</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/20/2019 10:33:07</publishTime>
+      <publishTime>08/22/2019 17:01:59</publishTime>
     </File>
   </ItemGroup>
 </Project>

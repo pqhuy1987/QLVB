@@ -90,7 +90,7 @@ namespace QLVB.Controllers
                 taskService.Insert(task, ModelState);
             }
 
-            string sNoiDung = " <p>Dear Ms. Đoan,</p><p>Hệ thống vừa ghi nhận lịch đăng ký sử dụng phòng họp của Ông/Bà <b>"+nv.HoTen+"</b> như sau:</p>";
+            string sNoiDung = " <p>Dear Ms. Đoan,</p><p>  <b>"+nv.HoTen+"</b> như sau:</p>";
             LichHop lh = db.LichHops.SingleOrDefault(n => n.ID == task.TaskID);
             sNoiDung += LayNoiDungLich(lh);
             sNoiDung += "<p>Trân trọng.</p>";

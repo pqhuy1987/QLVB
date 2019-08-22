@@ -7,6 +7,10 @@ using QLVB.Models;
 using PagedList;
 using PagedList.Mvc;
 using System.IO;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
+using System.Net.Mail;
+using System.Net;
 
 namespace QLVB.Controllers
 {
@@ -136,6 +140,8 @@ namespace QLVB.Controllers
             ViewBag.LoaiTinTuc = new SelectList(tool.DMTinTuc(0), "Value", "Text");
             ViewBag.MaLoaiCT = new SelectList(db.LoaiCongTruongs, "MaLoaiCT", "TenLoaiCT");
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.Where(n => n.DanhMucCha == Tools.MaDanhMucTin), "MaDanhMuc", "TenDanhMuc");
+            var vNhanVien = db.NhanViens.Where(n => n.Id != 1).Select(s => new { TenDangNhap = s.TenDangNhap, TenNhanVien = s.TenDangNhap + " (" + s.HoTen + ")" }).ToList();
+            ViewBag.NhanVien = new SelectList(vNhanVien, "TenDangNhap", "TenNhanVien");
             Session["lbl"] = "Tạo mới";
 
             return View();
@@ -143,7 +149,7 @@ namespace QLVB.Controllers
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult ThemMoi(TinTuc tin,FormCollection c ,HttpPostedFileBase HinhDaiDiens)
+        public ActionResult ThemMoi(TinTuc tin, FormCollection c, HttpPostedFileBase HinhDaiDiens, string[] TaiKhoan)
         {
             if (KiemTraSession() == true)
                 return RedirectToAction("DangNhap", "QuanTri");
@@ -190,6 +196,10 @@ namespace QLVB.Controllers
 
                 db.TinTucs.Add(tin);
                 db.SaveChanges();
+
+                TinTuc nsTin = db.TinTucs.OrderByDescending(p => p.MaTinTuc).FirstOrDefault();
+
+                MailLich(nsTin, TaiKhoan);
                 
                 TempData["thongbao"] = "<script>$('#div-pthongbao').text('Lưu thành công !'); $('#div-thongbao').show(); $('#div-thongbao').fadeOut(5000);</script>";
             }
@@ -506,6 +516,90 @@ namespace QLVB.Controllers
             }
         }
 
+        public void MailLich(TinTuc tin, string[] TaiKhoan)
+        {
+            string sMailGui = System.Configuration.ConfigurationManager.AppSettings["MailSend"];
+            string sPass = System.Configuration.ConfigurationManager.AppSettings["MailPass"];
+            string sHost = System.Configuration.ConfigurationManager.AppSettings["MailHost"];
+            string sPort = System.Configuration.ConfigurationManager.AppSettings["MailPort"];
+           
+            //string sMailTo = System.Configuration.ConfigurationManager.AppSettings["schedulerman"];
+
+            if (TaiKhoan != null && TaiKhoan.Length != 0) // them nhom_nhanvien
+            {
+                for (int i = 0; i < TaiKhoan.Length; i++)
+                {
+                    string sTaiKhoan = TaiKhoan[i];
+                    NhanVien layNV = db.NhanViens.SingleOrDefault(n => n.TenDangNhap == sTaiKhoan);
+                    // gui mail
+                    string sTieuDe = tin.TieuDe;
+                    string sMailTo = layNV.Email;
+                    var fromAddress = new MailAddress(sMailGui);
+                    var toAddress = new MailAddress(sMailTo);
+                    string fromPassword = sPass;
+                    string subject = sTieuDe;
+                    string NoiDung = " <p>Kính gửi Anh/Chị " + layNV.TenDangNhap + ",</p><p> Hệ thống quản lý kỹ thuật nội bộ xin gửi đến Anh/Chị một vấn đề mới phát sinh như sau:</p>";
+                    NoiDung += "<p> <a href=http://kythuat.newtecons.vn/TinTuc/XemTin/"+tin.MaTinTuc+">"+ tin.TieuDe + "</a></p>";
+                    NoiDung += "<p>Trân trọng.</p>";
+                    string body = NoiDung;
+
+                    var smtp = new SmtpClient
+                    {
+                        Host = sHost,
+                        Port = int.Parse(sPort),
+                        EnableSsl = false,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                    };
+                    //var smtp = new SmtpClient();
+
+                    using (var message = new MailMessage(fromAddress, toAddress)
+                    {
+                        IsBodyHtml = true,
+                        Subject = subject,
+                        Body = body
+                    })
+                    {
+                        try
+                        {
+                            smtp.Send(message);
+                            smtp.Dispose();
+                        }
+                        catch (SmtpFailedRecipientsException ex)
+                        {
+                            for (int j = 0; j < ex.InnerExceptions.Length; j++)
+                            {
+                                SmtpStatusCode status = ex.InnerExceptions[j].StatusCode;
+                                if (status == SmtpStatusCode.MailboxBusy || status == SmtpStatusCode.MailboxUnavailable)
+                                {
+                                    // Console.WriteLine("Delivery failed - retrying in 5 seconds.");
+                                    System.Threading.Thread.Sleep(5000);
+                                    smtp.Send(message);
+                                }
+                                else
+                                {
+                                    //  Console.WriteLine("Failed to deliver message to {0}", ex.InnerExceptions[i].FailedRecipient);
+                                    throw ex;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //  Console.WriteLine("Exception caught in RetryIfBusy(): {0}",ex.ToString());
+                            throw ex;
+                        }
+                        finally
+                        {
+                            smtp.Dispose();
+                        }
+                    }
+                }
+            }
+
+
+
+        }
 
         protected override void Dispose(bool disposing)
         {
